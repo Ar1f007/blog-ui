@@ -41,6 +41,10 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
 
+    'no-console': 1,
+
+    'react/jsx-boolean-value': 1,
+
     'arrow-body-style': ['error', 'as-needed'],
 
     'react/self-closing-comp': [
@@ -71,6 +75,14 @@ module.exports = {
         groups: ['builtin', 'external', 'parent', 'sibling', 'index', 'object', 'type'],
         alphabetize: { order: 'asc' },
         'newlines-between': 'always',
+      },
+    ],
+
+    // MUI
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: ['@mui/*/*/*'],
       },
     ],
   },
