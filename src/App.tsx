@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 
-import { toggleTheme } from './app/slices/themeSlice';
+import { asyncToggleTheme } from './app/slices/themeSlice';
 import { useAppDispatch, useAppSelector } from './hooks/store';
 import ThemeProvider from './theme';
 
@@ -11,7 +11,7 @@ const App = () => {
   return (
     <ThemeProvider>
       <Button
-        onClick={() => dispatch(toggleTheme())}
+        onClick={() => dispatch(asyncToggleTheme())}
         variant="contained"
       >
         Theme {isDarkMode ? 'dark' : 'light'}
