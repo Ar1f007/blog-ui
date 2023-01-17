@@ -1,5 +1,7 @@
-import MainRoutes from './routes';
+import { RouterProvider } from 'react-router-dom';
 
-const App = () => <MainRoutes />;
+import routes from './routes';
+
+const App = () => <RouterProvider router={routes} />;
 
 export default App;

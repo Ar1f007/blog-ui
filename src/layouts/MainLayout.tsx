@@ -5,7 +5,9 @@ import Navbar from './Navbar';
 const MainLayout = () => (
   <>
     <Navbar />
-    <Outlet />
+    <main>
+      <Outlet />
+    </main>
   </>
 );
 export default MainLayout;
