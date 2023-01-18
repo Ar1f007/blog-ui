@@ -1,7 +1,7 @@
-import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 
 import MainLayout from '../layouts/MainLayout';
-import Home from '../pages/home';
+import { Home, SignUp } from '../pages';
 
 import paths from './paths';
 
@@ -15,6 +15,10 @@ export const routes = createBrowserRouter([
         element: <Home />,
       },
     ],
+  },
+  {
+    path: paths.signUp,
+    element: <SignUp />,
   },
   {
     path: '*',
