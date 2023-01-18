@@ -9,7 +9,6 @@ import type { FC } from 'react';
 const styles = createSXCollection({
   formHeader: {
     alignItems: 'center',
-    gap: 1,
   },
   logoWrapper: {
     width: '20rem',
