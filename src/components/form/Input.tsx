@@ -1,14 +1,14 @@
 import { TextField } from '@mui/material';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import type { TextFieldProps } from '@mui/material';
+import type { TextFieldProps as MuiTextFieldProps } from '@mui/material';
 import type { FC } from 'react';
 
-type InputProps = {
+type TextFieldProps = {
   name: string;
-} & TextFieldProps;
+} & MuiTextFieldProps;
 
-const Input: FC<InputProps> = ({ name, ...others }) => {
+const Input: FC<TextFieldProps> = ({ name, ...others }) => {
   const {
     control,
     formState: { errors },
