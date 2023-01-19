@@ -26,6 +26,7 @@ const FormHeader: FC<FormHeaderProps> = ({ text }) => (
       <Typography
         variant="h5"
         component="h1"
+        fontWeight="500"
       >
         {text}
       </Typography>

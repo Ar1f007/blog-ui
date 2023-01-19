@@ -1,19 +1,39 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { LoadingButton } from '@mui/lab';
-import { Box, Stack, IconButton, InputAdornment } from '@mui/material';
+import { Box, Stack, IconButton, InputAdornment, Typography } from '@mui/material';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 
 import Icons from '../../../assets/icons';
+
+import type { SignUpInputs } from '../validations/sign-up';
+
 import Input from '../../../components/form/Input';
+
+import type { SubmitHandler } from 'react-hook-form';
+
 import Icon from '../../../components/ui/Icon';
+import paths from '../../../routes/paths';
+import signUpSchema from '../validations/sign-up';
 
 const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const methods = useForm();
+  const methods = useForm<SignUpInputs>({
+    mode: 'onTouched',
+    defaultValues: {
+      username: '',
+      firstName: '',
+      lastName: '',
+      password: '',
+      confirmPassword: '',
+    },
+    resolver: zodResolver(signUpSchema),
+  });
 
-  const onSubmit = (data: any) => {
+  const onSubmit: SubmitHandler<SignUpInputs> = (data) => {
     console.log(data);
   };
 
@@ -24,12 +44,6 @@ const SignUpForm = () => {
         onSubmit={methods.handleSubmit(onSubmit)}
       >
         <Stack spacing={3}>
-          <Input
-            name="username"
-            label="Username"
-            autoComplete="off"
-          />
-
           <Stack
             direction={{ xs: 'column', sm: 'row' }}
             spacing={2}
@@ -45,6 +59,12 @@ const SignUpForm = () => {
               fullWidth
             />
           </Stack>
+
+          <Input
+            name="username"
+            label="Username"
+            autoComplete="off"
+          />
 
           <Input
             name="password"
@@ -84,6 +104,25 @@ const SignUpForm = () => {
             }}
           />
 
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+          >
+            <Typography
+              variant="body2"
+              component="span"
+            >
+              Already have an account?&nbsp;
+              <Box
+                component={Link}
+                to={paths.login}
+                sx={{ color: 'primary.main', fontWeight: 500 }}
+              >
+                Login
+              </Box>
+            </Typography>
+          </Stack>
+
           <LoadingButton
             fullWidth
             variant="contained"
@@ -91,7 +130,7 @@ const SignUpForm = () => {
             type="submit"
             // loading={isSubmitting}
           >
-            Sign up
+            Create Account
           </LoadingButton>
         </Stack>
       </Box>
