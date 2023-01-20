@@ -77,7 +77,6 @@ module.exports = {
         'newlines-between': 'always',
       },
     ],
-    'import/no-unresolved': 'off',
 
     // MUI
     'no-restricted-imports': [

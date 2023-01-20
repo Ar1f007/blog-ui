@@ -1,9 +1,9 @@
-import type { RegisterInfo } from './types';
+import { REGISTER_ENDPOINT } from '../../../constant';
+import apiClient from '../../../lib/apiClient';
 
-import { REGISTER_ENDPOINT } from '@/constant';
-import http from '@/lib/http';
+import type { RegisterPayload } from './types';
 
-const register = (data: RegisterInfo) => http.post(REGISTER_ENDPOINT, data);
+const register = (data: RegisterPayload) => apiClient.post(REGISTER_ENDPOINT, data);
 
 const userApi = {
   register,

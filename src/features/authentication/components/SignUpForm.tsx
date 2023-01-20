@@ -5,21 +5,24 @@ import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
-import Icons from '../../../assets/icons';
-
 import type { SignUpInputs } from '../validations/sign-up';
 
-import Input from '../../../components/form/Input';
+import { registerUserAction } from '../../../app/slices/users/action';
+import Icons from '../../../assets/icons';
 
 import type { SubmitHandler } from 'react-hook-form';
 
+import Input from '../../../components/form/Input';
 import Icon from '../../../components/ui/Icon';
+import { useAppDispatch } from '../../../hooks/store';
 import paths from '../../../routes/paths';
 import signUpSchema from '../validations/sign-up';
 
 const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const dispatch = useAppDispatch();
 
   const methods = useForm<SignUpInputs>({
     mode: 'onTouched',
@@ -34,8 +37,12 @@ const SignUpForm = () => {
     resolver: zodResolver(signUpSchema),
   });
 
-  const onSubmit: SubmitHandler<SignUpInputs> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<SignUpInputs> = async (data) => {
+    try {
+      dispatch(registerUserAction(data));
+    } catch (err) {
+      /* empty */
+    }
   };
 
   return (
