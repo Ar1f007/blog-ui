@@ -5,7 +5,7 @@ const signupSchema = z
     username: z
       .string()
       .trim()
-      .min(3, { message: 'username should be at least 3 character(s) long' })
+      .min(3, { message: 'Username should be at least 3 character(s) long' })
       .regex(new RegExp(/^\S+$/), { message: 'no spaces allowed' }),
 
     firstName: z.string().trim().min(3, { message: 'First name should be at least 3 character(s) long' }),
