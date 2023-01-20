@@ -27,6 +27,7 @@ const SignUpForm = () => {
       username: '',
       firstName: '',
       lastName: '',
+      email: '',
       password: '',
       confirmPassword: '',
     },
@@ -63,7 +64,11 @@ const SignUpForm = () => {
           <Input
             name="username"
             label="Username"
-            autoComplete="off"
+          />
+
+          <Input
+            name="email"
+            label="Email"
           />
 
           <Input
