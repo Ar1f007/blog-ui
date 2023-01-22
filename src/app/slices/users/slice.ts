@@ -3,13 +3,12 @@ import { createSlice } from '@reduxjs/toolkit';
 import { registerUserAction } from './action';
 
 import type { UserState } from './types';
-// import type { PayloadAction } from '@reduxjs/toolkit';
 
-const initialState: UserState = {
+const initialState = {
   loading: false,
   data: null,
   error: null,
-};
+} as UserState;
 
 const usersSlice = createSlice({
   name: 'users',
@@ -20,9 +19,8 @@ const usersSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(registerUserAction.fulfilled, (state, action) => {
-      // console.log('success', action);
       state.loading = false;
-      state.data = action.payload.user;
+      state.data = action.payload;
       state.error = null;
     });
     builder.addCase(registerUserAction.rejected, (state, action) => {
@@ -31,7 +29,8 @@ const usersSlice = createSlice({
       if (action.payload) {
         state.error = action.payload;
       } else {
-        state.error = action.error.message || 'something went wrong';
+        state.error = action.error;
+        // state.error = action.error?.message || 'something went wrong';
       }
     });
   },

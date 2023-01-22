@@ -3,14 +3,14 @@ import axios from 'axios';
 
 import userApi from './services';
 
-import type { RegisterPayload } from './types';
+import type { RegisterPayload, User, UserState } from './types';
 
-export const registerUserAction = createAsyncThunk(
+export const registerUserAction = createAsyncThunk<User, RegisterPayload, { rejectValue: UserState['error'] }>(
   'users/register',
-  async (registerPayload: RegisterPayload, { rejectWithValue }) => {
+  async (registerPayload, { rejectWithValue }) => {
     try {
       const { data } = await userApi.register(registerPayload);
-      return data;
+      return data.user;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (!error.response) {

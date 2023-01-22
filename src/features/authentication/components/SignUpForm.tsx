@@ -1,20 +1,21 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoadingButton } from '@mui/lab';
 import { Box, Stack, IconButton, InputAdornment, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
+import type { InputFieldNames } from '../../../app/slices/users/types';
 import type { SignUpInputs } from '../validations/sign-up';
 
 import { registerUserAction } from '../../../app/slices/users/action';
-import Icons from '../../../assets/icons';
 
 import type { SubmitHandler } from 'react-hook-form';
 
+import Icons from '../../../assets/icons';
 import Input from '../../../components/form/Input';
 import Icon from '../../../components/ui/Icon';
-import { useAppDispatch } from '../../../hooks/store';
+import { useAppDispatch, useAppSelector } from '../../../hooks/store';
 import paths from '../../../routes/paths';
 import signUpSchema from '../validations/sign-up';
 
@@ -37,13 +38,29 @@ const SignUpForm = () => {
     resolver: zodResolver(signUpSchema),
   });
 
+  const { loading, error } = useAppSelector((s) => s.user);
+
   const onSubmit: SubmitHandler<SignUpInputs> = async (data) => {
-    try {
-      dispatch(registerUserAction(data));
-    } catch (err) {
-      /* empty */
-    }
+    dispatch(registerUserAction(data));
   };
+
+  const attachValidationErrorsToFields = (name: InputFieldNames, message: string): void => {
+    methods.setError(name, { message, type: 'server' });
+  };
+
+  useEffect(() => {
+    if (error?.message) {
+      alert(error.message);
+      return;
+    }
+
+    if (error?.errors) {
+      error.errors.map((e) => {
+        attachValidationErrorsToFields(e.fieldName, e.message);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
 
   return (
     <FormProvider {...methods}>
@@ -140,7 +157,7 @@ const SignUpForm = () => {
             variant="contained"
             size="large"
             type="submit"
-            // loading={isSubmitting}
+            loading={loading}
           >
             Create Account
           </LoadingButton>
