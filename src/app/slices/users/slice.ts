@@ -13,7 +13,11 @@ const initialState = {
 const usersSlice = createSlice({
   name: 'users',
   initialState,
-  reducers: {},
+  reducers: {
+    clearError: (state) => {
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(registerUserAction.pending, (state) => {
       state.loading = true;
@@ -30,10 +34,10 @@ const usersSlice = createSlice({
         state.error = action.payload;
       } else {
         state.error = action.error;
-        // state.error = action.error?.message || 'something went wrong';
       }
     });
   },
 });
 
+export const { clearError } = usersSlice.actions;
 export default usersSlice.reducer;

@@ -3,7 +3,7 @@ import { LoadingButton } from '@mui/lab';
 import { Box, Stack, IconButton, InputAdornment, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import type { InputFieldNames } from '../../../app/slices/users/types';
 import type { SignUpInputs } from '../validations/sign-up';
@@ -12,6 +12,7 @@ import { registerUserAction } from '../../../app/slices/users/action';
 
 import type { SubmitHandler } from 'react-hook-form';
 
+import { clearError } from '../../../app/slices/users/slice';
 import Icons from '../../../assets/icons';
 import Input from '../../../components/form/Input';
 import Icon from '../../../components/ui/Icon';
@@ -20,9 +21,7 @@ import paths from '../../../routes/paths';
 import signUpSchema from '../validations/sign-up';
 
 const SignUpForm = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const methods = useForm<SignUpInputs>({
@@ -38,132 +37,146 @@ const SignUpForm = () => {
     resolver: zodResolver(signUpSchema),
   });
 
-  const { loading, error } = useAppSelector((s) => s.user);
+  const { data: userData, loading, error } = useAppSelector((s) => s.user);
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const onSubmit: SubmitHandler<SignUpInputs> = async (data) => {
     dispatch(registerUserAction(data));
   };
 
-  const attachValidationErrorsToFields = (name: InputFieldNames, message: string): void => {
+  const attachValidationErrorToField = (name: InputFieldNames, message: string) => {
     methods.setError(name, { message, type: 'server' });
   };
 
   useEffect(() => {
     if (error?.message) {
       alert(error.message);
+      dispatch(clearError());
       return;
     }
 
     if (error?.errors) {
       error.errors.map((e) => {
-        attachValidationErrorsToFields(e.fieldName, e.message);
+        attachValidationErrorToField(e.fieldName, e.message);
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
+  useEffect(() => {
+    if (userData) {
+      // navigate('/');
+    }
+  }, [userData, navigate]);
+
   return (
-    <FormProvider {...methods}>
-      <Box
-        component="form"
-        onSubmit={methods.handleSubmit(onSubmit)}
-      >
-        <Stack spacing={3}>
-          <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            spacing={2}
-          >
-            <Input
-              name="firstName"
-              label="First name"
-              fullWidth
-            />
-            <Input
-              name="lastName"
-              label="Last name"
-              fullWidth
-            />
-          </Stack>
+    <>
+      {error?.message && <p>{error.message}</p>}
 
-          <Input
-            name="username"
-            label="Username"
-          />
-
-          <Input
-            name="email"
-            label="Email"
-          />
-
-          <Input
-            name="password"
-            label="Password"
-            type={showPassword ? 'text' : 'password'}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    edge="end"
-                    onClick={() => setShowPassword(!showPassword)}
-                    aria-label="Toggle password visibility"
-                  >
-                    <Icon icon={showPassword ? <Icons.Visibility /> : <Icons.VisibilityOff />} />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-
-          <Input
-            name="confirmPassword"
-            label="Confirm Password"
-            type={showConfirmPassword ? 'text' : 'password'}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    edge="end"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    aria-label="Toggle password visibility"
-                  >
-                    <Icon icon={showConfirmPassword ? <Icons.Visibility /> : <Icons.VisibilityOff />} />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-          >
-            <Typography
-              variant="body2"
-              component="span"
+      <FormProvider {...methods}>
+        <Box
+          component="form"
+          onSubmit={methods.handleSubmit(onSubmit)}
+        >
+          <Stack spacing={3}>
+            <Stack
+              direction={{ xs: 'column', sm: 'row' }}
+              spacing={2}
             >
-              Already have an account?&nbsp;
-              <Box
-                component={Link}
-                to={paths.login}
-                sx={{ color: 'primary.main', fontWeight: 500 }}
-              >
-                Login
-              </Box>
-            </Typography>
-          </Stack>
+              <Input
+                name="firstName"
+                label="First name"
+                fullWidth
+              />
+              <Input
+                name="lastName"
+                label="Last name"
+                fullWidth
+              />
+            </Stack>
 
-          <LoadingButton
-            fullWidth
-            variant="contained"
-            size="large"
-            type="submit"
-            loading={loading}
-          >
-            Create Account
-          </LoadingButton>
-        </Stack>
-      </Box>
-    </FormProvider>
+            <Input
+              name="username"
+              label="Username"
+            />
+
+            <Input
+              name="email"
+              label="Email"
+            />
+
+            <Input
+              name="password"
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      edge="end"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label="Toggle password visibility"
+                    >
+                      <Icon icon={showPassword ? <Icons.Visibility /> : <Icons.VisibilityOff />} />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+
+            <Input
+              name="confirmPassword"
+              label="Confirm Password"
+              type={showConfirmPassword ? 'text' : 'password'}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      edge="end"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      aria-label="Toggle password visibility"
+                    >
+                      <Icon icon={showConfirmPassword ? <Icons.Visibility /> : <Icons.VisibilityOff />} />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+            >
+              <Typography
+                variant="body2"
+                component="span"
+              >
+                Already have an account?&nbsp;
+                <Box
+                  component={Link}
+                  to={paths.login}
+                  sx={{ color: 'primary.main', fontWeight: 500 }}
+                >
+                  Login
+                </Box>
+              </Typography>
+            </Stack>
+
+            <LoadingButton
+              fullWidth
+              variant="contained"
+              size="large"
+              type="submit"
+              loading={loading}
+            >
+              Create Account
+            </LoadingButton>
+          </Stack>
+        </Box>
+      </FormProvider>
+    </>
   );
 };
 export default SignUpForm;
