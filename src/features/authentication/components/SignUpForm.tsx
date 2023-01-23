@@ -4,6 +4,7 @@ import { Box, Stack, IconButton, InputAdornment, Typography } from '@mui/materia
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import type { InputFieldNames } from '../../../app/slices/users/types';
 import type { SignUpInputs } from '../validations/sign-up';
@@ -52,7 +53,8 @@ const SignUpForm = () => {
 
   useEffect(() => {
     if (error?.message) {
-      alert(error.message);
+      toast.error(error.message);
+
       dispatch(clearError());
       return;
     }
@@ -67,9 +69,12 @@ const SignUpForm = () => {
 
   useEffect(() => {
     if (userData) {
-      // navigate('/');
+      toast.success('Account created successfully');
+      methods.reset();
+      navigate('/');
     }
-  }, [userData, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userData]);
 
   return (
     <>
