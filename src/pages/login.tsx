@@ -1,6 +1,6 @@
 import { Container, Paper, Stack } from '@mui/material';
 
-import { FormHeader, SignUpForm } from '../features/authentication/components';
+import { FormHeader, LoginForm } from '../features/authentication/components';
 import { createSXCollection } from '../utils/mui';
 
 const styles = createSXCollection({
@@ -14,7 +14,7 @@ const styles = createSXCollection({
   },
 });
 
-export const SignUp = () => (
+const Login = () => (
   <Stack sx={styles.wrapper}>
     <Container maxWidth="sm">
       <Paper
@@ -22,10 +22,11 @@ export const SignUp = () => (
         elevation={5}
       >
         <Stack spacing={3}>
-          <FormHeader text="Hello there, Welcome!" />
-          <SignUpForm />
+          <FormHeader text="Welcome back!" />
+          <LoginForm />
         </Stack>
       </Paper>
     </Container>
   </Stack>
 );
+export default Login;

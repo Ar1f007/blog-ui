@@ -8,11 +8,9 @@ import { toast } from 'react-toastify';
 
 import type { InputFieldNames } from '../../../app/slices/users/types';
 import type { SignUpInputs } from '../validations/sign-up';
-
-import { registerUserAction } from '../../../app/slices/users/action';
-
 import type { SubmitHandler } from 'react-hook-form';
 
+import { registerUserAction } from '../../../app/slices/users/action';
 import { clearError } from '../../../app/slices/users/slice';
 import Icons from '../../../assets/icons';
 import Input from '../../../components/form/Input';
