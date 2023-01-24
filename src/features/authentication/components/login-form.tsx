@@ -20,6 +20,8 @@ import Icon from '../../../components/ui/Icon';
 import { useAppDispatch, useAppSelector } from '../../../hooks/store';
 import loginSchema from '../validations/login';
 
+import LoginFormFooter from './login-form-footer';
+
 // --------------------------------------------------------------------
 
 const Form = () => {
@@ -115,6 +117,7 @@ const Form = () => {
           </Stack>
         </Box>
       </FormProvider>
+      <LoginFormFooter />
     </>
   );
 };

@@ -1,3 +1,7 @@
+:root {
+  --gray: '#858585';
+}
+
 html {
   font-size: 62.5%;
 }
@@ -11,4 +15,16 @@ body {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+.link-text {
+  color: var(--gray);
+  text-decoration: none;
+  font-size: 1.4rem;
+  transition: text-decoration 0.2s ease;
+  font-weight: 500;
+}
+
+.link-text:hover {
+  text-decoration: underline;
 }
