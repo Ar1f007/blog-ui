@@ -6,7 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import type { InputFieldNames } from '../../../app/slices/users/types';
+import type { RegisterFields } from '../../../app/slices/users/types';
 import type { SignUpInputs } from '../validations/sign-up';
 import type { SubmitHandler } from 'react-hook-form';
 
@@ -18,6 +18,8 @@ import Icon from '../../../components/ui/Icon';
 import { useAppDispatch, useAppSelector } from '../../../hooks/store';
 import paths from '../../../routes/paths';
 import signUpSchema from '../validations/sign-up';
+
+// --------------------------------------------------------------------
 
 const SignUpForm = () => {
   const navigate = useNavigate();
@@ -42,10 +44,10 @@ const SignUpForm = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const onSubmit: SubmitHandler<SignUpInputs> = async (data) => {
-    dispatch(registerUserAction(data));
+    await dispatch(registerUserAction(data));
   };
 
-  const attachValidationErrorToField = (name: InputFieldNames, message: string) => {
+  const attachValidationErrorToField = (name: RegisterFields, message: string) => {
     methods.setError(name, { message, type: 'server' });
   };
 
@@ -59,7 +61,7 @@ const SignUpForm = () => {
 
     if (error?.errors) {
       error.errors.map((e) => {
-        attachValidationErrorToField(e.fieldName, e.message);
+        attachValidationErrorToField(e.fieldName as RegisterFields, e.message);
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
 const loginSchema = z.object({
-  email: z.string().min(1, { message: 'Please type your email' }),
+  emailOrUsername: z.string().min(1, { message: 'Please type or email or username' }),
+
   password: z.string().min(1, { message: 'Please type your password' }),
 });
 

@@ -1,35 +1,73 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoadingButton } from '@mui/lab';
 import { Box, IconButton, InputAdornment, Stack } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-import Icons from '../../../assets/icons';
-import Input from '../../../components/form/Input';
-
+import type { LoginFields } from '../../../app/slices/users/types';
 import type { LoginInputs } from '../validations/login';
 
-import Icon from '../../../components/ui/Icon';
+import { loginUserAction } from '../../../app/slices/users/action';
 
 import type { SubmitHandler } from 'react-hook-form';
 
+import { clearError } from '../../../app/slices/users/slice';
+import Icons from '../../../assets/icons';
+import Input from '../../../components/form/Input';
+import Icon from '../../../components/ui/Icon';
+import { useAppDispatch, useAppSelector } from '../../../hooks/store';
 import loginSchema from '../validations/login';
+
+// --------------------------------------------------------------------
 
 const Form = () => {
   const methods = useForm<LoginInputs>({
     mode: 'onTouched',
     defaultValues: {
-      email: '',
+      emailOrUsername: '',
       password: '',
     },
     resolver: zodResolver(loginSchema),
   });
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
+  const { data: userData, loading, error } = useAppSelector((s) => s.user);
 
-  const onSubmit: SubmitHandler<LoginInputs> = (data) => {
-    //
+  const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
+    await dispatch(loginUserAction(data));
   };
+
+  const attachValidationErrorToField = (name: LoginFields, message: string) => {
+    methods.setError(name, { message, type: 'server' });
+  };
+
+  useEffect(() => {
+    if (error?.message) {
+      toast.error(error.message);
+
+      dispatch(clearError());
+      return;
+    }
+
+    if (error?.errors) {
+      error.errors.map((e) => {
+        attachValidationErrorToField(e.fieldName as LoginFields, e.message);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
+
+  useEffect(() => {
+    if (userData) {
+      methods.reset();
+      navigate('/');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userData]);
 
   return (
     <>
@@ -40,9 +78,10 @@ const Form = () => {
         >
           <Stack spacing={3}>
             <Input
-              name="email"
-              label="Email"
+              name="emailOrUsername"
+              label="Email or Username"
               fullWidth
+              autoComplete="off"
             />
 
             <Input
@@ -69,7 +108,7 @@ const Form = () => {
               variant="contained"
               size="large"
               type="submit"
-              // loading={loading}
+              loading={loading}
             >
               Login
             </LoadingButton>

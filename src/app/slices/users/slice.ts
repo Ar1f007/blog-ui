@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { registerUserAction } from './action';
+import { loginUserAction, registerUserAction } from './action';
 
 import type { UserState } from './types';
 
@@ -28,6 +28,28 @@ const usersSlice = createSlice({
       state.error = null;
     });
     builder.addCase(registerUserAction.rejected, (state, action) => {
+      state.loading = false;
+
+      if (action.payload) {
+        state.error = action.payload;
+      } else {
+        state.error = action.error;
+      }
+    });
+
+    // ------------------------------------------------------------------------------------------------
+
+    builder.addCase(loginUserAction.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loginUserAction.fulfilled, (state, action) => {
+      state.loading = false;
+      state.data = action.payload;
+      state.error = null;
+    });
+
+    builder.addCase(loginUserAction.rejected, (state, action) => {
       state.loading = false;
 
       if (action.payload) {

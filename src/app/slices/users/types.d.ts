@@ -1,3 +1,4 @@
+import type { LoginInputs } from '../../../features/authentication/validations/login';
 import type { SignUpInputs } from '../../../features/authentication/validations/sign-up';
 import type { SerializedError } from '@reduxjs/toolkit';
 
@@ -15,14 +16,18 @@ export type User = {
   lastName: string;
   email: string;
   role: string;
+  photo?: string;
+  isBlocked?: boolean;
+  isAdmin?: boolean;
 };
 
-export type InputFieldNames = Exclude<keyof SignUpInputs, 'confirmPassword'>;
+export type RegisterFields = Exclude<keyof SignUpInputs, 'confirmPassword'>;
+export type LoginFields = keyof LoginInputs;
 
 type ApiError = {
   success?: boolean;
   errors?: {
-    fieldName: InputFieldNames;
+    fieldName: RegisterFields | LoginFields;
     message: string;
   }[];
 } & SerializedError;
