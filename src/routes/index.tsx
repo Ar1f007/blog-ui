@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import MainLayout from '../layouts/MainLayout';
+import { AuthLayout, MainLayout } from '../layouts';
 import { Home, SignUp } from '../pages';
 import Login from '../pages/login';
 
@@ -18,12 +18,17 @@ export const routes = createBrowserRouter([
     ],
   },
   {
-    path: paths.signUp,
-    element: <SignUp />,
-  },
-  {
-    path: paths.login,
-    element: <Login />,
+    element: <AuthLayout />,
+    children: [
+      {
+        path: paths.signUp,
+        element: <SignUp />,
+      },
+      {
+        path: paths.login,
+        element: <Login />,
+      },
+    ],
   },
   {
     path: '*',

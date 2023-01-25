@@ -1,14 +1,27 @@
-import type { PaletteMode, PaletteOptions } from '@mui/material';
+import type { PaletteMode, PaletteOptions, ThemeOptions } from '@mui/material';
 
-const common = {
+const common: ThemeOptions = {
   typography: {
     htmlFontSize: 10,
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        containedPrimary: {
+          color: '#fff',
+        },
+      },
+    },
   },
 };
 
 const lightPalette: PaletteOptions = {
   background: {
     default: '#EFF1F5',
+  },
+
+  primary: {
+    main: '#FDA214',
   },
 };
 

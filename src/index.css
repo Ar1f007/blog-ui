@@ -19,12 +19,7 @@ code {
 
 .link-text {
   color: var(--gray);
-  text-decoration: none;
   font-size: 1.4rem;
-  transition: text-decoration 0.2s ease;
+  color: #fda214;
   font-weight: 500;
-}
-
-.link-text:hover {
-  text-decoration: underline;
 }

@@ -14,7 +14,7 @@ const LoginFormFooter = () => (
     >
       Forgot Password?
     </Link>
-    <Box sx={{ fontSize: '1.4rem', fontWeight: 500 }}>
+    <Box sx={{ fontSize: '1.4rem' }}>
       Don&apos;t have account?{' '}
       <Link
         to={paths.signUp}
