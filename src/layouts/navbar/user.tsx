@@ -1,9 +1,29 @@
-import { Avatar, Box, IconButton, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
+import { Avatar, Box, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip } from '@mui/material';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+import { getUserData, logout } from '../../app/slices/users/slice';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import { userNavigation } from '../../routes/navigation';
+import Icons from '../../utils/icons';
+import { createSXCollection } from '../../utils/mui';
+
+const styles = createSXCollection({
+  menu: {
+    mt: '45px',
+  },
+  link: {
+    display: 'flex',
+    alignItems: 'center',
+    textDecoration: 'none',
+    color: (t) => t.palette.grey['900'],
+  },
+});
 
 const UserSettings = () => {
+  const user = useAppSelector(getUserData);
+  const dispatch = useAppDispatch();
+
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -14,6 +34,11 @@ const UserSettings = () => {
     setAnchorElUser(null);
   };
 
+  const handleLogout = () => {
+    handleCloseUserMenu();
+    dispatch(logout());
+  };
+
   return (
     <Box flexGrow={0}>
       <Tooltip title="Open settings">
@@ -22,14 +47,16 @@ const UserSettings = () => {
           sx={{ p: 0 }}
         >
           <Avatar
-            alt="John Doe"
-            src="www.random.com/jpeg"
+            alt={user?.firstName}
+            src={user?.photo}
           />
         </IconButton>
       </Tooltip>
 
       <Menu
-        sx={{ mt: '45px' }}
+        sx={{
+          mt: '45px',
+        }}
         id="menu-appbar"
         anchorEl={anchorElUser}
         anchorOrigin={{
@@ -44,14 +71,50 @@ const UserSettings = () => {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        {settings.map((setting) => (
+        <MenuItem
+          onClick={handleCloseUserMenu}
+          sx={{ width: '200px' }}
+        >
+          <Box
+            component={Link}
+            to={`/${user?.username}`}
+            sx={styles.link}
+          >
+            <ListItemIcon>
+              <Icons.PermIdentity />
+            </ListItemIcon>
+            Profile
+          </Box>
+        </MenuItem>
+        {userNavigation.map((userMenu) => (
           <MenuItem
-            key={setting}
+            key={userMenu.name}
             onClick={handleCloseUserMenu}
           >
-            <Typography textAlign="center">{setting}</Typography>
+            <Box
+              component={Link}
+              to={userMenu.href}
+              sx={styles.link}
+            >
+              <ListItemIcon>
+                <userMenu.icon />
+              </ListItemIcon>
+              {userMenu.name}
+            </Box>
           </MenuItem>
         ))}
+
+        <Divider />
+
+        <MenuItem
+          onClick={handleLogout}
+          sx={styles.link}
+        >
+          <ListItemIcon>
+            <Icons.Logout />
+          </ListItemIcon>
+          Logout
+        </MenuItem>
       </Menu>
     </Box>
   );

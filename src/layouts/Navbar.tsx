@@ -12,7 +12,7 @@ import SearchBar from './navbar/search';
 const styles = createSXCollection({
   logo: {
     width: (t) => t.spacing(15),
-    display: { xs: 'none', md: 'flex' },
+    mr: { xs: 2, lg: 0 },
   },
   signUp: {
     ml: 2,

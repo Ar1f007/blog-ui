@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { loginUserAction, registerUserAction } from './action';
 
 import type { UserState } from './types';
+import type { RootState } from '../../store';
 
 const initialState = {
   loading: false,
@@ -16,6 +17,10 @@ const usersSlice = createSlice({
   reducers: {
     clearError: (state) => {
       state.error = null;
+    },
+
+    logout: (state) => {
+      state.data = null;
     },
   },
   extraReducers: (builder) => {
@@ -61,5 +66,7 @@ const usersSlice = createSlice({
   },
 });
 
-export const { clearError } = usersSlice.actions;
+export const { clearError, logout } = usersSlice.actions;
 export default usersSlice.reducer;
+
+export const getUserData = (s: RootState) => s.user.data;
