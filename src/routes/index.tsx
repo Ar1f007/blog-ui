@@ -1,7 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import { AuthLayout, MainLayout } from '../layouts';
+import { AuthLayout, MainLayout, PostLayout } from '../layouts';
 import { Home, SignUp } from '../pages';
+import AddPost from '../pages/add-post';
 import Login from '../pages/login';
 
 import paths from './paths';
@@ -27,6 +28,15 @@ export const routes = createBrowserRouter([
       {
         path: paths.login,
         element: <Login />,
+      },
+    ],
+  },
+  {
+    element: <PostLayout />,
+    children: [
+      {
+        path: paths.newPost,
+        element: <AddPost />,
       },
     ],
   },

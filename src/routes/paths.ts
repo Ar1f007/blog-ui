@@ -4,7 +4,7 @@ const paths = {
   signUp: '/sign-up',
   login: '/login',
   forgotPassword: '/forgot-password',
-  cretePost: '/create',
+  createPost: '/create',
 
   lists: '/me/lists',
   dashboard: '/me/dashboard',

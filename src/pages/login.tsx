@@ -1,10 +1,11 @@
 import { Stack } from '@mui/material';
 
-import { FormHeader, LoginForm } from '../features/authentication/components';
+import { FormHeader } from '../components';
+import { LoginForm } from '../features/authentication/components';
 
 const Login = () => (
   <Stack spacing={3}>
-    <FormHeader text="Welcome back!" />
+    <FormHeader title="Welcome Back!" />
     <LoginForm />
   </Stack>
 );

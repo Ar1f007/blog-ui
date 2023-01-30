@@ -1,9 +1,9 @@
 import { Stack, Box, Typography } from '@mui/material';
 
-import Logo from '../../../components/ui/Logo';
-import { createSXCollection } from '../../../utils/mui';
+import { createSXCollection } from '../../utils/mui';
+import Logo from '../ui/Logo';
 
-import type { FormHeaderProps } from '../types';
+import type { FormHeaderProps } from '../../types/form';
 import type { FC } from 'react';
 
 const styles = createSXCollection({
@@ -16,22 +16,22 @@ const styles = createSXCollection({
   },
 });
 
-const FormHeader: FC<FormHeaderProps> = ({ text }) => (
+export const FormHeader: FC<FormHeaderProps> = ({ title, logo = true }) => (
   <Stack sx={styles.formHeader}>
-    <Box sx={styles.logoWrapper}>
-      <Logo />
-    </Box>
+    {logo && (
+      <Box sx={styles.logoWrapper}>
+        <Logo />
+      </Box>
+    )}
 
-    {text && (
+    {title && (
       <Typography
         variant="h5"
         component="h1"
         fontWeight="500"
       >
-        {text}
+        {title}
       </Typography>
     )}
   </Stack>
 );
-
-export default FormHeader;
