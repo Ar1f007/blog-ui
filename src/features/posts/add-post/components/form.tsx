@@ -1,34 +1,56 @@
-import { Button, Stack, TextField } from '@mui/material';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, FormHelperText, Stack, TextField } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
+import JoditEditor from 'jodit-react';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
+
+import type { CreatePostPayload } from '../../validations/create-post';
+
 import CreatableSelect from 'react-select/creatable';
 
+import type { SubmitHandler } from 'react-hook-form/dist/types/form';
+
 import { FormHeader, TextInput } from '../../../../components';
-import Description from '../../../../components/editor/Description';
+import Description, { config } from '../../../../components/editor/Description';
+import { createPostSchema } from '../../validations/create-post';
 
 dayjs.extend(utc);
 dayjs.extend(relativeTime);
 
 export type CategoryOption = {
-  readonly value: string;
-  readonly label: string;
+  value: string;
+  label: string;
+  __isNew__?: boolean;
 };
 
-export const options: readonly CategoryOption[] = [
-  { value: 'js', label: 'Javascript' },
-  { value: 'react', label: 'React' },
-  { value: 'node', label: 'Node JS' },
+const options: ReadonlyArray<{ value: string; label: string; __isNew__: boolean }> = [
+  { value: 'Option 1', label: 'Option 1', __isNew__: false },
+  { value: 'Option 2', label: 'Option 2', __isNew__: false },
+  { value: 'Option 3', label: 'Option 3', __isNew__: false },
 ];
 
 const Form = () => {
-  const methods = useForm();
+  const methods = useForm<CreatePostPayload>({
+    mode: 'onTouched',
+    defaultValues: {
+      title: '',
+      category: undefined,
+      description: '',
+      published_at: dayjs(),
+      tags: undefined,
+    },
+    resolver: zodResolver(createPostSchema),
+  });
 
-  const onSubmit = (data: any) => {
+  const onSubmit: SubmitHandler<CreatePostPayload> = (data) => {
     console.log(data);
   };
+
+  console.log(methods.formState.errors.published_at);
+  // console.log({ m: methods.getValues('published_at') });
 
   return (
     <Stack rowGap={3}>
@@ -57,40 +79,68 @@ const Form = () => {
 
             <TextInput
               name="title"
-              label="Title"
+              placeholder="Title"
+              // label="Title"
             />
+
+            {/* <Controller
+              name="description"
+              control={methods.control}
+              render={({ field: { value, onChange }, formState }) => (
+                <Stack>
+                  <Description
+                    content={value}
+                    setContent={onChange}
+                  />
+                  <FormHelperText
+                    sx={{ ml: 1.75 }}
+                    error={!!formState.errors.description}
+                  >
+                    {formState.errors.description?.message}
+                  </FormHelperText>
+                </Stack>
+              )}
+            /> */}
 
             <Controller
               name="description"
               control={methods.control}
-              render={({ field: { value, onChange } }) => (
-                <Description
-                  content={value}
-                  setContent={onChange}
-                />
+              render={({ field }) => (
+                <Stack>
+                  <JoditEditor
+                    config={config}
+                    {...field}
+                    ref={methods.register('description').ref}
+                  />
+                  <FormHelperText
+                    sx={{ ml: 1.75 }}
+                    error={!!methods.formState.errors.description}
+                  >
+                    {methods.formState.errors?.description?.message}
+                  </FormHelperText>
+                </Stack>
               )}
             />
 
             <Controller
               name="published_at"
               control={methods.control}
-              defaultValue={null}
-              render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
+              render={({ field }) => (
                 <DateTimePicker
                   label="Publish Date"
-                  inputRef={ref}
                   renderInput={(params) => (
                     <TextField
                       placeholder="Select Date"
-                      error={!!error}
-                      helperText={error?.message}
+                      ref={methods.register('published_at').ref}
+                      error={!!methods.formState.errors.published_at}
+                      helperText={
+                        <span style={{ color: 'red' }}>{methods.formState.errors.published_at?.message}</span>
+                      }
                       {...params}
                     />
                   )}
                   minDate={dayjs()}
-                  value={value}
-                  onChange={onChange}
-                  onOpen={() => onChange(() => dayjs())}
+                  {...field}
                 />
               )}
             />
@@ -98,26 +148,71 @@ const Form = () => {
             <Controller
               control={methods.control}
               name="category"
-              render={({ field }) => (
-                <CreatableSelect
-                  {...field}
-                  isClearable
-                  options={options}
-                  placeholder="Category"
-                  theme={(theme) => ({
-                    ...theme,
-                    colors: {
-                      ...theme.colors,
-                      primary: '#FDA214',
-                    },
-                  })}
-                  styles={{
-                    control: (baseStyles, state) => ({
-                      ...baseStyles,
-                      paddingBlock: '8px',
-                    }),
-                  }}
-                />
+              render={({ field, formState }) => (
+                <Stack>
+                  <CreatableSelect
+                    {...field}
+                    isClearable
+                    options={options}
+                    placeholder="Category"
+                    ref={methods.register('category').ref}
+                    theme={(theme) => ({
+                      ...theme,
+                      colors: {
+                        ...theme.colors,
+                        primary: '#FDA214',
+                      },
+                    })}
+                    styles={{
+                      control: (baseStyles, state) => ({
+                        ...baseStyles,
+                        paddingBlock: '8px',
+                      }),
+                    }}
+                  />
+                  <FormHelperText
+                    sx={{ ml: 1.75 }}
+                    error={!!formState.errors.category}
+                  >
+                    {formState.errors?.category && <>Please add a category</>}
+                  </FormHelperText>
+                </Stack>
+              )}
+            />
+
+            <Controller
+              control={methods.control}
+              name="tags"
+              render={({ field, formState }) => (
+                <Stack>
+                  <CreatableSelect
+                    {...field}
+                    isClearable
+                    isMulti
+                    options={options}
+                    placeholder="Tag (choose upto 3 tags)"
+                    ref={methods.register('tags').ref}
+                    theme={(theme) => ({
+                      ...theme,
+                      colors: {
+                        ...theme.colors,
+                        primary: '#FDA214',
+                      },
+                    })}
+                    styles={{
+                      control: (baseStyles, state) => ({
+                        ...baseStyles,
+                        paddingBlock: '8px',
+                      }),
+                    }}
+                  />
+                  <FormHelperText
+                    sx={{ ml: 1.75 }}
+                    error={!!formState.errors.tags}
+                  >
+                    {formState.errors?.tags && <>Please add tags(up to 3)</>}
+                  </FormHelperText>
+                </Stack>
               )}
             />
 

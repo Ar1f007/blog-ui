@@ -12,6 +12,7 @@ const Input: FC<TextFieldProps> = ({ name, ...others }) => {
   const {
     control,
     formState: { errors },
+    register,
   } = useFormContext();
 
   return (
@@ -23,6 +24,7 @@ const Input: FC<TextFieldProps> = ({ name, ...others }) => {
         <TextField
           {...others}
           {...field}
+          ref={register(name).ref}
           error={!!errors[name]}
           helperText={errors[name] ? errors[name]?.message?.toString() : ''}
         />
