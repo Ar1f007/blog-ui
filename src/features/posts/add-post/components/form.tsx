@@ -1,10 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, FormHelperText, Stack, TextField } from '@mui/material';
+import { Box, Button, FormHelperText, Stack, TextField } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
 import JoditEditor from 'jodit-react';
+import Dropzone from 'react-dropzone';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
 
 import type { CreatePostPayload } from '../../validations/create-post';
@@ -14,7 +15,8 @@ import CreatableSelect from 'react-select/creatable';
 import type { SubmitHandler } from 'react-hook-form/dist/types/form';
 
 import { FormHeader, TextInput } from '../../../../components';
-import Description, { config } from '../../../../components/editor/Description';
+import { config } from '../../../../components/editor/Description';
+import { createSXCollection } from '../../../../utils/mui';
 import { createPostSchema } from '../../validations/create-post';
 
 dayjs.extend(utc);
@@ -32,6 +34,26 @@ const options: ReadonlyArray<{ value: string; label: string; __isNew__: boolean 
   { value: 'Option 3', label: 'Option 3', __isNew__: false },
 ];
 
+const styles = createSXCollection({
+  dropzoneContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    alignItems: 'center',
+    padding: '20px',
+    borderWidth: '2px',
+    borderRadius: '2px',
+    borderStyle: 'dashed',
+    backgroundColor: '#fafafa',
+    color: '#bdbdbd',
+    borderColor: 'rgba(0, 0, 0, 0.23)',
+    transition: 'border 0.24s ease-in-out',
+    '&:active, &:hover': {
+      borderColor: 'primary.main',
+    },
+  },
+});
+
 const Form = () => {
   const methods = useForm<CreatePostPayload>({
     mode: 'onTouched',
@@ -41,6 +63,7 @@ const Form = () => {
       description: '',
       published_at: dayjs(),
       tags: undefined,
+      coverImage: '',
     },
     resolver: zodResolver(createPostSchema),
   });
@@ -49,9 +72,7 @@ const Form = () => {
     console.log(data);
   };
 
-  console.log(methods.formState.errors.published_at);
-  // console.log({ m: methods.getValues('published_at') });
-
+  console.log(methods.formState.errors);
   return (
     <Stack rowGap={3}>
       <FormHeader
@@ -61,21 +82,55 @@ const Form = () => {
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Stack rowGap={3}>
+            {/* <Box sx={styles.dropzoneContainer}>
+              <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
+                {({ getRootProps, getInputProps }) => (
+                  <section>
+                    <div {...getRootProps({ className: 'dropzone' })}>
+                      <input {...getInputProps()} />
+                      <p>Drag &apos;n&apos; drop some files here, or click to select files</p>
+                    </div>
+                  </section>
+                )}
+              </Dropzone>
+            </Box> */}
+
             {/* <Button
-            variant="contained"
-            component="label"
-            sx={{
-              width: 'fit-content',
-              textTransform: 'unset',
-            }}
-          >
-            Upload a cover image
-            <input
-              type="file"
-              accept="image/*"
-              hidden
-            />
-          </Button> */}
+              variant="contained"
+              component="label"
+              sx={{
+                width: 'fit-content',
+                textTransform: 'unset',
+              }}
+            >
+              Upload a cover image
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                {...methods.register('coverImage')}
+              />
+            </Button> */}
+            {/* <Controller
+              name="coverImage"
+              control={methods.control}
+              render={({ field }) => (
+                // <Box sx={styles.dropzoneContainer}>
+                <Dropzone 
+                  onChange=
+                >
+                  {({ getRootProps, getInputProps }) => (
+                    <section>
+                      <div {...getRootProps({ className: 'dropzone' })}>
+                        <input {...getInputProps()} />
+                        <p>Drag &apos;n&apos; drop some files here, or click to select files</p>
+                      </div>
+                    </section>
+                  )}
+                </Dropzone>
+                // </Box>
+              )}
+            /> */}
 
             <TextInput
               name="title"
@@ -164,7 +219,7 @@ const Form = () => {
                       },
                     })}
                     styles={{
-                      control: (baseStyles, state) => ({
+                      control: (baseStyles) => ({
                         ...baseStyles,
                         paddingBlock: '8px',
                       }),
@@ -192,6 +247,7 @@ const Form = () => {
                     options={options}
                     placeholder="Tag (choose upto 3 tags)"
                     ref={methods.register('tags').ref}
+                    isOptionDisabled={() => field?.value?.length >= 3}
                     theme={(theme) => ({
                       ...theme,
                       colors: {
@@ -200,7 +256,7 @@ const Form = () => {
                       },
                     })}
                     styles={{
-                      control: (baseStyles, state) => ({
+                      control: (baseStyles) => ({
                         ...baseStyles,
                         paddingBlock: '8px',
                       }),
