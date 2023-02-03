@@ -3,8 +3,8 @@ import { z } from 'zod';
 
 import type { Dayjs } from 'dayjs';
 
-const MAX_FILE_SIZE = 500000;
-const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/avif'];
+const MB_BYTES = 1000000;
+const ACCEPTED_MIME_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/avif'];
 
 const selectSchema = z.object({
   value: z.string(),
@@ -23,13 +23,28 @@ export const createPostSchema = z.object({
 
   published_at: z.instanceof(dayjs as unknown as typeof Dayjs, { message: 'Not a valid date' }),
 
-  coverImage: z
-    .any()
-    .refine((files) => files[0]?.size <= MAX_FILE_SIZE, 'Max image size is 5MB')
-    .refine(
-      (files) => ACCEPTED_IMAGE_TYPES.includes(files[0]?.type),
-      'Only .jpg, .jpeg, .png, .webp and .avif formats are supported',
-    ),
+  // coverImage: z
+  //   .any()
+  //   .refine((files) => files[0]?.size <= 5 * MB_BYTES, 'Max image size is 5MB')
+  //   .refine((files) => `File must be one of [${ACCEPTED_MIME_TYPES.join(', ')}] but was ${files[0].type}`),
+  coverImage: z.instanceof(File).superRefine((file, ctx) => {
+    if (!ACCEPTED_MIME_TYPES.includes(file.type)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `File must be one of [${ACCEPTED_MIME_TYPES.join(', ')}] but was ${file.type}`,
+      });
+    }
+
+    if (file.size > 5 * MB_BYTES) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_big,
+        type: 'array',
+        message: `The file must not be larger than ${3 * MB_BYTES} bytes: ${file.size}`,
+        maximum: 3 * MB_BYTES,
+        inclusive: true,
+      });
+    }
+  }),
 });
 
 export type CreatePostPayload = z.infer<typeof createPostSchema>;

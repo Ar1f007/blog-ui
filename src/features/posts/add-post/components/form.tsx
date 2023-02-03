@@ -16,6 +16,7 @@ import type { SubmitHandler } from 'react-hook-form/dist/types/form';
 
 import { FormHeader, TextInput } from '../../../../components';
 import { config } from '../../../../components/editor/Description';
+import { FileInput } from '../../../../components/form/file-input';
 import { createSXCollection } from '../../../../utils/mui';
 import { createPostSchema } from '../../validations/create-post';
 
@@ -63,7 +64,7 @@ const Form = () => {
       description: '',
       published_at: dayjs(),
       tags: undefined,
-      coverImage: '',
+      coverImage: undefined,
     },
     resolver: zodResolver(createPostSchema),
   });
@@ -82,6 +83,8 @@ const Form = () => {
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Stack rowGap={3}>
+            <FileInput name="coverImage" />
+            <p>{methods.formState.errors.coverImage?.message?.toString()}</p>
             {/* <Box sx={styles.dropzoneContainer}>
               <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
                 {({ getRootProps, getInputProps }) => (
