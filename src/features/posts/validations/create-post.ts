@@ -13,9 +13,9 @@ const selectSchema = z.object({
 });
 
 export const createPostSchema = z.object({
-  title: z.string().min(1),
+  title: z.string().min(1, { message: 'Please add a title' }),
 
-  description: z.string().min(1),
+  description: z.string().min(1, { message: 'Content is required' }),
 
   category: selectSchema,
 
@@ -23,28 +23,27 @@ export const createPostSchema = z.object({
 
   published_at: z.instanceof(dayjs as unknown as typeof Dayjs, { message: 'Not a valid date' }),
 
-  // coverImage: z
-  //   .any()
-  //   .refine((files) => files[0]?.size <= 5 * MB_BYTES, 'Max image size is 5MB')
-  //   .refine((files) => `File must be one of [${ACCEPTED_MIME_TYPES.join(', ')}] but was ${files[0].type}`),
-  coverImage: z.instanceof(File).superRefine((file, ctx) => {
-    if (!ACCEPTED_MIME_TYPES.includes(file.type)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: `File must be one of [${ACCEPTED_MIME_TYPES.join(', ')}] but was ${file.type}`,
-      });
-    }
+  coverImage: z
+    .instanceof(File)
+    .superRefine((file, ctx) => {
+      if (!ACCEPTED_MIME_TYPES.includes(file.type)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `File must be one of [${ACCEPTED_MIME_TYPES.join(', ')}] but was ${file.type}`,
+        });
+      }
 
-    if (file.size > 5 * MB_BYTES) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.too_big,
-        type: 'array',
-        message: `The file must not be larger than ${3 * MB_BYTES} bytes: ${file.size}`,
-        maximum: 3 * MB_BYTES,
-        inclusive: true,
-      });
-    }
-  }),
+      if (file.size > 5 * MB_BYTES) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.too_big,
+          type: 'array',
+          message: `The file must not be larger than ${3 * MB_BYTES} bytes: ${file.size}`,
+          maximum: 3 * MB_BYTES,
+          inclusive: true,
+        });
+      }
+    })
+    .optional(),
 });
 
 export type CreatePostPayload = z.infer<typeof createPostSchema>;

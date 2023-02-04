@@ -46,11 +46,7 @@ export const FileInput: FC<Props> = ({ name }) => {
     onDrop,
     maxFiles: 1,
     accept: {
-      'image/': ['.png', '.jpg', '.jpeg', '.webp', '.avif'],
-      // 'image/jpg': ['.jpg'],
-      // 'image/jpeg': ['.jpeg'],
-      // 'image/webp': ['.webp'],
-      // 'image/avif': ['.avif'],
+      'image/': ['.png', '/.jpg', '/.jpeg', '/.webp', '/.avif'],
     },
   });
 
@@ -76,17 +72,17 @@ export const FileInput: FC<Props> = ({ name }) => {
     <>
       <div
         {...getRootProps()}
-        // type="file"
         role="button"
         aria-label="File Upload"
         id={name}
+        style={{ marginBottom: 0, paddingBottom: 0 }}
       >
         <input {...getInputProps()} />
-        <div
-          style={{ width: '500px', border: 'black solid 2px' }}
+        <Box
+          sx={styles.dropzoneContainer}
           className={' ' + (isDragActive ? ' ' : ' ')}
         >
-          <p className=" ">Drop the files here ...</p>
+          <p className=" ">{isDragActive ? 'Drop the file here' : 'Choose a cover image'}</p>
 
           {!!files?.length && (
             <div className=" ">
@@ -96,16 +92,17 @@ export const FileInput: FC<Props> = ({ name }) => {
                     src={URL.createObjectURL(file)}
                     alt={file.name}
                     style={{
-                      height: '200px',
+                      // height: '200px',
+                      width: '100%',
                     }}
                   />
                 </div>
               ))}
             </div>
           )}
+        </Box>
 
-          <ul>{fileRejectionItems}</ul>
-        </div>
+        {fileRejectionItems.length > 0 && <ul>{fileRejectionItems}</ul>}
       </div>
     </>
   );

@@ -17,7 +17,6 @@ import type { SubmitHandler } from 'react-hook-form/dist/types/form';
 import { FormHeader, TextInput } from '../../../../components';
 import { config } from '../../../../components/editor/Description';
 import { FileInput } from '../../../../components/form/file-input';
-import { createSXCollection } from '../../../../utils/mui';
 import { createPostSchema } from '../../validations/create-post';
 
 dayjs.extend(utc);
@@ -34,26 +33,6 @@ const options: ReadonlyArray<{ value: string; label: string; __isNew__: boolean 
   { value: 'Option 2', label: 'Option 2', __isNew__: false },
   { value: 'Option 3', label: 'Option 3', __isNew__: false },
 ];
-
-const styles = createSXCollection({
-  dropzoneContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    flex: 1,
-    alignItems: 'center',
-    padding: '20px',
-    borderWidth: '2px',
-    borderRadius: '2px',
-    borderStyle: 'dashed',
-    backgroundColor: '#fafafa',
-    color: '#bdbdbd',
-    borderColor: 'rgba(0, 0, 0, 0.23)',
-    transition: 'border 0.24s ease-in-out',
-    '&:active, &:hover': {
-      borderColor: 'primary.main',
-    },
-  },
-});
 
 const Form = () => {
   const methods = useForm<CreatePostPayload>({
@@ -73,7 +52,6 @@ const Form = () => {
     console.log(data);
   };
 
-  console.log(methods.formState.errors);
   return (
     <Stack rowGap={3}>
       <FormHeader
@@ -83,82 +61,20 @@ const Form = () => {
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Stack rowGap={3}>
-            <FileInput name="coverImage" />
-            <p>{methods.formState.errors.coverImage?.message?.toString()}</p>
-            {/* <Box sx={styles.dropzoneContainer}>
-              <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
-                {({ getRootProps, getInputProps }) => (
-                  <section>
-                    <div {...getRootProps({ className: 'dropzone' })}>
-                      <input {...getInputProps()} />
-                      <p>Drag &apos;n&apos; drop some files here, or click to select files</p>
-                    </div>
-                  </section>
-                )}
-              </Dropzone>
-            </Box> */}
-
-            {/* <Button
-              variant="contained"
-              component="label"
-              sx={{
-                width: 'fit-content',
-                textTransform: 'unset',
-              }}
-            >
-              Upload a cover image
-              <input
-                type="file"
-                accept="image/*"
-                hidden
-                {...methods.register('coverImage')}
-              />
-            </Button> */}
-            {/* <Controller
-              name="coverImage"
-              control={methods.control}
-              render={({ field }) => (
-                // <Box sx={styles.dropzoneContainer}>
-                <Dropzone 
-                  onChange=
-                >
-                  {({ getRootProps, getInputProps }) => (
-                    <section>
-                      <div {...getRootProps({ className: 'dropzone' })}>
-                        <input {...getInputProps()} />
-                        <p>Drag &apos;n&apos; drop some files here, or click to select files</p>
-                      </div>
-                    </section>
-                  )}
-                </Dropzone>
-                // </Box>
-              )}
-            /> */}
+            <Stack>
+              <FileInput name="coverImage" />
+              <FormHelperText
+                sx={{ ml: 1.75 }}
+                error={!!methods.formState.errors.coverImage}
+              >
+                {methods.formState.errors.coverImage?.message}
+              </FormHelperText>
+            </Stack>
 
             <TextInput
               name="title"
               placeholder="Title"
-              // label="Title"
             />
-
-            {/* <Controller
-              name="description"
-              control={methods.control}
-              render={({ field: { value, onChange }, formState }) => (
-                <Stack>
-                  <Description
-                    content={value}
-                    setContent={onChange}
-                  />
-                  <FormHelperText
-                    sx={{ ml: 1.75 }}
-                    error={!!formState.errors.description}
-                  >
-                    {formState.errors.description?.message}
-                  </FormHelperText>
-                </Stack>
-              )}
-            /> */}
 
             <Controller
               name="description"
