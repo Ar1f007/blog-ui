@@ -24,21 +24,21 @@ export const createPostSchema = z.object({
   published_at: z.instanceof(dayjs as unknown as typeof Dayjs, { message: 'Not a valid date' }),
 
   coverImage: z
-    .instanceof(File)
-    .superRefine((file, ctx) => {
-      if (!ACCEPTED_MIME_TYPES.includes(file.type)) {
+    .any()
+    .superRefine((files, ctx) => {
+      if (!ACCEPTED_MIME_TYPES.includes(files[0]?.type)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: `File must be one of [${ACCEPTED_MIME_TYPES.join(', ')}] but was ${file.type}`,
+          message: `File must be one of [${ACCEPTED_MIME_TYPES.join(', ')}] but was ${files[0]?.type}`,
         });
       }
 
-      if (file.size > 5 * MB_BYTES) {
+      if (files[0].size > 5 * MB_BYTES) {
         ctx.addIssue({
           code: z.ZodIssueCode.too_big,
           type: 'array',
-          message: `The file must not be larger than ${3 * MB_BYTES} bytes: ${file.size}`,
-          maximum: 3 * MB_BYTES,
+          message: `The file must not be larger than ${5 * MB_BYTES} bytes: ${files[0]?.size}`,
+          maximum: 5 * MB_BYTES,
           inclusive: true,
         });
       }

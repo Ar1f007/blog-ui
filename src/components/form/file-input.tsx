@@ -1,14 +1,16 @@
-import { Box } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
 
+import Icons from '../../utils/icons';
 import { createSXCollection } from '../../utils/mui';
 
 import type { FC } from 'react';
 
 type Props = {
   name: string;
+  isOptional?: boolean;
 };
 
 const styles = createSXCollection({
@@ -31,9 +33,10 @@ const styles = createSXCollection({
   },
 });
 
-export const FileInput: FC<Props> = ({ name }) => {
-  const { register, setValue, unregister, watch } = useFormContext();
+export const FileInput: FC<Props> = ({ name, isOptional = true }) => {
+  const { register, setValue, unregister, watch, resetField } = useFormContext();
   const files = watch(name);
+  const isCoverImageUploaded = files?.length > 0;
 
   const onDrop = useCallback(
     (droppedFiles: File[]) => {
@@ -46,7 +49,11 @@ export const FileInput: FC<Props> = ({ name }) => {
     onDrop,
     maxFiles: 1,
     accept: {
-      'image/': ['.png', '/.jpg', '/.jpeg', '/.webp', '/.avif'],
+      'image/png': [],
+      'image/jpeg': [],
+      'image/jpg': [],
+      'image/webp': [],
+      'image/avif': [],
     },
   });
 
@@ -61,6 +68,11 @@ export const FileInput: FC<Props> = ({ name }) => {
     </li>
   ));
 
+  const handleCoverImageRemove = () => {
+    resetField(name);
+    fileRejections.length = 0;
+  };
+
   useEffect(() => {
     register(name);
     return () => {
@@ -70,29 +82,42 @@ export const FileInput: FC<Props> = ({ name }) => {
 
   return (
     <>
-      <div
+      {files && (
+        <Stack alignItems="flex-end">
+          <Button
+            onClick={() => handleCoverImageRemove()}
+            aria-label="remove image"
+          >
+            Remove
+          </Button>
+        </Stack>
+      )}
+      <Box
         {...getRootProps()}
         role="button"
         aria-label="File Upload"
         id={name}
-        style={{ marginBottom: 0, paddingBottom: 0 }}
       >
         <input {...getInputProps()} />
-        <Box
-          sx={styles.dropzoneContainer}
-          className={' ' + (isDragActive ? ' ' : ' ')}
-        >
-          <p className=" ">{isDragActive ? 'Drop the file here' : 'Choose a cover image'}</p>
+        <Box sx={styles.dropzoneContainer}>
+          <Box sx={{ position: 'relative', width: '100%' }}>
+            <Typography textAlign="center">
+              {isDragActive
+                ? 'Drop the file here'
+                : isCoverImageUploaded
+                ? null
+                : `Choose a cover image ${isOptional ? '(optional)' : ''}`}
+            </Typography>
+          </Box>
 
           {!!files?.length && (
-            <div className=" ">
+            <div>
               {files.map((file: File) => (
                 <div key={file.name}>
                   <img
                     src={URL.createObjectURL(file)}
                     alt={file.name}
                     style={{
-                      // height: '200px',
                       width: '100%',
                     }}
                   />
@@ -102,8 +127,8 @@ export const FileInput: FC<Props> = ({ name }) => {
           )}
         </Box>
 
-        {fileRejectionItems.length > 0 && <ul>{fileRejectionItems}</ul>}
-      </div>
+        {fileRejectionItems?.length > 0 && <ul>{fileRejectionItems}</ul>}
+      </Box>
     </>
   );
 };

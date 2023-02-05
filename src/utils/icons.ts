@@ -12,6 +12,7 @@ import {
   PermIdentity,
   Search,
   Settings,
+  Close,
 } from '@mui/icons-material';
 
 const Icons = {
@@ -28,6 +29,7 @@ const Icons = {
   PermIdentity,
   Search,
   Settings,
+  Close,
 };
 
 export default Icons;
