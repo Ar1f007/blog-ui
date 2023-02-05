@@ -97,6 +97,7 @@ export const FileInput: FC<Props> = ({ name, isOptional = true }) => {
         role="button"
         aria-label="File Upload"
         id={name}
+        sx={{ '&:focus-visible': { outlineColor: (t) => t.palette.primary.main } }}
       >
         <input {...getInputProps()} />
         <Box sx={styles.dropzoneContainer}>
