@@ -1,9 +1,8 @@
-import { Box, Button, Stack, Typography } from '@mui/material';
-import { useCallback, useEffect } from 'react';
+import { Box, Button, FormHelperText, Stack, Typography } from '@mui/material';
+import { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
 
-import Icons from '../../utils/icons';
 import { createSXCollection } from '../../utils/mui';
 
 import type { FC } from 'react';
@@ -34,8 +33,19 @@ const styles = createSXCollection({
 });
 
 export const FileInput: FC<Props> = ({ name, isOptional = true }) => {
-  const { register, setValue, unregister, watch, resetField } = useFormContext();
+  const {
+    register,
+    setValue,
+    unregister,
+    watch,
+    resetField,
+    formState: { errors },
+  } = useFormContext();
+
   const files = watch(name);
+
+  const hasValidationError = !!errors[name];
+
   const isCoverImageUploaded = files?.length > 0;
 
   const onDrop = useCallback(
@@ -57,6 +67,11 @@ export const FileInput: FC<Props> = ({ name, isOptional = true }) => {
     },
   });
 
+  const handleCoverImageRemove = () => {
+    resetField(name);
+    fileRejections.length = 0;
+  };
+
   const fileRejectionItems = fileRejections.map(({ file, errors }) => (
     <li key={file.name}>
       {file.name} - {file.size} bytes
@@ -68,10 +83,43 @@ export const FileInput: FC<Props> = ({ name, isOptional = true }) => {
     </li>
   ));
 
-  const handleCoverImageRemove = () => {
-    resetField(name);
-    fileRejections.length = 0;
-  };
+  const invalidFileTypeExists = fileRejectionItems?.length > 0;
+
+  const previewFile = isCoverImageUploaded && (
+    <div>
+      {files.map((file: File) => (
+        <div key={file.name}>
+          <img
+            src={URL.createObjectURL(file)}
+            alt={file.name}
+            style={{
+              width: '100%',
+            }}
+          />
+        </div>
+      ))}
+    </div>
+  );
+
+  const showErrorMsg = (
+    <FormHelperText
+      sx={{ ml: 1.75 }}
+      error={hasValidationError}
+    >
+      {errors[name]?.message?.toString()}
+    </FormHelperText>
+  );
+
+  const showRemoveBtn = (
+    <Stack alignItems="flex-end">
+      <Button
+        onClick={() => handleCoverImageRemove()}
+        aria-label="remove image"
+      >
+        Remove
+      </Button>
+    </Stack>
+  );
 
   useEffect(() => {
     register(name);
@@ -82,16 +130,8 @@ export const FileInput: FC<Props> = ({ name, isOptional = true }) => {
 
   return (
     <>
-      {files && (
-        <Stack alignItems="flex-end">
-          <Button
-            onClick={() => handleCoverImageRemove()}
-            aria-label="remove image"
-          >
-            Remove
-          </Button>
-        </Stack>
-      )}
+      {files && showRemoveBtn}
+
       <Box
         {...getRootProps()}
         role="button"
@@ -111,25 +151,13 @@ export const FileInput: FC<Props> = ({ name, isOptional = true }) => {
             </Typography>
           </Box>
 
-          {!!files?.length && (
-            <div>
-              {files.map((file: File) => (
-                <div key={file.name}>
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt={file.name}
-                    style={{
-                      width: '100%',
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
+          {previewFile}
         </Box>
 
-        {fileRejectionItems?.length > 0 && <ul>{fileRejectionItems}</ul>}
+        {invalidFileTypeExists && <ul style={{ marginBottom: 0 }}>{fileRejectionItems}</ul>}
       </Box>
+
+      {hasValidationError && showErrorMsg}
     </>
   );
 };

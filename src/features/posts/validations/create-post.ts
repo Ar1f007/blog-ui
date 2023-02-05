@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
 import { z } from 'zod';
 
+import { bytesToMB } from '../../../utils/others';
+
 import type { Dayjs } from 'dayjs';
 
 const MB_BYTES = 1000000;
@@ -20,7 +22,7 @@ export const createPostSchema = z
 
     category: selectSchema,
 
-    tags: z.array(selectSchema),
+    tags: z.array(selectSchema, { required_error: 'Add/create tag(s) (up to 3)' }),
 
     published_at: z.instanceof(dayjs as unknown as typeof Dayjs, { message: 'Not a valid date' }),
 
@@ -30,15 +32,15 @@ export const createPostSchema = z
         if (!ACCEPTED_MIME_TYPES.includes(files[0]?.type)) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: `File must be one of [${ACCEPTED_MIME_TYPES.join(', ')}] but was ${files[0]?.type}`,
+            message: `File must be one of [${ACCEPTED_MIME_TYPES.join(', ')}]}`,
           });
         }
 
-        if (files[0].size > 5 * MB_BYTES) {
+        if (files[0]?.size > 5 * MB_BYTES) {
           ctx.addIssue({
             code: z.ZodIssueCode.too_big,
             type: 'array',
-            message: `The file must not be larger than ${5 * MB_BYTES} bytes: ${files[0]?.size}`,
+            message: `Max allowed size is 5MB. Your current file size is ${bytesToMB(files[0]?.size)}`,
             maximum: 5 * MB_BYTES,
             inclusive: true,
           });
@@ -46,12 +48,20 @@ export const createPostSchema = z
       })
       .optional(),
   })
-  .superRefine(({ description }, ctx) => {
+  .superRefine(({ description, tags }, ctx) => {
     if (description === '<p><br></p>') {
       ctx.addIssue({
         code: 'custom',
         message: 'Write your story',
         path: ['description'],
+      });
+    }
+
+    if (tags.length === 0) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Add at least 1 tag to the post',
+        path: ['tags'],
       });
     }
   });

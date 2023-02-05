@@ -10,9 +10,10 @@ type Props = {
   label: string;
   name: string;
   options: ReadonlyArray<SelectOption>;
+  maxSelectableOption: number;
 };
 
-export const Select = ({ name, label, options }: Props) => {
+export const MultiSelect = ({ name, label, options, maxSelectableOption }: Props) => {
   const {
     control,
     register,
@@ -30,9 +31,11 @@ export const Select = ({ name, label, options }: Props) => {
           <CreatableSelect
             {...field}
             isClearable
+            isMulti
             options={options}
             placeholder={label}
             ref={register(name).ref}
+            isOptionDisabled={() => field?.value?.length >= maxSelectableOption}
             theme={(theme) => ({
               ...theme,
               colors: {
@@ -52,7 +55,7 @@ export const Select = ({ name, label, options }: Props) => {
               sx={{ ml: 1.75 }}
               error={hasError}
             >
-              Add/create a {name}
+              {errors[name]?.message?.toString()}
             </FormHelperText>
           )}
         </Stack>
