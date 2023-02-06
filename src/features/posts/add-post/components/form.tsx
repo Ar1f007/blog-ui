@@ -45,7 +45,7 @@ const Form = () => {
   });
 
   const onSubmit: SubmitHandler<CreatePostPayload> = (data) => {
-    console.log(data);
+    // if (data.coverImage)
   };
 
   return (
@@ -99,4 +99,5 @@ const Form = () => {
     </Stack>
   );
 };
+
 export default Form;
