@@ -10,9 +10,11 @@ type Props = {
   label: string;
   name: string;
   options: ReadonlyArray<SelectOption>;
+  isMulti?: boolean;
+  maxSelectableOption?: number;
 };
 
-export const Select = ({ name, label, options }: Props) => {
+export const Select = ({ name, label, options, isMulti = false, maxSelectableOption = 3 }: Props) => {
   const {
     control,
     register,
@@ -31,6 +33,8 @@ export const Select = ({ name, label, options }: Props) => {
             {...field}
             isClearable
             options={options}
+            isMulti={isMulti}
+            isOptionDisabled={() => field?.value?.length >= maxSelectableOption}
             placeholder={label}
             ref={register(name).ref}
             theme={(theme) => ({
@@ -52,7 +56,7 @@ export const Select = ({ name, label, options }: Props) => {
               sx={{ ml: 1.75 }}
               error={hasError}
             >
-              Add/create a {name}
+              {isMulti ? errors[name]?.message?.toString() : `Add/create a ${name}`}
             </FormHelperText>
           )}
         </Stack>

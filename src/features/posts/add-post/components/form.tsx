@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, FormHelperText, Stack } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
@@ -15,7 +15,6 @@ import {
   DateTimePicker,
   TextEditor,
   Select,
-  MultiSelect,
 } from '../../../../components';
 
 import type { SubmitHandler } from 'react-hook-form/dist/types/form';
@@ -55,6 +54,7 @@ const Form = () => {
         title="Create New Post"
         logo={false}
       />
+
       <FormProvider
         methods={methods}
         onSubmit={methods.handleSubmit(onSubmit)}
@@ -80,7 +80,8 @@ const Form = () => {
             options={options}
           />
 
-          <MultiSelect
+          <Select
+            isMulti
             name="tags"
             label="Add tags (choose up to 3)"
             options={options}
