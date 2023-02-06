@@ -24,10 +24,10 @@ import { createPostSchema } from '../../validations/create-post';
 dayjs.extend(utc);
 dayjs.extend(relativeTime);
 
-const options: ReadonlyArray<{ value: string; label: string; __isNew__: boolean }> = [
-  { value: 'Option 1', label: 'Option 1', __isNew__: false },
-  { value: 'Option 2', label: 'Option 2', __isNew__: false },
-  { value: 'Option 3', label: 'Option 3', __isNew__: false },
+const options: ReadonlyArray<{ value: string; label: string; __isNew__?: boolean }> = [
+  { value: 'Option 1', label: 'Option 1' },
+  { value: 'Option 2', label: 'Option 2' },
+  { value: 'Option 3', label: 'Option 3' },
 ];
 
 const Form = () => {

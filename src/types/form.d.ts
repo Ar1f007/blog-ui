@@ -6,5 +6,5 @@ export type FormHeaderProps = {
 export type SelectOption = {
   value: string;
   label: string;
-  __isNew__: boolean;
+  __isNew__?: boolean;
 };
