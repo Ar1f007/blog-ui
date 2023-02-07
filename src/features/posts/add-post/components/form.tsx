@@ -3,10 +3,14 @@ import { Button, Stack } from '@mui/material';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import type { CreatePostPayload } from '../../validations/create-post';
+import type { Dayjs } from 'dayjs';
+import type { SubmitHandler } from 'react-hook-form/dist/types/form';
 
+import { getCategoriesAction } from '../../../../app/slices/categories/action';
 import {
   FormHeader,
   TextInput,
@@ -16,13 +20,16 @@ import {
   TextEditor,
   Select,
 } from '../../../../components';
-
-import type { SubmitHandler } from 'react-hook-form/dist/types/form';
-
+import { useAppDispatch, useAppSelector } from '../../../../hooks/store';
 import { createPostSchema } from '../../validations/create-post';
 
 dayjs.extend(utc);
 dayjs.extend(relativeTime);
+
+type Tags = {
+  ids: string[];
+  newTagNames: string[];
+};
 
 const options: ReadonlyArray<{ value: string; label: string; __isNew__?: boolean }> = [
   { value: 'Option 1', label: 'Option 1' },
@@ -31,6 +38,8 @@ const options: ReadonlyArray<{ value: string; label: string; __isNew__?: boolean
 ];
 
 const Form = () => {
+  const category = useAppSelector((s) => s.category.data);
+  const dispatch = useAppDispatch();
   const methods = useForm<CreatePostPayload>({
     mode: 'onTouched',
     defaultValues: {
@@ -44,9 +53,69 @@ const Form = () => {
     resolver: zodResolver(createPostSchema),
   });
 
-  const onSubmit: SubmitHandler<CreatePostPayload> = (data) => {
-    // if (data.coverImage)
+  const getUtcDate = (date: Dayjs) => dayjs.utc(date).format();
+
+  const getCategory = (category: CreatePostPayload['category']) => ({
+    [category.__isNew__ ? 'newCategoryName' : 'categoryId']: category.value,
+  });
+
+  const getTags = (tags: CreatePostPayload['tags']) => {
+    const result: Tags = tags.reduce(
+      (acc, tag) => {
+        if (tag.__isNew__) {
+          acc.newTagNames.push(tag.value);
+        } else {
+          acc.ids.push(tag.value);
+        }
+
+        return acc;
+      },
+      { ids: [], newTagNames: [] } as Tags,
+    );
+
+    return result;
   };
+
+  const transformData = (data: CreatePostPayload) => {
+    let payload: Record<string, string | [] | object> = {};
+
+    payload = {
+      ...data,
+
+      published_at: getUtcDate(data.published_at),
+
+      category: getCategory(data.category),
+
+      tags: getTags(data.tags),
+    };
+
+    return payload;
+  };
+
+  const getCategoryKey = (categoryType: CreatePostPayload['category']) =>
+    `category[${categoryType.__isNew__ ? 'newCategoryName' : 'categoryId'}]`;
+
+  const onSubmit: SubmitHandler<CreatePostPayload> = (data) => {
+    if (!data.coverImage) {
+      delete data.coverImage;
+      const payload = transformData(data);
+    }
+
+    const fd = new FormData();
+
+    fd.append('title', data.title);
+    fd.append('description', data.description);
+    fd.append('published_at', getUtcDate(data.published_at));
+    fd.append('category', JSON.stringify(getCategory(data.category)));
+    fd.append('tags', JSON.stringify(getTags(data.tags)));
+    fd.append('coverImage', data.coverImage[0]);
+  };
+
+  useEffect(() => {
+    if (!category) {
+      dispatch(getCategoriesAction());
+    }
+  }, []);
 
   return (
     <Stack rowGap={3}>

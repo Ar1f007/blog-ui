@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import categoryApi from './services';
 
-export const getCategories = createAsyncThunk('categories/fetch', async (_, { rejectWithValue }) => {
+export const getCategoriesAction = createAsyncThunk('categories/fetch', async (_, { rejectWithValue }) => {
   try {
     const { data } = await categoryApi.getCategories();
     return data.categories;
