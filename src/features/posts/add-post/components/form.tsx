@@ -2,19 +2,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Stack } from '@mui/material';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import utc from 'dayjs/plugin/utc';
 import { useEffect } from 'react';
-
-import type { CreatePost } from '../../../../app/slices/posts/types';
-
 import { useForm } from 'react-hook-form';
 
+import type { CreatePost } from '../../../../app/slices/posts/types';
 import type { CreatePostPayload } from '../../validations/create-post';
-import type { Dayjs } from 'dayjs';
-import type { SubmitHandler } from 'react-hook-form/dist/types/form';
 
 import { getCategoriesAction } from '../../../../app/slices/categories/action';
+
+import type { SubmitHandler } from 'react-hook-form/dist/types/form';
+
 import { createPostAction } from '../../../../app/slices/posts/actions';
 import {
   FormHeader,
@@ -26,15 +23,8 @@ import {
   Select,
 } from '../../../../components';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/store';
+import { getFormattedPayload } from '../../helpers';
 import { createPostSchema } from '../../validations/create-post';
-
-dayjs.extend(utc);
-dayjs.extend(relativeTime);
-
-type Tags = {
-  ids: string[];
-  newTagNames: string[];
-};
 
 const options: ReadonlyArray<{ value: string; label: string; __isNew__?: boolean }> = [
   { value: 'Option 1', label: 'Option 1' },
@@ -61,45 +51,6 @@ const Form = () => {
     resolver: zodResolver(createPostSchema),
   });
 
-  const getUtcDate = (date: Dayjs) => dayjs.utc(date).format();
-
-  const getCategory = (category: CreatePostPayload['category']) => ({
-    [category.__isNew__ ? 'newCategoryName' : 'categoryId']: category.value,
-  });
-
-  const getTags = (tags: CreatePostPayload['tags']) => {
-    const result: Tags = tags.reduce(
-      (acc, tag) => {
-        if (tag.__isNew__) {
-          acc.newTagNames.push(tag.value);
-        } else {
-          acc.ids.push(tag.value);
-        }
-
-        return acc;
-      },
-      { ids: [], newTagNames: [] } as Tags,
-    );
-
-    return result;
-  };
-
-  const transformData = (data: CreatePostPayload) => {
-    let payload: Record<string, string | [] | object> = {};
-
-    payload = {
-      ...data,
-
-      published_at: getUtcDate(data.published_at),
-
-      category: getCategory(data.category),
-
-      tags: getTags(data.tags),
-    };
-
-    return payload;
-  };
-
   const savePost = ({ payload, coverImgIncluded }: CreatePost) => {
     actions.createPostAction({
       payload,
@@ -108,30 +59,11 @@ const Form = () => {
   };
 
   const onSubmit: SubmitHandler<CreatePostPayload> = async (data) => {
-    if (!data.coverImage) {
-      delete data.coverImage;
-      const payload = transformData(data);
-
-      savePost({
-        payload,
-        coverImgIncluded: false,
-      });
-
-      return;
-    }
-
-    const fd = new FormData();
-
-    fd.append('title', data.title);
-    fd.append('description', data.description);
-    fd.append('published_at', getUtcDate(data.published_at));
-    fd.append('category', JSON.stringify(getCategory(data.category)));
-    fd.append('tags', JSON.stringify(getTags(data.tags)));
-    fd.append('coverImage', data.coverImage[0]);
+    const payload = getFormattedPayload(data);
 
     savePost({
-      payload: fd,
-      coverImgIncluded: true,
+      payload,
+      coverImgIncluded: !!data.coverImage,
     });
   };
 

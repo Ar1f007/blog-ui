@@ -1,13 +1,13 @@
 import { AppBar, Box, Chip, Toolbar } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-import Logo from '../components/ui/Logo';
-import { useAppSelector } from '../hooks/store';
-import paths from '../routes/paths';
-import { createSXCollection } from '../utils/mui';
+import Logo from '../../components/ui/Logo';
+import { useAppSelector } from '../../hooks/store';
+import paths from '../../routes/paths';
+import { createSXCollection } from '../../utils/mui';
 
-import NavLinks from './navbar/nav-links';
-import SearchBar from './navbar/search';
+import NavLinks from './nav-links';
+import SearchBar from './search';
 
 const styles = createSXCollection({
   logo: {
