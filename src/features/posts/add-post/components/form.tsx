@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Stack } from '@mui/material';
+import { bindActionCreators } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
@@ -11,6 +12,7 @@ import type { Dayjs } from 'dayjs';
 import type { SubmitHandler } from 'react-hook-form/dist/types/form';
 
 import { getCategoriesAction } from '../../../../app/slices/categories/action';
+import { createPostAction } from '../../../../app/slices/posts/actions';
 import {
   FormHeader,
   TextInput,
@@ -40,6 +42,9 @@ const options: ReadonlyArray<{ value: string; label: string; __isNew__?: boolean
 const Form = () => {
   const category = useAppSelector((s) => s.category.data);
   const dispatch = useAppDispatch();
+
+  const actions = bindActionCreators({ getCategoriesAction, createPostAction }, dispatch);
+
   const methods = useForm<CreatePostPayload>({
     mode: 'onTouched',
     defaultValues: {
@@ -92,13 +97,23 @@ const Form = () => {
     return payload;
   };
 
-  const getCategoryKey = (categoryType: CreatePostPayload['category']) =>
-    `category[${categoryType.__isNew__ ? 'newCategoryName' : 'categoryId'}]`;
-
-  const onSubmit: SubmitHandler<CreatePostPayload> = (data) => {
+  const onSubmit: SubmitHandler<CreatePostPayload> = async (data) => {
     if (!data.coverImage) {
       delete data.coverImage;
       const payload = transformData(data);
+
+      try {
+        const data = await actions.createPostAction({
+          payload,
+          coverImgIncluded: false,
+        });
+
+        console.log(data);
+      } catch (e) {
+        // console.log(e);
+      }
+
+      return;
     }
 
     const fd = new FormData();
@@ -109,13 +124,22 @@ const Form = () => {
     fd.append('category', JSON.stringify(getCategory(data.category)));
     fd.append('tags', JSON.stringify(getTags(data.tags)));
     fd.append('coverImage', data.coverImage[0]);
+
+    try {
+      const data = await actions.createPostAction({
+        payload: fd,
+        coverImgIncluded: true,
+      });
+    } catch (e) {
+      //
+    }
   };
 
   useEffect(() => {
     if (!category) {
-      dispatch(getCategoriesAction());
+      actions.getCategoriesAction();
     }
-  }, []);
+  }, [category, actions]);
 
   return (
     <Stack rowGap={3}>

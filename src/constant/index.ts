@@ -7,3 +7,5 @@ export const REGISTER_ENDPOINT = `${BASE_URL}/users`;
 export const LOGIN_ENDPOINT = `${BASE_URL}/users/login`;
 
 export const GET_ALL_CATEGORIES = `${BASE_URL}/categories`;
+
+export const CREATE_POST = BASE_URL + '/posts';
