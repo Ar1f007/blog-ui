@@ -5,6 +5,9 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
 import { useEffect } from 'react';
+
+import type { CreatePost } from '../../../../app/slices/posts/types';
+
 import { useForm } from 'react-hook-form';
 
 import type { CreatePostPayload } from '../../validations/create-post';
@@ -97,21 +100,22 @@ const Form = () => {
     return payload;
   };
 
+  const savePost = ({ payload, coverImgIncluded }: CreatePost) => {
+    actions.createPostAction({
+      payload,
+      coverImgIncluded,
+    });
+  };
+
   const onSubmit: SubmitHandler<CreatePostPayload> = async (data) => {
     if (!data.coverImage) {
       delete data.coverImage;
       const payload = transformData(data);
 
-      try {
-        const data = await actions.createPostAction({
-          payload,
-          coverImgIncluded: false,
-        });
-
-        console.log(data);
-      } catch (e) {
-        // console.log(e);
-      }
+      savePost({
+        payload,
+        coverImgIncluded: false,
+      });
 
       return;
     }
@@ -125,14 +129,10 @@ const Form = () => {
     fd.append('tags', JSON.stringify(getTags(data.tags)));
     fd.append('coverImage', data.coverImage[0]);
 
-    try {
-      const data = await actions.createPostAction({
-        payload: fd,
-        coverImgIncluded: true,
-      });
-    } catch (e) {
-      //
-    }
+    savePost({
+      payload: fd,
+      coverImgIncluded: true,
+    });
   };
 
   useEffect(() => {
