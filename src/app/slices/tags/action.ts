@@ -3,15 +3,15 @@ import axios from 'axios';
 
 import { transformOptions } from '../helpers';
 
-import categoryApi from './services';
+import tagApi from './services';
 
-export const getCategoriesAction = createAsyncThunk('categories/fetch', async (_, { rejectWithValue }) => {
+export const getAllTagActions = createAsyncThunk('tags/fetch', async (_, { rejectWithValue }) => {
   try {
-    const { data } = await categoryApi.getCategories();
+    const { data } = await tagApi.getAllTags();
 
-    const categories = transformOptions(data.categories);
+    const tags = transformOptions(data.tags);
 
-    return categories;
+    return tags;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (!error.response) {

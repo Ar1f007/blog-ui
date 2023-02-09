@@ -1,34 +1,34 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { getCategoriesAction } from './action';
+import { getAllTagActions } from './action';
 
-import type { CategoryState } from './types';
+import type { TagState } from './types';
 
 const initialState = {
   loading: false,
   data: [],
   error: null,
-} as CategoryState;
+} as TagState;
 
-const categorySlice = createSlice({
-  name: 'categories',
+const tagSlice = createSlice({
+  name: 'tags',
   initialState,
   reducers: {
-    clearCategoryError: (state) => {
+    clearTagError: (state) => {
       state.error = null;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getCategoriesAction.pending, (state) => {
+    builder.addCase(getAllTagActions.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(getCategoriesAction.fulfilled, (state, action) => {
+    builder.addCase(getAllTagActions.fulfilled, (state, action) => {
       state.loading = false;
       state.data = action.payload;
       state.error = null;
     });
 
-    builder.addCase(getCategoriesAction.rejected, (state, action) => {
+    builder.addCase(getAllTagActions.rejected, (state, action) => {
       state.loading = false;
 
       if (action.payload) {
@@ -40,6 +40,6 @@ const categorySlice = createSlice({
   },
 });
 
-export const { clearCategoryError } = categorySlice.actions;
+export const { clearTagError } = tagSlice.actions;
 
-export default categorySlice.reducer;
+export default tagSlice.reducer;

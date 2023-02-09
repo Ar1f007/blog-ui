@@ -22,6 +22,7 @@ const App = () => {
         draggable
         pauseOnHover
         theme={isDarkMode ? 'dark' : 'light'}
+        limit={3}
       />
     </>
   );

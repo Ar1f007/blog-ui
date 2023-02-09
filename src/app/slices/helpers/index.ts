@@ -1,12 +1,17 @@
-import type { Category } from './types';
+type Option = {
+  value: string;
+  label: string;
+  slug: string;
+  __is_new__?: boolean;
+};
 
-type CategoryData = {
+type ApiOptionData = {
   id: string;
   name: string;
   slug: string;
 };
 
-export const formatCategoryOptions = (data: CategoryData[]) => {
+export const transformOptions = (data: ApiOptionData[]) => {
   const options = data.reduce((acc, option) => {
     const value = option.id;
     const label = option.name;
@@ -15,7 +20,7 @@ export const formatCategoryOptions = (data: CategoryData[]) => {
     acc.push({ value, label, slug });
 
     return acc;
-  }, [] as Category[]);
+  }, [] as Option[]);
 
   return options;
 };

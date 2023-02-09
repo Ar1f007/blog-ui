@@ -8,4 +8,6 @@ export const LOGIN_ENDPOINT = `${BASE_URL}/users/login`;
 
 export const GET_ALL_CATEGORIES = `${BASE_URL}/categories`;
 
+export const GET_ALL_TAGS = `${BASE_URL}/tags`;
+
 export const CREATE_POST = BASE_URL + '/posts';

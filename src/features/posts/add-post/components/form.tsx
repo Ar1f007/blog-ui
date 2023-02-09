@@ -14,7 +14,10 @@ import type { CreatePostPayload } from '../../validations/create-post';
 import type { SubmitHandler } from 'react-hook-form/dist/types/form';
 
 import { getCategoriesAction } from '../../../../app/slices/categories/action';
+import { clearCategoryError } from '../../../../app/slices/categories/slice';
 import { createPostAction } from '../../../../app/slices/posts/actions';
+import { getAllTagActions } from '../../../../app/slices/tags/action';
+import { clearTagError } from '../../../../app/slices/tags/slice';
 import {
   FormHeader,
   TextInput,
@@ -28,17 +31,32 @@ import { useAppDispatch, useAppSelector } from '../../../../hooks/store';
 import { getFormattedPayload } from '../../helpers';
 import { createPostSchema } from '../../validations/create-post';
 
-const options: ReadonlyArray<{ value: string; label: string; __isNew__?: boolean; slug?: string }> = [
-  { value: 'Option 1', label: 'Option 1' },
-  { value: 'Option 2', label: 'Option 2' },
-  { value: 'Option 3', label: 'Option 3' },
-];
-
+// --------------------------------------------------------------------------------------------
 const Form = () => {
-  const { data: category, loading: fetchingCategory, error: errorFetchingCategory } = useAppSelector((s) => s.category);
+  const {
+    data: category,
+    loading: fetchingCategory,
+    error: errorFetchingCategory,
+  } = useAppSelector((s) => s.category);
+
+  const {
+    data: tag,
+    loading: fetchingTag,
+    error: errorFetchingTag,
+  } = useAppSelector((s) => s.tag);
+
   const dispatch = useAppDispatch();
 
-  const actions = bindActionCreators({ getCategoriesAction, createPostAction }, dispatch);
+  const actions = bindActionCreators(
+    {
+      getCategoriesAction,
+      getAllTagActions,
+      createPostAction,
+      clearCategoryError,
+      clearTagError,
+    },
+    dispatch,
+  );
 
   const methods = useForm<CreatePostPayload>({
     mode: 'onTouched',
@@ -73,13 +91,21 @@ const Form = () => {
     if (!category.length) {
       actions.getCategoriesAction();
     }
-  }, [actions, category]);
 
-  if (errorFetchingCategory) {
-    toast.error('Could not get categories. Try loading again.');
+    if (!tag.length) {
+      actions.getAllTagActions();
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (errorFetchingCategory || errorFetchingTag) {
+    toast.error('Could not load category/tag list. Please try re-loading', {
+      toastId: 'toast1',
+    });
   }
 
-  if (fetchingCategory) {
+  if (fetchingCategory || fetchingTag) {
     return <p>Loading...</p>;
   }
 
@@ -119,7 +145,7 @@ const Form = () => {
             isMulti
             name="tags"
             label="Add tags (choose up to 3)"
-            options={options}
+            options={tag}
             maxSelectableOption={3}
           />
 
