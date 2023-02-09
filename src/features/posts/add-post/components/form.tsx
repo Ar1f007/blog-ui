@@ -1,17 +1,19 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Stack } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Stack } from '@mui/material';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import type { CreatePost } from '../../../../app/slices/posts/types';
+
+import { toast } from 'react-toastify';
+
 import type { CreatePostPayload } from '../../validations/create-post';
-
-import { getCategoriesAction } from '../../../../app/slices/categories/action';
-
 import type { SubmitHandler } from 'react-hook-form/dist/types/form';
 
+import { getCategoriesAction } from '../../../../app/slices/categories/action';
 import { createPostAction } from '../../../../app/slices/posts/actions';
 import {
   FormHeader,
@@ -26,14 +28,14 @@ import { useAppDispatch, useAppSelector } from '../../../../hooks/store';
 import { getFormattedPayload } from '../../helpers';
 import { createPostSchema } from '../../validations/create-post';
 
-const options: ReadonlyArray<{ value: string; label: string; __isNew__?: boolean }> = [
+const options: ReadonlyArray<{ value: string; label: string; __isNew__?: boolean; slug?: string }> = [
   { value: 'Option 1', label: 'Option 1' },
   { value: 'Option 2', label: 'Option 2' },
   { value: 'Option 3', label: 'Option 3' },
 ];
 
 const Form = () => {
-  const category = useAppSelector((s) => s.category.data);
+  const { data: category, loading: fetchingCategory, error: errorFetchingCategory } = useAppSelector((s) => s.category);
   const dispatch = useAppDispatch();
 
   const actions = bindActionCreators({ getCategoriesAction, createPostAction }, dispatch);
@@ -68,10 +70,18 @@ const Form = () => {
   };
 
   useEffect(() => {
-    if (!category) {
+    if (!category.length) {
       actions.getCategoriesAction();
     }
-  }, [category, actions]);
+  }, [actions, category]);
+
+  if (errorFetchingCategory) {
+    toast.error('Could not get categories. Try loading again.');
+  }
+
+  if (fetchingCategory) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <Stack rowGap={3}>
@@ -102,7 +112,7 @@ const Form = () => {
           <Select
             name="category"
             label="Category"
-            options={options}
+            options={category}
           />
 
           <Select
@@ -113,12 +123,13 @@ const Form = () => {
             maxSelectableOption={3}
           />
 
-          <Button
-            type="submit"
+          <LoadingButton
             variant="contained"
+            type="submit"
+            loading={methods.formState.isSubmitting}
           >
-            Submit
-          </Button>
+            Create
+          </LoadingButton>
         </Stack>
       </FormProvider>
     </Stack>

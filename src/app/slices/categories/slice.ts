@@ -6,7 +6,7 @@ import type { CategoryState } from './types';
 
 const initialState = {
   loading: false,
-  data: null,
+  data: [],
   error: null,
 } as CategoryState;
 

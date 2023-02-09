@@ -1,11 +1,12 @@
 export type Category = {
-  _id: string;
-  name: string;
+  value: string;
+  label: string;
   slug: string;
+  __is_new__?: boolean;
 };
 
 export type CategoryState = {
   loading: boolean;
-  data: Category[] | null;
+  data: Category[];
   error: ApiError | null;
 };

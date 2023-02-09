@@ -9,6 +9,12 @@ type Tags = {
   newTagNames: string[];
 };
 
+export type CategoryOptions = {
+  value: string;
+  label: string;
+  __isNew__?: boolean;
+};
+
 const getUTCDate = (date: Dayjs) => dayjs.utc(date).format();
 
 const getFormattedCategoryValue = (category: CreatePostPayload['category']) => ({
