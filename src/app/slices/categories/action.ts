@@ -1,5 +1,4 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
 
 import { handleError, transformOptions } from '../helpers';
 
@@ -29,9 +28,7 @@ export const getCategoriesAction = createAsyncThunk<
     condition: (_, { getState }) => {
       const { loading } = getState();
 
-      if (loading === 'pending') {
-        return false;
-      }
+      if (loading === 'pending') return false;
     },
   },
 );

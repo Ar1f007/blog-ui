@@ -33,7 +33,7 @@ type ApiError = {
   errors?: {
     fieldName: CreatePostServerError;
     message: string;
-  };
+  }[];
 } & SerializedError;
 
 export type PostsState = {

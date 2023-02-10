@@ -13,8 +13,7 @@ import { toast } from 'react-toastify';
 import type { CreatePostPayload } from '../../validations/create-post';
 import type { SubmitHandler } from 'react-hook-form/dist/types/form';
 
-import { getCategoriesAction } from '../../../../app/slices/categories/action';
-import { clearCategoryError } from '../../../../app/slices/categories/slice';
+import { getCategoriesAction } from '../../../../app/slices/categories';
 import { createPostAction } from '../../../../app/slices/posts/actions';
 import { getAllTagActions } from '../../../../app/slices/tags/action';
 import { clearTagError } from '../../../../app/slices/tags/slice';
@@ -45,6 +44,8 @@ const Form = () => {
     error: errorFetchingTag,
   } = useAppSelector((s) => s.tag);
 
+  const { loading: creatingPost, error } = useAppSelector((s) => s.post);
+
   const dispatch = useAppDispatch();
 
   const actions = bindActionCreators(
@@ -52,7 +53,6 @@ const Form = () => {
       getCategoriesAction,
       getAllTagActions,
       createPostAction,
-      clearCategoryError,
       clearTagError,
     },
     dispatch,
@@ -87,6 +87,13 @@ const Form = () => {
     });
   };
 
+  const attachValidationErrorToField = (
+    name: keyof CreatePostPayload,
+    message: string,
+  ) => {
+    methods.setError(name, { message, type: 'server' });
+  };
+
   useEffect(() => {
     if (!category.length) {
       actions.getCategoriesAction();
@@ -98,6 +105,24 @@ const Form = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (error?.message) {
+      toast.error(error.message, {
+        toastId: 'error',
+      });
+    }
+
+    if (error?.errors) {
+      error.errors.map((e) => {
+        attachValidationErrorToField(
+          e.fieldName as keyof CreatePostPayload,
+          e.message,
+        );
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
 
   if (errorFetchingCategory || errorFetchingTag) {
     toast.error('Could not load category/tag list. Please try re-loading', {
@@ -152,7 +177,7 @@ const Form = () => {
           <LoadingButton
             variant="contained"
             type="submit"
-            loading={methods.formState.isSubmitting}
+            loading={creatingPost}
           >
             Create
           </LoadingButton>
