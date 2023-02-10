@@ -5,7 +5,7 @@ import { getCategoriesAction } from './action';
 import type { CategoryState } from './types';
 
 const initialState = {
-  loading: false,
+  loading: 'idle',
   data: [],
   error: null,
 } as CategoryState;
@@ -20,16 +20,17 @@ const categorySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getCategoriesAction.pending, (state) => {
-      state.loading = true;
+      state.loading = 'pending';
     });
+
     builder.addCase(getCategoriesAction.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loading = 'idle';
       state.data = action.payload;
       state.error = null;
     });
 
     builder.addCase(getCategoriesAction.rejected, (state, action) => {
-      state.loading = false;
+      state.loading = 'idle';
 
       if (action.payload) {
         state.error = action.payload;

@@ -105,7 +105,7 @@ const Form = () => {
     });
   }
 
-  if (fetchingCategory || fetchingTag) {
+  if (fetchingCategory === 'pending' || fetchingTag) {
     return <p>Loading...</p>;
   }
 

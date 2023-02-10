@@ -5,22 +5,41 @@ import { transformOptions } from '../helpers';
 
 import categoryApi from './services';
 
-export const getCategoriesAction = createAsyncThunk('categories/fetch', async (_, { rejectWithValue }) => {
-  try {
-    const { data } = await categoryApi.getCategories();
+import type { CategoryState } from './types';
+import type { Option } from '../helpers';
 
-    const categories = transformOptions(data.categories);
+export const getCategoriesAction = createAsyncThunk<
+  Option[],
+  void,
+  { state: CategoryState }
+>(
+  'categories/fetch',
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await categoryApi.getCategories();
 
-    return categories;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      if (!error.response) {
-        throw error;
+      const categories = transformOptions(data.categories);
+
+      return categories;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (!error.response) {
+          throw error;
+        }
+
+        return rejectWithValue(error.response.data);
       }
 
-      return rejectWithValue(error.response.data);
+      throw new Error('Something went wrong!');
     }
+  },
+  {
+    condition: (_, { getState }) => {
+      const { loading } = getState();
 
-    throw new Error('Something went wrong!');
-  }
-});
+      if (loading === 'pending') {
+        return false;
+      }
+    },
+  },
+);

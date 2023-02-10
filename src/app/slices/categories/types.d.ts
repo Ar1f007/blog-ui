@@ -12,7 +12,7 @@ type ApiError = {
 } & SerializedError;
 
 export type CategoryState = {
-  loading: boolean;
+  loading: 'idle' | 'pending';
   data: Category[];
   error: ApiError | null;
 };
