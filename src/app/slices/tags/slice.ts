@@ -5,7 +5,7 @@ import { getAllTagActions } from './action';
 import type { TagState } from './types';
 
 const initialState = {
-  loading: false,
+  status: 'idle',
   data: [],
   error: null,
 } as TagState;
@@ -20,16 +20,20 @@ const tagSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getAllTagActions.pending, (state) => {
-      state.loading = true;
+      if (state.status === 'idle') {
+        state.status = 'pending';
+      }
     });
     builder.addCase(getAllTagActions.fulfilled, (state, action) => {
-      state.loading = false;
-      state.data = action.payload;
-      state.error = null;
+      if (state.status === 'pending') {
+        state.status = 'idle';
+        state.data = action.payload;
+        state.error = null;
+      }
     });
 
     builder.addCase(getAllTagActions.rejected, (state, action) => {
-      state.loading = false;
+      state.status = 'idle';
 
       if (action.payload) {
         state.error = action.payload;

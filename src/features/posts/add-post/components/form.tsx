@@ -41,7 +41,7 @@ const Form = () => {
 
   const {
     data: tag,
-    loading: fetchingTag,
+    status: fetchingTag,
     error: errorFetchingTag,
   } = useAppSelector((s) => s.tag);
 
@@ -105,7 +105,7 @@ const Form = () => {
     });
   }
 
-  if (fetchingCategory === 'pending' || fetchingTag) {
+  if (fetchingCategory === 'pending' || fetchingTag === 'pending') {
     return <p>Loading...</p>;
   }
 

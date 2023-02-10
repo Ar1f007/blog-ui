@@ -1,26 +1,45 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-import { transformOptions } from '../helpers';
+import { handleError, transformOptions } from '../helpers';
 
 import tagApi from './services';
 
-export const getAllTagActions = createAsyncThunk('tags/fetch', async (_, { rejectWithValue }) => {
-  try {
-    const { data } = await tagApi.getAllTags();
+import type { TagState } from './types';
+import type { Option } from '../helpers';
 
-    const tags = transformOptions(data.tags);
+export const getAllTagActions = createAsyncThunk<
+  Option[],
+  void,
+  { state: TagState }
+>(
+  'tags/fetch',
 
-    return tags;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      if (!error.response) {
-        throw error;
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await tagApi.getAllTags();
+
+      const tags = transformOptions(data.tags);
+
+      return tags;
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        if (!e.response) {
+          throw e;
+        }
+
+        return rejectWithValue(e.response.data);
       }
 
-      return rejectWithValue(error.response.data);
+      throw new Error('Something went wrong!');
     }
+  },
 
-    throw new Error('Something went wrong!');
-  }
-});
+  {
+    condition: (_, { getState }) => {
+      const { status } = getState();
+
+      if (status === 'pending') return false;
+    },
+  },
+);

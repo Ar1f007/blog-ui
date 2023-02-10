@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export type Option = {
   value: string;
   label: string;
@@ -23,4 +25,16 @@ export const transformOptions = (data: ApiOptionData[]) => {
   }, [] as Option[]);
 
   return options;
+};
+
+export const handleError = (e: unknown) => {
+  if (axios.isAxiosError(e)) {
+    if (!e.response) {
+      throw e;
+    }
+
+    return e.response.data;
+  }
+
+  throw new Error('Something went wrong!');
 };

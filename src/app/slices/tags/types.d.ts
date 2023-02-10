@@ -8,7 +8,7 @@ export type Tag = {
 };
 
 export type TagState = {
-  loading: boolean;
+  status: 'idle' | 'pending';
   data: Tag[];
   error: ApiError | null;
 };
