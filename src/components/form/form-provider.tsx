@@ -9,7 +9,11 @@ type Props<T extends FieldValues> = {
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
 };
 
-export const FormProvider = <T extends FieldValues>({ methods, children, onSubmit }: Props<T>) => (
+export const FormProvider = <T extends FieldValues>({
+  methods,
+  children,
+  onSubmit,
+}: Props<T>) => (
   <Form {...methods}>
     <form onSubmit={onSubmit}>{children}</form>
   </Form>

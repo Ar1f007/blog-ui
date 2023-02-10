@@ -27,6 +27,7 @@ import {
   Select,
 } from '../../../../components';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/store';
+import { attachValidationErrors } from '../../../../utils';
 import { getFormattedPayload } from '../../helpers';
 import { createPostSchema } from '../../validations/create-post';
 
@@ -87,13 +88,6 @@ const Form = () => {
     });
   };
 
-  const attachValidationErrorToField = (
-    name: keyof CreatePostPayload,
-    message: string,
-  ) => {
-    methods.setError(name, { message, type: 'server' });
-  };
-
   useEffect(() => {
     if (!category.length) {
       actions.getCategoriesAction();
@@ -114,12 +108,7 @@ const Form = () => {
     }
 
     if (error?.errors) {
-      error.errors.map((e) => {
-        attachValidationErrorToField(
-          e.fieldName as keyof CreatePostPayload,
-          e.message,
-        );
-      });
+      attachValidationErrors<CreatePostPayload>(error.errors, methods);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);

@@ -1,6 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoadingButton } from '@mui/lab';
-import { Box, Stack, IconButton, InputAdornment, Typography } from '@mui/material';
+import {
+  Box,
+  Stack,
+  IconButton,
+  InputAdornment,
+  Typography,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -17,6 +23,7 @@ import Input from '../../../components/form/Input';
 import Icon from '../../../components/ui/Icon';
 import { useAppDispatch, useAppSelector } from '../../../hooks/store';
 import paths from '../../../routes/paths';
+import { attachValidationErrors } from '../../../utils';
 import signUpSchema from '../validations/sign-up';
 
 // --------------------------------------------------------------------
@@ -47,10 +54,6 @@ const SignUpForm = () => {
     await dispatch(registerUserAction(data));
   };
 
-  const attachValidationErrorToField = (name: RegisterFields, message: string) => {
-    methods.setError(name, { message, type: 'server' });
-  };
-
   useEffect(() => {
     if (error?.message) {
       toast.error(error.message);
@@ -60,9 +63,10 @@ const SignUpForm = () => {
     }
 
     if (error?.errors) {
-      error.errors.map((e) => {
-        attachValidationErrorToField(e.fieldName as RegisterFields, e.message);
-      });
+      attachValidationErrors<SignUpInputs>(
+        error.errors as { fieldName: RegisterFields; message: string }[],
+        methods,
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
@@ -124,7 +128,15 @@ const SignUpForm = () => {
                       onClick={() => setShowPassword(!showPassword)}
                       aria-label="Toggle password visibility"
                     >
-                      <Icon icon={showPassword ? <Icons.Visibility /> : <Icons.VisibilityOff />} />
+                      <Icon
+                        icon={
+                          showPassword ? (
+                            <Icons.Visibility />
+                          ) : (
+                            <Icons.VisibilityOff />
+                          )
+                        }
+                      />
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -140,10 +152,20 @@ const SignUpForm = () => {
                   <InputAdornment position="end">
                     <IconButton
                       edge="end"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
                       aria-label="Toggle password visibility"
                     >
-                      <Icon icon={showConfirmPassword ? <Icons.Visibility /> : <Icons.VisibilityOff />} />
+                      <Icon
+                        icon={
+                          showConfirmPassword ? (
+                            <Icons.Visibility />
+                          ) : (
+                            <Icons.VisibilityOff />
+                          )
+                        }
+                      />
                     </IconButton>
                   </InputAdornment>
                 ),

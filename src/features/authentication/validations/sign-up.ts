@@ -8,11 +8,21 @@ const signupSchema = z
       .min(3, { message: 'Username should be at least 3 character(s) long' })
       .regex(new RegExp(/^\S+$/), { message: 'no spaces allowed' }),
 
-    firstName: z.string().trim().min(3, { message: 'First name should be at least 3 character(s) long' }),
+    firstName: z
+      .string()
+      .trim()
+      .min(3, { message: 'First name should be at least 3 character(s) long' }),
 
-    lastName: z.string({ required_error: 'Last name is required' }).trim().min(1, { message: 'Last name is required' }),
+    lastName: z
+      .string({ required_error: 'Last name is required' })
+      .trim()
+      .min(1, { message: 'Last name is required' }),
 
-    email: z.string().min(1, { message: 'Email is required' }).trim().email({ message: 'Email is not valid' }),
+    email: z
+      .string()
+      .min(1, { message: 'Email is required' })
+      .trim()
+      .email({ message: 'Email is not valid' }),
 
     password: z
       .string()
@@ -20,7 +30,9 @@ const signupSchema = z
       .min(5, { message: 'Must be 5 or more characters long' })
       .max(25, { message: 'Must be 25 or fewer characters long' }),
 
-    confirmPassword: z.string({ required_error: 'Please confirm your password' }).trim(),
+    confirmPassword: z
+      .string({ required_error: 'Please confirm your password' })
+      .trim(),
   })
   .superRefine(({ password, confirmPassword }, ctx) => {
     if (password !== confirmPassword) {

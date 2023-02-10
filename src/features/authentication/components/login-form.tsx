@@ -18,6 +18,7 @@ import Icons from '../../../assets/icons';
 import Input from '../../../components/form/Input';
 import Icon from '../../../components/ui/Icon';
 import { useAppDispatch, useAppSelector } from '../../../hooks/store';
+import { attachValidationErrors } from '../../../utils';
 import loginSchema from '../validations/login';
 
 import LoginFormFooter from './login-form-footer';
@@ -43,10 +44,6 @@ const Form = () => {
     await dispatch(loginUserAction(data));
   };
 
-  const attachValidationErrorToField = (name: LoginFields, message: string) => {
-    methods.setError(name, { message, type: 'server' });
-  };
-
   useEffect(() => {
     if (error?.message) {
       toast.error(error.message);
@@ -56,9 +53,10 @@ const Form = () => {
     }
 
     if (error?.errors) {
-      error.errors.map((e) => {
-        attachValidationErrorToField(e.fieldName as LoginFields, e.message);
-      });
+      attachValidationErrors<LoginInputs>(
+        error.errors as { fieldName: LoginFields; message: string }[],
+        methods,
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
@@ -98,7 +96,15 @@ const Form = () => {
                       onClick={() => setShowPassword(!showPassword)}
                       aria-label="Toggle password visibility"
                     >
-                      <Icon icon={showPassword ? <Icons.Visibility /> : <Icons.VisibilityOff />} />
+                      <Icon
+                        icon={
+                          showPassword ? (
+                            <Icons.Visibility />
+                          ) : (
+                            <Icons.VisibilityOff />
+                          )
+                        }
+                      />
                     </IconButton>
                   </InputAdornment>
                 ),

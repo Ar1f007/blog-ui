@@ -1,5 +1,4 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
 
 import { handleError, transformOptions } from '../helpers';
 
@@ -23,15 +22,7 @@ export const getAllTagActions = createAsyncThunk<
 
       return tags;
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        if (!e.response) {
-          throw e;
-        }
-
-        return rejectWithValue(e.response.data);
-      }
-
-      throw new Error('Something went wrong!');
+      return rejectWithValue(handleError(e));
     }
   },
 
