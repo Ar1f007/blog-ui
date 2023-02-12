@@ -1,5 +1,6 @@
 import { TextField } from '@mui/material';
-import { DateTimePicker as MuiDateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+// import { DateTimePicker as MuiDateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { MobileDateTimePicker as MuiDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import dayjs from 'dayjs';
 import { Controller, useFormContext } from 'react-hook-form';
 
@@ -10,7 +11,10 @@ type DateTimePickerProps = {
   minDate?: boolean;
 };
 
-export const DateTimePicker: FC<DateTimePickerProps> = ({ name, ...others }) => {
+export const DateTimePicker: FC<DateTimePickerProps> = ({
+  name,
+  ...others
+}) => {
   const {
     control,
     formState: { errors },

@@ -12,9 +12,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import type { RegisterFields } from '../../../app/slices/users/types';
-import type { SignUpInputs } from '../validations/sign-up';
-import type { SubmitHandler } from 'react-hook-form';
 
 import { registerUserAction } from '../../../app/slices/users/action';
 import { clearError } from '../../../app/slices/users/slice';
@@ -25,6 +22,10 @@ import { useAppDispatch, useAppSelector } from '../../../hooks/store';
 import paths from '../../../routes/paths';
 import { attachValidationErrors } from '../../../utils';
 import signUpSchema from '../validations/sign-up';
+
+import type { RegisterFields } from '../../../app/slices/users/types';
+import type { SignUpInputs } from '../validations/sign-up';
+import type { SubmitHandler } from 'react-hook-form';
 
 // --------------------------------------------------------------------
 

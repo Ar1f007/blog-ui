@@ -5,18 +5,15 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-
-import type { CreatePost } from '../../../../app/slices/posts/types';
-
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import type { CreatePostPayload } from '../../validations/create-post';
-import type { SubmitHandler } from 'react-hook-form/dist/types/form';
-
 import { getCategoriesAction } from '../../../../app/slices/categories';
-import { createPostAction } from '../../../../app/slices/posts/actions';
+import {
+  createPostAction,
+  clearCurrentPostData,
+} from '../../../../app/slices/posts';
 import { getAllTagActions } from '../../../../app/slices/tags/action';
-import { clearTagError } from '../../../../app/slices/tags/slice';
 import {
   FormHeader,
   TextInput,
@@ -30,6 +27,10 @@ import { useAppDispatch, useAppSelector } from '../../../../hooks/store';
 import { attachValidationErrors } from '../../../../utils';
 import { getFormattedPayload } from '../../helpers';
 import { createPostSchema } from '../../validations/create-post';
+
+import type { CreatePost } from '../../../../app/slices/posts/types';
+import type { CreatePostPayload } from '../../validations/create-post';
+import type { SubmitHandler } from 'react-hook-form/dist/types/form';
 
 // --------------------------------------------------------------------------------------------
 const Form = () => {
@@ -45,7 +46,13 @@ const Form = () => {
     error: errorFetchingTag,
   } = useAppSelector((s) => s.tag);
 
-  const { loading: creatingPost, error } = useAppSelector((s) => s.post);
+  const {
+    currentPost: postCreatedSuccessfully,
+    loading: creatingPost,
+    error,
+  } = useAppSelector((s) => s.post);
+
+  const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
 
@@ -54,7 +61,7 @@ const Form = () => {
       getCategoriesAction,
       getAllTagActions,
       createPostAction,
-      clearTagError,
+      clearCurrentPostData,
     },
     dispatch,
   );
@@ -112,6 +119,15 @@ const Form = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
+
+  useEffect(() => {
+    if (postCreatedSuccessfully) {
+      methods.reset();
+      actions.clearCurrentPostData();
+      navigate('/');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postCreatedSuccessfully]);
 
   if (errorFetchingCategory || errorFetchingTag) {
     toast.error('Could not load category/tag list. Please try re-loading', {

@@ -4,10 +4,9 @@ import { useMemo, useState } from 'react';
 
 import { useAppSelector } from '../hooks/store';
 
-import type { PaletteMode } from '@mui/material';
-
 import { getDesignTokens } from './palette';
 
+import type { PaletteMode } from '@mui/material';
 import type { FC, ReactNode } from 'react';
 
 type Props = {

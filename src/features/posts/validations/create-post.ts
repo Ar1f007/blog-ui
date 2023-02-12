@@ -6,7 +6,13 @@ import { bytesToMB } from '../../../utils/others';
 import type { Dayjs } from 'dayjs';
 
 const MB_BYTES = 1000000;
-const ACCEPTED_MIME_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/avif'];
+const ACCEPTED_MIME_TYPES = [
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp',
+  'image/avif',
+];
 
 const selectSchema = z.object({
   value: z.string(),
@@ -18,13 +24,20 @@ export const createPostSchema = z
   .object({
     title: z.string().min(1, { message: 'Add a title' }),
 
-    description: z.string().trim().min(1, { message: 'Write your story' }),
+    description: z
+      .string()
+      .trim()
+      .min(15, { message: 'Content should be at least 15 character(s) long' }),
 
     category: selectSchema,
 
-    tags: z.array(selectSchema, { required_error: 'Add/create tag(s) (up to 3)' }),
+    tags: z.array(selectSchema, {
+      required_error: 'Add/create tag(s) (up to 3)',
+    }),
 
-    published_at: z.instanceof(dayjs as unknown as typeof Dayjs, { message: 'Not a valid date' }),
+    published_at: z.instanceof(dayjs as unknown as typeof Dayjs, {
+      message: 'Not a valid date',
+    }),
 
     coverImage: z
       .any()
@@ -40,7 +53,9 @@ export const createPostSchema = z
           ctx.addIssue({
             code: z.ZodIssueCode.too_big,
             type: 'array',
-            message: `Max allowed size is 5MB. Your current file size is ${bytesToMB(files[0]?.size)}`,
+            message: `Max allowed size is 5MB. Your current file size is ${bytesToMB(
+              files[0]?.size,
+            )}`,
             maximum: 5 * MB_BYTES,
             inclusive: true,
           });
