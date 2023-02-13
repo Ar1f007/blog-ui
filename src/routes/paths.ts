@@ -7,7 +7,14 @@ const paths = {
   createPost: '/create',
 
   lists: '/me/lists',
-  dashboard: '/me/dashboard',
+  dashboard: {
+    index: '/me/dashboard',
+    series: '/me/series',
+    followers: '/me/followers',
+    followingUsers: '/me/following',
+    followingTags: '/me/following-tags',
+    followingCategories: '/me/following-categories',
+  },
   myPost: '/me/posts',
   settings: '/me/settings',
   newPost: '/new-post',

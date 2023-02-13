@@ -14,7 +14,11 @@ export const userNavigation = [
   { icon: Icons.NoteAltOutlined, name: 'Write', href: paths.newPost },
   { icon: Icons.ArticleOutlined, name: 'Posts', href: paths.myPost },
   { icon: Icons.BookmarksOutlined, name: 'Lists', href: paths.lists },
-  { icon: Icons.DashboardCustomizeOutlined, name: 'Dashboard', href: paths.dashboard },
+  {
+    icon: Icons.DashboardCustomizeOutlined,
+    name: 'Dashboard',
+    href: paths.dashboard.index,
+  },
   { icon: Icons.Settings, name: 'Settings', href: paths.settings },
 ];
 

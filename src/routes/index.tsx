@@ -27,7 +27,7 @@ export const routes = createBrowserRouter([
         ],
       },
       {
-        path: paths.dashboard,
+        path: paths.dashboard.index,
         element: <Dashboard />,
         children: [
           {

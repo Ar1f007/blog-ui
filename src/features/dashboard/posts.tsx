@@ -9,7 +9,8 @@ export const PostStats = () => {
   const url = useLocation();
 
   const currentPath = url.pathname;
-  const showStats = currentPath === `${paths.dashboard}` ? <Stats /> : null;
+  const showStats =
+    currentPath === `${paths.dashboard.index}` ? <Stats /> : null;
 
   return (
     <>
