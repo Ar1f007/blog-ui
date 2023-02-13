@@ -1,7 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import { PostStats } from '../features/dashboard';
 import { AuthLayout, MainLayout, PostLayout } from '../layouts';
-import { Home, SignUp } from '../pages';
+import { Dashboard, Home, SignUp } from '../pages';
 import AddPost from '../pages/add-post';
 import Login from '../pages/login';
 
@@ -16,6 +17,25 @@ export const routes = createBrowserRouter([
         index: true,
         element: <Home />,
       },
+      {
+        element: <PostLayout />,
+        children: [
+          {
+            path: paths.newPost,
+            element: <AddPost />,
+          },
+        ],
+      },
+      {
+        path: paths.dashboard,
+        element: <Dashboard />,
+        children: [
+          {
+            index: true,
+            element: <PostStats />,
+          },
+        ],
+      },
     ],
   },
   {
@@ -28,15 +48,6 @@ export const routes = createBrowserRouter([
       {
         path: paths.login,
         element: <Login />,
-      },
-    ],
-  },
-  {
-    element: <PostLayout />,
-    children: [
-      {
-        path: paths.newPost,
-        element: <AddPost />,
       },
     ],
   },

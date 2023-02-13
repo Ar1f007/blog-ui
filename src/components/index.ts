@@ -6,3 +6,5 @@ export { FormProvider } from './form/form-provider';
 export { DateTimePicker } from './form/date-time-picker';
 export { TextEditor } from './form/text-editor';
 export { Select } from './form/select';
+
+export { StatCard } from './ui/stat-card';

@@ -22,12 +22,12 @@ const selectSchema = z.object({
 
 export const createPostSchema = z
   .object({
-    title: z.string().min(1, { message: 'Add a title' }),
+    title: z.string().min(1, { message: "Title can't be blank" }),
 
     description: z
       .string()
       .trim()
-      .min(15, { message: 'Content should be at least 15 character(s) long' }),
+      .min(1, { message: "Content can't be blank" }),
 
     category: selectSchema,
 

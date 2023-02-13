@@ -135,9 +135,9 @@ const Form = () => {
     });
   }
 
-  if (fetchingCategory === 'pending' || fetchingTag === 'pending') {
-    return <p>Loading...</p>;
-  }
+  // if (fetchingCategory === 'pending' || fetchingTag === 'pending') {
+  //   return <p>Loading...</p>;
+  // }
 
   return (
     <Stack rowGap={3}>
