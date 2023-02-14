@@ -1,7 +1,3 @@
-import { Button } from '@mui/material';
+import { Container } from '@mui/material';
 
-export const Home = () => (
-  <div>
-    <Button>Home</Button>
-  </div>
-);
+export const Home = () => <Container>Homepage</Container>;

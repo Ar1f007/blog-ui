@@ -39,7 +39,10 @@ module.exports = {
     // no need to import react from react
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
-    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
+    'react/jsx-filename-extension': [
+      1,
+      { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
+    ],
 
     'no-console': 1,
 
@@ -72,7 +75,15 @@ module.exports = {
     'import/order': [
       'error',
       {
-        groups: ['builtin', 'external', 'parent', 'sibling', 'index', 'object', 'type'],
+        groups: [
+          'builtin',
+          'external',
+          'parent',
+          'sibling',
+          'index',
+          'object',
+          'type',
+        ],
         alphabetize: { order: 'asc' },
         'newlines-between': 'always',
       },

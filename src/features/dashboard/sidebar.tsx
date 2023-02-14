@@ -1,7 +1,18 @@
-import { MenuItem, MenuList, Paper } from '@mui/material';
+import {
+  List,
+  ListItem,
+  ListItemText,
+  MenuItem,
+  MenuList,
+  Paper,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { Link } from 'react-router-dom';
 
 import paths from '../../routes/paths';
+
+// import paths from '../../routes/paths';
 
 const dashboardNavigation = [
   {
@@ -36,12 +47,21 @@ export const Sidebar = () => (
     elevation={4}
     sx={{ p: 3 }}
   >
-    <MenuList>
+    <List>
       {dashboardNavigation.map((link, index) => (
-        <MenuItem key={index}>
-          <Link to={link.path}>{link.name}</Link>
-        </MenuItem>
+        <ListItem key={index}>
+          <ListItemText
+            primary={link.name}
+            secondary={10000}
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'space-between',
+            }}
+          />
+          {/* <Link to={link.path}>{link.name}</Link> */}
+        </ListItem>
       ))}
-    </MenuList>
+    </List>
   </Paper>
 );

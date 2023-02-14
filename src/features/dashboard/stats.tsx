@@ -27,7 +27,7 @@ const Stats = () => (
         item
         key={index}
         xs={6}
-        lg={3}
+        lg={4}
       >
         <StatCard
           title={stat.title}
