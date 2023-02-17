@@ -2,7 +2,6 @@ import {
   Avatar,
   Box,
   Card,
-  CardActions,
   CardContent,
   CardHeader,
   CardMedia,
@@ -55,9 +54,12 @@ const CardExcerpt: FC<CardExcerptProps> = ({ excerpt }) => (
     sx={{
       display: {
         xs: 'none',
-        sm: 'block',
+        sm: '-webkit-box',
       },
-      lineClamp: 2,
+      lineClamp: 3,
+      overflow: 'hidden',
+      WebkitLineClamp: 3,
+      WebkitBoxOrient: 'vertical',
     }}
   >
     {excerpt}
@@ -66,43 +68,36 @@ const CardExcerpt: FC<CardExcerptProps> = ({ excerpt }) => (
 
 const CardFooter = () => (
   <Stack
-    direction={{
-      lg: 'row',
-    }}
-    justifyContent={{
-      lg: 'space-between',
-    }}
+    direction="row"
     spacing={3}
   >
-    <Stack
-      direction="row"
-      columnGap={2}
-    >
-      <Box>3 days ago</Box>
-      <Divider orientation="vertical" />
+    <Box sx={{ fontSize: '13px' }}>3 days ago</Box>
 
-      <Box>8 min read</Box>
-      <Divider orientation="vertical" />
+    <Box sx={{ fontSize: '13px' }}>8 min read</Box>
 
-      <Box>Design</Box>
-    </Stack>
+    <Box
+      flexGrow={1}
+      sx={{
+        display: {
+          xs: 'none',
+          sm: 'block',
+        },
+      }}
+    />
 
-    <Stack
-      direction="row"
-      columnGap={2}
-    >
-      <Box>likes 2</Box>
-      <Divider orientation="vertical" />
+    <Box sx={{ fontSize: '13px' }}>Design</Box>
 
-      <Box>comments 2</Box>
-    </Stack>
+    <Box sx={{ fontSize: '13px' }}>127 reactions </Box>
   </Stack>
 );
 
-export const Post: FC<PostProps> = ({ showHeader }) => {
+export const Post: FC<PostProps> = ({ showHeader = false }) => {
   const cardHeader = (
     <CardHeader>
-      <Avatar />
+      {/* <Avatar
+        url="./jpg"
+        alt="Arif"
+      /> */}
     </CardHeader>
   );
   return (
@@ -123,7 +118,7 @@ export const Post: FC<PostProps> = ({ showHeader }) => {
             >
               <CardTitle title="Compound components pattern for creating reusable Rating component" />
 
-              <CardExcerpt excerpt="The environment of web interaction is diverse. And to ensure outstanding user experience across all devices, businesses are bound to invest in mobile  See more..." />
+              <CardExcerpt excerpt="The environment of web interaction is diverse. And to ensure outstanding user experience across all devices, businesses are bound to invest in mobile" />
             </Grid>
 
             <Grid

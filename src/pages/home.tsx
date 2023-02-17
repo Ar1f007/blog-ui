@@ -1,6 +1,7 @@
 import { Container, Grid } from '@mui/material';
 
 import { Post } from '../components/ui/post-card';
+import { RightSidebar } from '../features/homepage';
 
 export const Home = () => (
   <Container>
@@ -13,7 +14,7 @@ export const Home = () => (
         lg={8}
       >
         <div>
-          <Post showHeader />
+          <Post showHeader={false} />
 
           <Post showHeader />
         </div>
@@ -22,7 +23,7 @@ export const Home = () => (
         item
         lg={4}
       >
-        B
+        <RightSidebar />
       </Grid>
     </Grid>
   </Container>
