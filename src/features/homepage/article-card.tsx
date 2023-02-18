@@ -20,7 +20,7 @@ const styles = createSXCollection({
   },
 });
 
-export const TrendingArticle: FC<PostProps> = (props) => {
+export const Article: FC<PostProps> = (props) => {
   const { author, authorAvatar, articleTitle, slug } = props;
 
   return (

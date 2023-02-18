@@ -1,6 +1,7 @@
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 
 import { Hashtags } from './hashtags';
+import { RecentReads } from './recent-reads';
 import { TrendingArticles } from './trending-articles';
 
 export const RightSidebar = () => (
@@ -8,8 +9,12 @@ export const RightSidebar = () => (
     component="aside"
     pt="1.6rem"
   >
-    <Hashtags />
+    <Stack rowGap={2}>
+      <Hashtags />
 
-    <TrendingArticles />
+      <TrendingArticles />
+
+      <RecentReads />
+    </Stack>
   </Box>
 );

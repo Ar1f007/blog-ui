@@ -10,6 +10,7 @@ export const SubHeading: FC<SubHeadingProps> = ({ title }) => (
   <Typography
     variant="h6"
     component="h2"
+    fontSize="1.6rem"
   >
     {title}
   </Typography>
