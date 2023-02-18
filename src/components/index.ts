@@ -10,3 +10,4 @@ export { TextEditor } from './form/text-editor';
 export { Select } from './form/select';
 
 export { StatCard } from './ui/stat-card';
+export { SubHeading } from './ui/sub-heading';

@@ -1,9 +1,10 @@
-import { Chip, Stack, Typography } from '@mui/material';
+import { Chip, Divider, Stack } from '@mui/material';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import { getAllTagActions } from '../../app/slices/tags/action';
+import { SubHeading } from '../../components';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 
 export const Hashtags = () => {
@@ -21,12 +22,7 @@ export const Hashtags = () => {
     <>
       {!!tags.length && (
         <Stack rowGap={1.5}>
-          <Typography
-            variant="h6"
-            component="h3"
-          >
-            Popular Hashtags
-          </Typography>
+          <SubHeading title="Popular Hashtags" />
 
           <Stack
             direction="row"
@@ -44,6 +40,8 @@ export const Hashtags = () => {
               />
             ))}
           </Stack>
+
+          <Divider />
         </Stack>
       )}
     </>

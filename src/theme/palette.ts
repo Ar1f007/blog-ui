@@ -4,6 +4,7 @@ const common: ThemeOptions = {
   typography: {
     htmlFontSize: 10,
   },
+
   components: {
     MuiButton: {
       styleOverrides: {
@@ -22,6 +23,17 @@ const lightPalette: PaletteOptions = {
 
   primary: {
     main: '#FDA214',
+  },
+  colorDark: {
+    main: 'rgba(41, 41, 41, 1)',
+  },
+
+  colorGrey: {
+    main: 'rgba(117, 117, 117, 1)',
+  },
+
+  text: {
+    primary: 'rgba(41, 41, 41, 1)',
   },
 };
 

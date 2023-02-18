@@ -11,6 +11,8 @@ import {
   Typography,
 } from '@mui/material';
 
+import { createSXCollection } from '../../utils';
+
 import type { FC } from 'react';
 
 const url =
@@ -27,6 +29,13 @@ type CardTitleProps = {
 type CardExcerptProps = {
   excerpt: string;
 };
+
+const styles = createSXCollection({
+  cardFooterText: {
+    fontSize: '1.3rem',
+    color: 'grey.main',
+  },
+});
 
 const CardTitle: FC<CardTitleProps> = ({ title }) => (
   <Typography
@@ -73,19 +82,13 @@ const CardFooter = () => (
     rowGap={1}
     justifyContent="space-between"
   >
-    <Box
-      sx={{
-        fontSize: '13px',
-      }}
-    >
-      3 days ago
-    </Box>
+    <Box sx={styles.cardFooterText}>3 days ago</Box>
     <Divider
       orientation="vertical"
       flexItem
     />
 
-    <Box sx={{ fontSize: '13px' }}>8 min read</Box>
+    <Box sx={styles.cardFooterText}>8 min read</Box>
 
     <Divider
       orientation="vertical"
@@ -107,14 +110,14 @@ const CardFooter = () => (
       }}
     />
 
-    <Box sx={{ fontSize: '13px' }}>Design</Box>
+    <Box sx={styles.cardFooterText}>Design</Box>
 
     <Divider
       orientation="vertical"
       flexItem
     />
 
-    <Box sx={{ fontSize: '13px' }}>127 reactions </Box>
+    <Box sx={styles.cardFooterText}>127 reactions </Box>
   </Stack>
 );
 

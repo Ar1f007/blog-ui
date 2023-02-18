@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 
 import { Hashtags } from './hashtags';
+import { TrendingArticles } from './trending-articles';
 
 export const RightSidebar = () => (
   <Box
@@ -8,5 +9,7 @@ export const RightSidebar = () => (
     pt="1.6rem"
   >
     <Hashtags />
+
+    <TrendingArticles />
   </Box>
 );
