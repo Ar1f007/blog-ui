@@ -18,6 +18,8 @@ const paths = {
   myPost: '/me/posts',
   settings: '/me/settings',
   newPost: '/new-post',
+  categories: '/categories',
+  tags: '/tags',
 };
 
 export default paths;
