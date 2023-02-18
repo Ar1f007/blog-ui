@@ -69,11 +69,33 @@ const CardExcerpt: FC<CardExcerptProps> = ({ excerpt }) => (
 const CardFooter = () => (
   <Stack
     direction="row"
-    spacing={3}
+    columnGap={1}
+    rowGap={1}
+    justifyContent="space-between"
   >
-    <Box sx={{ fontSize: '13px' }}>3 days ago</Box>
+    <Box
+      sx={{
+        fontSize: '13px',
+      }}
+    >
+      3 days ago
+    </Box>
+    <Divider
+      orientation="vertical"
+      flexItem
+    />
 
     <Box sx={{ fontSize: '13px' }}>8 min read</Box>
+
+    <Divider
+      orientation="vertical"
+      flexItem
+      sx={{
+        display: {
+          sm: 'none',
+        },
+      }}
+    />
 
     <Box
       flexGrow={1}
@@ -86,6 +108,11 @@ const CardFooter = () => (
     />
 
     <Box sx={{ fontSize: '13px' }}>Design</Box>
+
+    <Divider
+      orientation="vertical"
+      flexItem
+    />
 
     <Box sx={{ fontSize: '13px' }}>127 reactions </Box>
   </Stack>

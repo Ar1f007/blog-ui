@@ -1,4 +1,4 @@
-import { Chip, Grid, Stack, Typography } from '@mui/material';
+import { Chip, Stack, Typography } from '@mui/material';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
