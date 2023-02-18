@@ -18,34 +18,34 @@ export const Hashtags = () => {
   }, [action, tags.length]);
 
   return (
-    <Stack rowGap={2}>
-      <Typography
-        variant="h6"
-        component="h3"
-      >
-        Popular Hashtags
-      </Typography>
-
-      <Grid
-        container
-        spacing={1}
-      >
-        {tags?.map((tag) => (
-          <Grid
-            item
-            key={tag.value}
-            xs={3}
-            lg={4}
+    <>
+      {!!tags.length && (
+        <Stack rowGap={1.5}>
+          <Typography
+            variant="h6"
+            component="h3"
           >
-            <Chip
-              component={Link}
-              to={`/tags/${tag.slug}`}
-              clickable
-              label={`#${tag.slug}`}
-            />
-          </Grid>
-        ))}
-      </Grid>
-    </Stack>
+            Popular Hashtags
+          </Typography>
+
+          <Stack
+            direction="row"
+            columnGap={1}
+            rowGap={1}
+            flexWrap="wrap"
+          >
+            {tags.map((tag) => (
+              <Chip
+                component={Link}
+                to={`/tags/${tag.slug}`}
+                clickable
+                label={`#${tag.slug}`}
+                key={tag.slug}
+              />
+            ))}
+          </Stack>
+        </Stack>
+      )}
+    </>
   );
 };
