@@ -83,6 +83,7 @@ const CardFooter = () => (
     justifyContent="space-between"
   >
     <Box sx={styles.cardFooterText}>3 days ago</Box>
+
     <Divider
       orientation="vertical"
       flexItem

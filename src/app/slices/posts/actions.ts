@@ -18,3 +18,16 @@ export const createPostAction = createAsyncThunk(
     }
   },
 );
+
+export const fetchPostsAction = createAsyncThunk(
+  'posts/fetch',
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await postApi.fetchPosts();
+      console.log(data);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  },
+);
