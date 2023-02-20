@@ -39,6 +39,6 @@ type ApiError = {
 export type PostsState = {
   loading: boolean;
   currentPost: Post | null;
-  posts: Post[] | null;
+  posts: Post[] | [];
   error: ApiError | null;
 };

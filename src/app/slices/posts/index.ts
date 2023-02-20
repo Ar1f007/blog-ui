@@ -1,2 +1,2 @@
 export { clearCurrentPostData } from './slice';
-export { createPostAction } from './actions';
+export { createPostAction, fetchPostsAction } from './actions';

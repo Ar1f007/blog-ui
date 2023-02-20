@@ -24,8 +24,8 @@ export const fetchPostsAction = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const { data } = await postApi.fetchPosts();
-      console.log(data);
-      return data;
+
+      return data.posts;
     } catch (error) {
       return rejectWithValue(error);
     }

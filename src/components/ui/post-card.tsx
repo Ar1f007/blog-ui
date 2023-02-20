@@ -20,6 +20,11 @@ const url =
 
 type PostProps = {
   showHeader: boolean;
+  title: string;
+  description: string;
+  coverImage: string;
+  likesCount: number;
+  category: string;
 };
 
 type CardTitleProps = {
@@ -70,12 +75,14 @@ const CardExcerpt: FC<CardExcerptProps> = ({ excerpt }) => (
       WebkitLineClamp: 3,
       WebkitBoxOrient: 'vertical',
     }}
-  >
-    {excerpt}
-  </Box>
+    dangerouslySetInnerHTML={{ __html: excerpt }}
+  />
 );
 
-const CardFooter = () => (
+const CardFooter: FC<Pick<PostProps, 'category' | 'likesCount'>> = ({
+  category,
+  likesCount,
+}) => (
   <Stack
     direction="row"
     columnGap={1}
@@ -111,18 +118,28 @@ const CardFooter = () => (
       }}
     />
 
-    <Box sx={styles.cardFooterText}>Design</Box>
+    <Box sx={styles.cardFooterText}>{category}</Box>
 
     <Divider
       orientation="vertical"
       flexItem
     />
 
-    <Box sx={styles.cardFooterText}>127 reactions </Box>
+    <Box sx={styles.cardFooterText}>
+      {likesCount}&nbsp;
+      {likesCount > 0 ? 'reactions' : 'reaction'}
+    </Box>
   </Stack>
 );
 
-export const Post: FC<PostProps> = ({ showHeader = false }) => {
+export const Post: FC<PostProps> = ({
+  showHeader = false,
+  title,
+  description,
+  category,
+  coverImage,
+  likesCount,
+}) => {
   const cardHeader = (
     <CardHeader>
       {/* <Avatar
@@ -147,9 +164,9 @@ export const Post: FC<PostProps> = ({ showHeader = false }) => {
               item
               xs={8}
             >
-              <CardTitle title="Compound components pattern for creating reusable Rating component" />
+              <CardTitle title={title || 'N/A'} />
 
-              <CardExcerpt excerpt="The environment of web interaction is diverse. And to ensure outstanding user experience across all devices, businesses are bound to invest in mobile" />
+              <CardExcerpt excerpt={description.slice(0, 300)} />
             </Grid>
 
             <Grid
@@ -159,13 +176,16 @@ export const Post: FC<PostProps> = ({ showHeader = false }) => {
               <CardMedia
                 component="img"
                 sx={{ width: '100%' }}
-                image={url}
-                alt="Live from space album cover"
+                image={coverImage}
+                alt={title}
               />
             </Grid>
           </Grid>
 
-          <CardFooter />
+          <CardFooter
+            category={category}
+            likesCount={likesCount}
+          />
           <Divider />
         </Stack>
       </CardContent>
