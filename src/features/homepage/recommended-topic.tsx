@@ -39,6 +39,7 @@ export const RecommendedTopics = () => {
             direction="row"
             columnGap={1}
             rowGap={1}
+            flexWrap="wrap"
           >
             {data.map((category) => (
               <Chip

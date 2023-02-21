@@ -41,12 +41,13 @@ export const Home = () => {
           {posts.map((post) => (
             <Post
               key={post.id}
-              showHeader={false}
+              showHeader
               title={post.title}
               description={post.description}
               category={post.category}
               coverImage={post.coverImage}
               likesCount={post.likesCount}
+              author={post.authorId}
             />
           ))}
         </Grid>

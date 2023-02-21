@@ -8,16 +8,26 @@ export type CreatePost = {
   coverImgIncluded: boolean;
 };
 
+type Topic = {
+  id: string;
+  name: string;
+  slug: string;
+};
+
 type Post = {
   slug: string;
   title: string;
-  category: string;
-  tags: [string];
+  category: Topic;
+  tags: Topic[];
   numViews: number;
   isLiked: boolean;
   likes: [string];
   likesCount: number;
-  authorId: string;
+  authorId: {
+    firstName: string;
+    lastName: string;
+    photo: string;
+  };
   description: string;
   coverImage: string;
   published_at: string;

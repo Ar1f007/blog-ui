@@ -15,16 +15,22 @@ import { createSXCollection } from '../../utils';
 
 import type { FC } from 'react';
 
-const url =
-  'https://images.unsplash.com/photo-1669054626218-f0b57b8ec632?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80';
-
 type PostProps = {
   showHeader: boolean;
   title: string;
   description: string;
   coverImage: string;
   likesCount: number;
-  category: string;
+  category: {
+    id: string;
+    name: string;
+    slug: string;
+  };
+  author: {
+    firstName: string;
+    lastName: string;
+    photo: string;
+  };
 };
 
 type CardTitleProps = {
@@ -118,7 +124,7 @@ const CardFooter: FC<Pick<PostProps, 'category' | 'likesCount'>> = ({
       }}
     />
 
-    <Box sx={styles.cardFooterText}>{category}</Box>
+    <Box sx={styles.cardFooterText}>{category?.name}</Box>
 
     <Divider
       orientation="vertical"
@@ -133,20 +139,31 @@ const CardFooter: FC<Pick<PostProps, 'category' | 'likesCount'>> = ({
 );
 
 export const Post: FC<PostProps> = ({
-  showHeader = false,
+  showHeader,
   title,
   description,
   category,
   coverImage,
   likesCount,
+  author,
 }) => {
   const cardHeader = (
-    <CardHeader>
-      {/* <Avatar
-        url="./jpg"
-        alt="Arif"
-      /> */}
-    </CardHeader>
+    <CardHeader
+      avatar={
+        <Avatar
+          src={author?.photo}
+          alt={author?.firstName}
+        />
+      }
+      title={author?.firstName + ' ' + author?.lastName}
+      sx={{
+        '.MuiCardHeader-title': {
+          fontWeight: 500,
+          color: 'colorGrey.main',
+        },
+        pb: 0,
+      }}
+    />
   );
   return (
     <Card
@@ -154,6 +171,7 @@ export const Post: FC<PostProps> = ({
       sx={{ backgroundColor: 'transparent' }}
     >
       {showHeader && cardHeader}
+
       <CardContent>
         <Stack spacing={3}>
           <Grid
