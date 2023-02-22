@@ -10,45 +10,38 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { Link } from 'react-router-dom';
 
+import paths from '../../routes/paths';
 import { createSXCollection } from '../../utils';
 
+import type { Post as PostAttrs } from '../../app/slices/posts/types';
 import type { FC } from 'react';
 
-type PostProps = {
-  showHeader: boolean;
-  title: string;
-  description: string;
-  coverImage: string;
-  likesCount: number;
-  category: {
-    id: string;
-    name: string;
-    slug: string;
-  };
-  author: {
-    firstName: string;
-    lastName: string;
-    photo: string;
-  };
-};
-
-type CardTitleProps = {
-  title: string;
-};
+type PostProps = { showHeader: boolean } & PostAttrs;
 
 type CardExcerptProps = {
   excerpt: string;
 };
 
+type LinkWrapperProps = {
+  children: JSX.Element;
+  slug: string;
+};
+
 const styles = createSXCollection({
-  cardFooterText: {
+  container: {
+    color: 'inherit',
+    textDecoration: 'none',
+  },
+
+  infoText: {
     fontSize: '1.3rem',
     color: 'grey.main',
   },
 });
 
-const CardTitle: FC<CardTitleProps> = ({ title }) => (
+const CardTitle: FC<Pick<PostAttrs, 'title'>> = ({ title }) => (
   <Typography
     component="h3"
     variant="h6"
@@ -85,9 +78,10 @@ const CardExcerpt: FC<CardExcerptProps> = ({ excerpt }) => (
   />
 );
 
-const CardFooter: FC<Pick<PostProps, 'category' | 'likesCount'>> = ({
+const Info: FC<Pick<PostProps, 'category' | 'likesCount' | 'slug'>> = ({
   category,
   likesCount,
+  slug,
 }) => (
   <Stack
     direction="row"
@@ -95,14 +89,17 @@ const CardFooter: FC<Pick<PostProps, 'category' | 'likesCount'>> = ({
     rowGap={1}
     justifyContent="space-between"
   >
-    <Box sx={styles.cardFooterText}>3 days ago</Box>
+    <LinkWrapper slug={slug}>
+      <Box sx={styles.infoText}>3 days ago</Box>
+    </LinkWrapper>
 
     <Divider
       orientation="vertical"
       flexItem
     />
-
-    <Box sx={styles.cardFooterText}>8 min read</Box>
+    <LinkWrapper slug={slug}>
+      <Box sx={styles.infoText}>8 min read</Box>
+    </LinkWrapper>
 
     <Divider
       orientation="vertical"
@@ -124,18 +121,30 @@ const CardFooter: FC<Pick<PostProps, 'category' | 'likesCount'>> = ({
       }}
     />
 
-    <Box sx={styles.cardFooterText}>{category?.name}</Box>
+    <Box sx={styles.infoText}>{category?.name}</Box>
 
     <Divider
       orientation="vertical"
       flexItem
     />
 
-    <Box sx={styles.cardFooterText}>
-      {likesCount}&nbsp;
-      {likesCount > 0 ? 'reactions' : 'reaction'}
-    </Box>
+    <LinkWrapper slug={slug}>
+      <Box sx={styles.infoText}>
+        {likesCount}&nbsp;
+        {likesCount > 0 ? 'reactions' : 'reaction'}
+      </Box>
+    </LinkWrapper>
   </Stack>
+);
+
+const LinkWrapper: FC<LinkWrapperProps> = ({ children, slug }) => (
+  <Box
+    component={Link}
+    to={paths.posts + '/' + slug}
+    sx={styles.container}
+  >
+    {children}
+  </Box>
 );
 
 export const Post: FC<PostProps> = ({
@@ -146,7 +155,10 @@ export const Post: FC<PostProps> = ({
   coverImage,
   likesCount,
   author,
+  slug,
 }) => {
+  const authorName = `${author?.firstName || ''} ${author?.lastName || ''}`;
+
   const cardHeader = (
     <CardHeader
       avatar={
@@ -155,7 +167,7 @@ export const Post: FC<PostProps> = ({
           alt={author?.firstName}
         />
       }
-      title={author?.firstName + ' ' + author?.lastName}
+      title={authorName}
       sx={{
         '.MuiCardHeader-title': {
           fontWeight: 500,
@@ -165,6 +177,7 @@ export const Post: FC<PostProps> = ({
       }}
     />
   );
+
   return (
     <Card
       elevation={0}
@@ -182,28 +195,37 @@ export const Post: FC<PostProps> = ({
               item
               xs={8}
             >
-              <CardTitle title={title || 'N/A'} />
+              <LinkWrapper slug={slug}>
+                <CardTitle title={title} />
+              </LinkWrapper>
 
-              <CardExcerpt excerpt={description.slice(0, 300)} />
+              <LinkWrapper slug={slug}>
+                <CardExcerpt excerpt={description.slice(0, 300)} />
+              </LinkWrapper>
             </Grid>
 
             <Grid
               item
               xs={4}
             >
-              <CardMedia
-                component="img"
-                sx={{ width: '100%' }}
-                image={coverImage}
-                alt={title}
-              />
+              <LinkWrapper slug={slug}>
+                <CardMedia
+                  component="img"
+                  sx={{ width: '100%' }}
+                  image={coverImage}
+                  alt={title}
+                />
+              </LinkWrapper>
             </Grid>
           </Grid>
 
-          <CardFooter
-            category={category}
-            likesCount={likesCount}
-          />
+          <Grid item>
+            <Info
+              category={category}
+              likesCount={likesCount}
+              slug={slug}
+            />
+          </Grid>
           <Divider />
         </Stack>
       </CardContent>

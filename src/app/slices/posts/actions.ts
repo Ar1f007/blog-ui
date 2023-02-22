@@ -25,7 +25,7 @@ export const fetchPostsAction = createAsyncThunk(
     try {
       const { data } = await postApi.fetchPosts();
 
-      return data.posts;
+      return data.posts || [];
     } catch (error) {
       return rejectWithValue(error);
     }

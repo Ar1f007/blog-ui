@@ -23,7 +23,7 @@ type Post = {
   isLiked: boolean;
   likes: [string];
   likesCount: number;
-  authorId: {
+  author: {
     firstName: string;
     lastName: string;
     photo: string;
