@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import { PostStats } from '../features/dashboard';
 import { AuthLayout, MainLayout, PostLayout } from '../layouts';
-import { Dashboard, Home, SignUp } from '../pages';
+import { Dashboard, Home, SignUp, Error_404 } from '../pages';
 import AddPost from '../pages/add-post';
 import Login from '../pages/login';
 
@@ -53,7 +53,7 @@ export const routes = createBrowserRouter([
   },
   {
     path: '*',
-    element: <>404</>,
+    element: <Error_404 />,
   },
 ]);
 
