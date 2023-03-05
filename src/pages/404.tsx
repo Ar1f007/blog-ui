@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import img from '../assets/images/404.svg';
 import paths from '../routes/paths';
 
-export const Error_404 = () => (
+export const FourOhFour = () => (
   <Container maxWidth="sm">
     <Box
       p={3}

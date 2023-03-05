@@ -56,6 +56,7 @@ const postSlice = createSlice({
       state.posts = [];
 
       if (action.payload) {
+        console.log(action.payload);
         state.error = action.payload;
       } else {
         state.error = action.error;
