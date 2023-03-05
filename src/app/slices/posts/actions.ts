@@ -27,7 +27,7 @@ export const fetchPostsAction = createAsyncThunk(
 
       return data.posts || [];
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(handleError(error));
     }
   },
 );

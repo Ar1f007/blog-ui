@@ -7,7 +7,13 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 
+import type { LoginFields } from '../../../app/slices/users/types';
+import type { LoginInputs } from '../validations/login';
+
 import { loginUserAction } from '../../../app/slices/users/action';
+
+import type { SubmitHandler } from 'react-hook-form';
+
 import { clearError } from '../../../app/slices/users/slice';
 import Icons from '../../../assets/icons';
 import Input from '../../../components/form/Input';
@@ -18,9 +24,6 @@ import loginSchema from '../validations/login';
 
 import LoginFormFooter from './login-form-footer';
 
-import type { LoginFields } from '../../../app/slices/users/types';
-import type { LoginInputs } from '../validations/login';
-import type { SubmitHandler } from 'react-hook-form';
 
 // --------------------------------------------------------------------
 

@@ -6,7 +6,13 @@ import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+
+import type { CreatePost } from '../../../../app/slices/posts/types';
+
 import { toast } from 'react-toastify';
+
+import type { CreatePostPayload } from '../../validations/create-post';
+import type { SubmitHandler } from 'react-hook-form/dist/types/form';
 
 import { getCategoriesAction } from '../../../../app/slices/categories';
 import {
@@ -28,23 +34,13 @@ import { attachValidationErrors } from '../../../../utils';
 import { getFormattedPayload } from '../../helpers';
 import { createPostSchema } from '../../validations/create-post';
 
-import type { CreatePost } from '../../../../app/slices/posts/types';
-import type { CreatePostPayload } from '../../validations/create-post';
-import type { SubmitHandler } from 'react-hook-form/dist/types/form';
-
 // --------------------------------------------------------------------------------------------
 const Form = () => {
-  const {
-    data: category,
-    loading: fetchingCategory,
-    error: errorFetchingCategory,
-  } = useAppSelector((s) => s.category);
+  const { data: category, error: errorFetchingCategory } = useAppSelector(
+    (s) => s.category,
+  );
 
-  const {
-    data: tag,
-    status: fetchingTag,
-    error: errorFetchingTag,
-  } = useAppSelector((s) => s.tag);
+  const { data: tag, error: errorFetchingTag } = useAppSelector((s) => s.tag);
 
   const {
     currentPost: postCreatedSuccessfully,

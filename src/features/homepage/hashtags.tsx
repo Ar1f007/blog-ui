@@ -10,13 +10,13 @@ import { useAppDispatch, useAppSelector } from '../../hooks/store';
 export const Hashtags = () => {
   const dispatch = useAppDispatch();
   const action = bindActionCreators({ getAllTagActions }, dispatch);
-  const tags = useAppSelector((s) => s.tag.data);
+  const { data: tags, error } = useAppSelector((s) => s.tag);
 
   useEffect(() => {
-    if (!tags.length) {
+    if (!tags.length && !error) {
       action.getAllTagActions();
     }
-  }, [action, tags.length]);
+  }, [action, tags.length, error]);
 
   return (
     <>

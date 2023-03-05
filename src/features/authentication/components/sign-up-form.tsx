@@ -13,7 +13,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 
+import type { RegisterFields } from '../../../app/slices/users/types';
+import type { SignUpInputs } from '../validations/sign-up';
+
 import { registerUserAction } from '../../../app/slices/users/action';
+
+import type { SubmitHandler } from 'react-hook-form';
+
 import { clearError } from '../../../app/slices/users/slice';
 import Icons from '../../../assets/icons';
 import Input from '../../../components/form/Input';
@@ -23,9 +29,6 @@ import paths from '../../../routes/paths';
 import { attachValidationErrors } from '../../../utils';
 import signUpSchema from '../validations/sign-up';
 
-import type { RegisterFields } from '../../../app/slices/users/types';
-import type { SignUpInputs } from '../validations/sign-up';
-import type { SubmitHandler } from 'react-hook-form';
 
 // --------------------------------------------------------------------
 

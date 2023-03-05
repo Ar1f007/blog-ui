@@ -10,10 +10,10 @@ export const Articles = () => {
   const { posts, loading, error } = useAppSelector((s) => s.post);
 
   useEffect(() => {
-    if (!posts.length) {
+    if (!posts.length && !error) {
       dispatch(fetchPostsAction());
     }
-  }, [dispatch, posts]);
+  }, [dispatch, posts, error]);
 
   if (error) {
     toast.error(error.message, {

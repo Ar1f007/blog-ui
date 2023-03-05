@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import paths from '../../routes/paths';
 
 export const RecommendedTopics = () => {
-  const { data, loading } = useAppSelector((s) => s.category);
+  const { data, loading, error } = useAppSelector((s) => s.category);
 
   const dispatch = useAppDispatch();
   const actions = bindActionCreators(
@@ -20,10 +20,10 @@ export const RecommendedTopics = () => {
   );
 
   useEffect(() => {
-    if (!data.length) {
+    if (!data.length && !error) {
       actions.getCategoriesAction();
     }
-  }, [data, actions]);
+  }, [data, actions, error]);
 
   if (loading === 'pending') {
     return <p>Loading...</p>;

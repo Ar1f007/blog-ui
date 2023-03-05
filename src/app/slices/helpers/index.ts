@@ -30,7 +30,9 @@ export const transformOptions = (data: ApiOptionData[]) => {
 export const handleError = (e: unknown) => {
   if (axios.isAxiosError(e)) {
     if (!e.response) {
-      throw e;
+      return {
+        message: e.message,
+      };
     }
 
     return e.response.data;
