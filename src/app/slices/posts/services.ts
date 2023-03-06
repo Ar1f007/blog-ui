@@ -17,9 +17,13 @@ const createPost = ({ payload, coverImgIncluded }: CreatePost) => {
 
 const fetchPosts = () => apiClient.get(POST_END_POINT);
 
+const fetchSinglePost = (slug: string) =>
+  apiClient.get(`${POST_END_POINT}/${slug}`);
+
 const postApi = {
   createPost,
   fetchPosts,
+  fetchSinglePost,
 };
 
 export default postApi;

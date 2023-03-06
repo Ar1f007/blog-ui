@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import { PostStats } from '../features/dashboard';
 import { AuthLayout, MainLayout, PostLayout } from '../layouts';
-import { Dashboard, Home, SignUp, FourOhFour } from '../pages';
+import { Dashboard, Home, SignUp, FourOhFour, PostDetails } from '../pages';
 import AddPost from '../pages/add-post';
 import Login from '../pages/login';
 
@@ -17,6 +17,7 @@ export const routes = createBrowserRouter([
         index: true,
         element: <Home />,
       },
+
       {
         element: <PostLayout />,
         children: [
@@ -25,6 +26,10 @@ export const routes = createBrowserRouter([
             element: <AddPost />,
           },
         ],
+      },
+      {
+        path: `${paths.posts}/:slug`,
+        element: <PostDetails />,
       },
       {
         path: paths.dashboard.index,

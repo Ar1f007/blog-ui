@@ -25,11 +25,9 @@ const tagSlice = createSlice({
       }
     });
     builder.addCase(getAllTagActions.fulfilled, (state, action) => {
-      if (state.status === 'pending') {
-        state.status = 'idle';
-        state.data = action.payload;
-        state.error = null;
-      }
+      state.status = 'idle';
+      state.data = action.payload;
+      state.error = null;
     });
 
     builder.addCase(getAllTagActions.rejected, (state, action) => {

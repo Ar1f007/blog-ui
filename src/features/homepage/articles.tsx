@@ -27,9 +27,9 @@ export const Articles = () => {
 
   return (
     <>
-      {posts.map((post) => (
+      {posts.map((post, idx) => (
         <Post
-          key={post.id}
+          key={idx}
           showHeader
           {...post}
         />
