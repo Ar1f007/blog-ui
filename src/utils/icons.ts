@@ -13,6 +13,11 @@ import {
   Search,
   Settings,
   Close,
+  FavoriteBorder,
+  Favorite,
+  Comment,
+  BookmarkAddOutlined,
+  BookmarkOutlined,
 } from '@mui/icons-material';
 
 const Icons = {
@@ -30,6 +35,11 @@ const Icons = {
   Search,
   Settings,
   Close,
+  FavoriteBorder,
+  Favorite,
+  Comment,
+  BookmarkAddOutlined,
+  BookmarkOutlined,
 };
 
 export default Icons;
