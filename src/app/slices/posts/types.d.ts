@@ -14,7 +14,7 @@ type Topic = {
   slug: string;
 };
 
-type Post = {
+export type Post = {
   slug: string;
   title: string;
   category: Topic;
@@ -27,6 +27,9 @@ type Post = {
     firstName: string;
     lastName: string;
     photo: string;
+    email: string;
+    bio: string;
+    followers: [string];
   };
   description: string;
   coverImage: string;

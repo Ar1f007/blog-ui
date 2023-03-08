@@ -4,7 +4,7 @@ import { handleError } from '../helpers';
 
 import postApi from './services';
 
-import type { CreatePost } from './types';
+import type { CreatePost, Post } from './types';
 
 export const createPostAction = createAsyncThunk(
   'posts/create',
@@ -26,6 +26,18 @@ export const fetchPostsAction = createAsyncThunk(
       const { data } = await postApi.fetchPosts();
 
       return data.posts || [];
+    } catch (error) {
+      return rejectWithValue(handleError(error));
+    }
+  },
+);
+
+export const fetchSinglePostAction = createAsyncThunk<Post, string>(
+  'posts/fetch/singlePost',
+  async (slug, { rejectWithValue }) => {
+    try {
+      const { data } = await postApi.fetchSinglePost(slug);
+      return data.post;
     } catch (error) {
       return rejectWithValue(handleError(error));
     }

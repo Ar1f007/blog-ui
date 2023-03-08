@@ -13,7 +13,7 @@ export const Articles = () => {
     if (!posts.length && !error) {
       dispatch(fetchPostsAction());
     }
-  }, [dispatch, posts, error]);
+  }, []);
 
   if (error) {
     toast.error(error.message, {

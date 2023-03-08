@@ -11,6 +11,7 @@ import paths from './paths';
 export const routes = createBrowserRouter([
   {
     path: paths.home,
+
     element: <MainLayout />,
     children: [
       {
