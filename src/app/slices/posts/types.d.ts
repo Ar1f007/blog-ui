@@ -30,6 +30,8 @@ export type Post = {
     email: string;
     bio: string;
     followers: [string];
+    address: string;
+    createdAt: string;
   };
   description: string;
   coverImage: string;
