@@ -19,3 +19,21 @@ export const attachValidationErrors = <T>(
     });
   });
 };
+
+export function calculateReadingTime(
+  htmlString: string,
+  wordsPerMinute = 200,
+): string {
+  const element = document.createElement('div');
+  element.innerHTML = htmlString;
+
+  // Extract the text content from the element
+  const textContent = element.textContent || '';
+
+  // Calculate the estimated reading time
+  const wordCount = textContent.split(/\s+/g).length;
+  const readingTimeInMinutes = wordCount / wordsPerMinute;
+  const formattedReadingTime = Math.ceil(readingTimeInMinutes).toString();
+
+  return `${formattedReadingTime} min read`;
+}

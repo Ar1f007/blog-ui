@@ -1,9 +1,13 @@
-import { Container, Grid } from '@mui/material';
+import { Box, Container, Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { fetchSinglePostAction } from '../../app/slices/posts/actions';
-import { AuthorInfo, PostInfo } from '../../features/posts';
+import {
+  AuthorInfo,
+  Post as PostContent,
+  PostInfo,
+} from '../../features/posts';
 import { useAppDispatch } from '../../hooks/store';
 import { formatTime } from '../../utils/dateTime';
 
@@ -17,6 +21,15 @@ export const PostDetails = () => {
   const author = post?.author;
 
   const ds = {
+    post: {
+      title: post?.title,
+      coverImage: post?.coverImage,
+      description: post?.description,
+      published_at: post?.published_at,
+      tags: post?.tags,
+      category: post?.category,
+    },
+
     author: {
       firstName: post?.author.firstName,
       lastName: post?.author.lastName,
@@ -44,42 +57,47 @@ export const PostDetails = () => {
 
   return (
     <Container maxWidth="xl">
-      <Grid
-        container
-        spacing={3}
-        flexWrap="wrap"
-      >
+      <Box mt={6}>
         <Grid
-          item
-          lg={1}
+          container
+          spacing={3}
         >
-          <PostInfo
-            commentsCount={20}
-            likesCount={530}
-            bookmarksCount={37}
-          />
-        </Grid>
+          <Grid
+            item
+            lg={1}
+          >
+            <PostInfo
+              commentsCount={20}
+              likesCount={530}
+              bookmarksCount={37}
+            />
+          </Grid>
 
-        <Grid
-          item
-          lg={7}
-        >
-          A
+          <Grid
+            item
+            xs={12}
+            lg={9}
+          >
+            <PostContent
+              {...ds.post}
+              name={ds.author.getFullName()}
+            />
+          </Grid>
+          <Grid
+            item
+            lg={2}
+          >
+            <AuthorInfo
+              name={ds.author.getFullName()}
+              avatar={ds.author.photo}
+              bio={ds.author.bio}
+              address={ds.author.address}
+              followers={ds.author.followers}
+              joined={ds.author.joined}
+            />
+          </Grid>
         </Grid>
-        <Grid
-          item
-          lg={3}
-        >
-          <AuthorInfo
-            name={ds.author.getFullName()}
-            avatar={ds.author.photo}
-            bio={ds.author.bio}
-            address={ds.author.address}
-            followers={ds.author.followers}
-            joined={ds.author.joined}
-          />
-        </Grid>
-      </Grid>
+      </Box>
     </Container>
   );
 };
