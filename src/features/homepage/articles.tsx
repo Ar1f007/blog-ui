@@ -27,7 +27,7 @@ export const Articles = () => {
 
   return (
     <>
-      {posts.map((post, idx) => (
+      {posts?.map((post, idx) => (
         <Post
           key={idx}
           showHeader

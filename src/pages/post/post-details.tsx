@@ -49,7 +49,6 @@ export const PostDetails = () => {
     (async function () {
       if (slug) {
         const { payload } = await dispatch(fetchSinglePostAction(slug));
-
         setPost(payload as Post);
       }
     })();

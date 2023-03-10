@@ -41,6 +41,35 @@ export type Post = {
   updatedAt: string;
 };
 
+export type PostDetails = {
+  author: {
+    id: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    fullName: string;
+    photo: string;
+    email: string;
+    followers: number;
+    joined: string;
+    address: string;
+  };
+  post: {
+    id: string;
+    slug: string;
+    coverImage: string;
+    title: string;
+    description: string;
+    views: number;
+    isLiked: boolean;
+    likesCount: number;
+    likes: [string];
+    published_at: string;
+    category: Topic;
+    tags: Topic[];
+  };
+};
+
 export type CreatePostServerError = keyof CreatePostPayload;
 
 type ApiError = {
