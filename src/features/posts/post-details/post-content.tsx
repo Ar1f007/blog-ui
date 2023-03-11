@@ -18,6 +18,8 @@ import { formatTime } from '../../../utils/dateTime';
 
 import type { PostDetails as PostDetailsType } from '../../../app/slices/posts/types';
 
+import Comments from './comments';
+
 type PostContent = PostDetailsType;
 
 const parser = (input: string) =>
@@ -176,6 +178,8 @@ export const Post = (props: PostContent) => {
           {description && <Box>{content}</Box>}
         </Stack>
       </Stack>
+
+      <Comments />
     </Paper>
   );
 };

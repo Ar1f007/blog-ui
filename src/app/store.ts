@@ -12,6 +12,7 @@ import {
 import storage from 'redux-persist/lib/storage';
 
 import reducer from './rootReducer';
+import { commentsApi } from './slices/comments';
 
 const persistConfig = {
   key: 'root',
@@ -31,7 +32,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }),
+    }).concat(commentsApi.middleware),
 });
 
 export const persistor = persistStore(store);
