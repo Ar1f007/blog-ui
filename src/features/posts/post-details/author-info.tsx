@@ -11,6 +11,7 @@ type Props = {
 
 export const AuthorInfo = (props: Partial<Props>) => {
   const { avatar, followers, name, address, bio, joined } = props;
+
   return (
     <Box>
       <Stack rowGap={1}>

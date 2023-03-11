@@ -9,7 +9,7 @@ export type CreatePost = {
 };
 
 type Topic = {
-  id: string;
+  _id: string;
   name: string;
   slug: string;
 };
@@ -41,33 +41,38 @@ export type Post = {
   updatedAt: string;
 };
 
+export type Author = {
+  id: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  photo: string;
+  email: string;
+  followers: number;
+  joined: string;
+  address: string;
+  bio: string;
+};
+
+type PostContent = {
+  id: string;
+  slug: string;
+  coverImage: string;
+  title: string;
+  description: string;
+  views: number;
+  isLiked: boolean;
+  likesCount: number;
+  likes: [string];
+  published_at: string;
+  category: Topic;
+  tags: Topic[];
+};
+
 export type PostDetails = {
-  author: {
-    id: string;
-    username: string;
-    firstName: string;
-    lastName: string;
-    fullName: string;
-    photo: string;
-    email: string;
-    followers: number;
-    joined: string;
-    address: string;
-  };
-  post: {
-    id: string;
-    slug: string;
-    coverImage: string;
-    title: string;
-    description: string;
-    views: number;
-    isLiked: boolean;
-    likesCount: number;
-    likes: [string];
-    published_at: string;
-    category: Topic;
-    tags: Topic[];
-  };
+  author: Author;
+  post: PostContent;
 };
 
 export type CreatePostServerError = keyof CreatePostPayload;

@@ -16,9 +16,9 @@ import paths from '../../../routes/paths';
 import { calculateReadingTime } from '../../../utils';
 import { formatTime } from '../../../utils/dateTime';
 
-import type { Post as PostType } from '../../../app/slices/posts/types';
+import type { PostDetails as PostDetailsType } from '../../../app/slices/posts/types';
 
-type PostContent = Partial<PostType> & { name: string };
+type PostContent = PostDetailsType;
 
 const parser = (input: string) =>
   parse(input, {
@@ -41,9 +41,9 @@ const styles = {
 const showFromTablet = { xs: 'none', sm: 'block' };
 
 export const Post = (props: PostContent) => {
-  const { title, coverImage, published_at, description, tags, category } =
-    props;
-  // const author = props.author;
+  const { tags, description, category, coverImage, published_at, title } =
+    props.post;
+  const { photo, fullName } = props.author;
 
   const getTags = useMemo(
     () =>
@@ -101,8 +101,8 @@ export const Post = (props: PostContent) => {
             columnGap={2}
           >
             <Avatar
-              src={props.author?.photo}
-              alt={props.name}
+              src={photo}
+              alt={fullName}
             />
 
             {/* Name */}
@@ -111,7 +111,7 @@ export const Post = (props: PostContent) => {
                 fontSize="20px"
                 fontWeight={500}
               >
-                {props.name}
+                {fullName}
               </Typography>
 
               <Stack
