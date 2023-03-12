@@ -43,7 +43,7 @@ const Comments = ({ postId }: Props) => {
           Comments ({data?.totalComments})
         </Typography>
 
-        <AddComment />
+        <AddComment postId={postId} />
 
         {data?.comments.map((comment) => (
           <CommentItem

@@ -9,9 +9,10 @@ import {
 import { Link } from 'react-router-dom';
 
 import paths from '../../../../routes/paths';
+import { parseHTMLToString } from '../../../../utils';
 import { formatTimeFromNow } from '../../../../utils/dateTime';
 
-import type { Comment } from '../../../../app/slices/comments/type';
+import type { Comment } from '../../../../app/slices/comments/types';
 
 type Props = {
   postSlug: string;
@@ -83,8 +84,9 @@ const CommentItem = (props: Props) => {
       <Typography
         fontSize="1.6rem"
         lineHeight={1.8}
+        component="div"
       >
-        {commentDesc}
+        {parseHTMLToString(commentDesc)}
       </Typography>
 
       <Divider />

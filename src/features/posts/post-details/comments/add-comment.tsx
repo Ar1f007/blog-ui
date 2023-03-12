@@ -1,47 +1,39 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Avatar, Box, Button, Divider, Stack } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Button,
+  CircularProgress,
+  Divider,
+  Stack,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { shallowEqual } from 'react-redux';
-import { z } from 'zod';
+import { toast } from 'react-toastify';
 
-import logo from '../../../../assets/images/logo.webp';
-import { FormProvider, TextEditor } from '../../../../components';
+import type { ErrData } from '../../../../types/others';
+import type { CommentPayload } from '../../validations/add-comment';
+
+import { useAddCommentMutation } from '../../../../app/slices/comments';
 
 import type { SubmitHandler } from 'react-hook-form';
 
+import logo from '../../../../assets/images/logo.webp';
+import { FormProvider, TextEditor } from '../../../../components';
 import { APP_NAME } from '../../../../constant';
 import { useAppSelector } from '../../../../hooks/store';
+import { isErrorWithMessage, isFetchBaseQueryError } from '../../../../utils';
 import AuthCard from '../../../authentication/components/auth-modal';
+import { commentSchema } from '../../validations/add-comment';
 
-const commentSchema = z
-  .object({
-    commentDesc: z
-      .string()
-      .min(1, 'Can not be left empty')
-      .transform((val) =>
-        val
-          .replace(/<p>\s*(?:&nbsp;|\s|<br\s*\/?>)*\s*<\/p>/g, '')
-          .replace(/\n/g, ''),
-      ),
-  })
-  .superRefine(({ commentDesc }, ctx) => {
-    const regex = /^(\s*<p>\s*(?:&nbsp;|\s|<br\s*\/?>)*\s*<\/p>\s*)+$/;
+type Props = {
+  postId: string;
+};
 
-    const hasEmptyContent = regex.test(commentDesc);
+export const AddComment = ({ postId }: Props) => {
+  const [addComment, { isLoading, isSuccess }] = useAddCommentMutation();
 
-    if (hasEmptyContent) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'Can not be left empty',
-        path: ['commentDesc'],
-      });
-    }
-  });
-
-type CommentPayload = z.infer<typeof commentSchema>;
-
-export const AddComment = () => {
   const user = useAppSelector((s) => s.user, shallowEqual);
   const [avatar, setAvatar] = useState<{ src: string; alt: string }>();
 
@@ -55,8 +47,30 @@ export const AddComment = () => {
     resolver: zodResolver(commentSchema),
   });
 
-  const onSubmit: SubmitHandler<CommentPayload> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<CommentPayload> = async (data) => {
+    const commentPayload = {
+      postId,
+      content: data.commentDesc,
+    };
+
+    try {
+      await addComment(commentPayload).unwrap();
+    } catch (err) {
+      if (isFetchBaseQueryError(err)) {
+        const errMsg =
+          'error' in err
+            ? err.error
+            : (err.data as ErrData)?.message || 'Something went wrong';
+
+        toast.error(errMsg, {
+          toastId: 'fetchBaseError',
+        });
+      } else if (isErrorWithMessage(err)) {
+        toast.error(err.message, {
+          toastId: 'errorWithMessage',
+        });
+      }
+    }
   };
 
   function handleOnTextEditorClick() {
@@ -82,6 +96,12 @@ export const AddComment = () => {
       });
     }
   }, [user.data]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      methods.reset();
+    }
+  }, [isSuccess, methods]);
 
   return (
     <>
@@ -110,7 +130,15 @@ export const AddComment = () => {
                 type="submit"
                 variant="contained"
                 sx={{ mt: 1.5 }}
+                disabled={isLoading}
               >
+                {isLoading && (
+                  <CircularProgress
+                    color="inherit"
+                    size={22}
+                    sx={{ mr: 1 }}
+                  />
+                )}
                 Comment
               </Button>
             )}

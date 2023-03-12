@@ -7,13 +7,12 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import parse, { Element } from 'html-react-parser';
 import { useMemo } from 'react';
 import LazyLoad from 'react-lazyload';
 import { Link } from 'react-router-dom';
 
 import paths from '../../../routes/paths';
-import { calculateReadingTime } from '../../../utils';
+import { calculateReadingTime, parseHTMLToString } from '../../../utils';
 import { formatTime } from '../../../utils/dateTime';
 
 import type { PostDetails as PostDetailsType } from '../../../app/slices/posts/types';
@@ -21,15 +20,6 @@ import type { PostDetails as PostDetailsType } from '../../../app/slices/posts/t
 import Comments from './comments';
 
 type PostContent = PostDetailsType;
-
-const parser = (input: string) =>
-  parse(input, {
-    replace: (domNode) => {
-      if (domNode instanceof Element && domNode.attribs.class === 'remove') {
-        return <></>;
-      }
-    },
-  });
 
 const styles = {
   postInfoText: {
@@ -65,7 +55,7 @@ export const Post = (props: PostContent) => {
 
   const content = useMemo(() => {
     if (description) {
-      return parser(description);
+      return parseHTMLToString(description);
     }
   }, [description]);
 
