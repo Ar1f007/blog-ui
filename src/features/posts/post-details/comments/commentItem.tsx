@@ -1,4 +1,11 @@
-import { Avatar, Divider, Stack, Typography } from '@mui/material';
+import {
+  Avatar,
+  Divider,
+  Paper,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { Link } from 'react-router-dom';
 
 import paths from '../../../../routes/paths';
@@ -14,6 +21,27 @@ const CommentItem = (props: Props) => {
   const { _id, commentDesc, user, updatedAt, postSlug } = props;
   const { username, bio, fullName, photo } = user;
 
+  const commenterInfo = (
+    <Paper sx={{ p: 3 }}>
+      <Stack rowGap={1.5}>
+        <Stack
+          direction="row"
+          columnGap={1}
+          alignItems="center"
+        >
+          <Avatar
+            alt={fullName}
+            src={photo}
+          />
+
+          <Typography fontWeight={500}>{fullName}</Typography>
+        </Stack>
+
+        <Typography variant="body2">{bio}</Typography>
+      </Stack>
+    </Paper>
+  );
+
   return (
     <Stack rowGap={2}>
       {/* Avatar and user info */}
@@ -21,25 +49,30 @@ const CommentItem = (props: Props) => {
         direction="row"
         columnGap={1}
       >
-        <Avatar
-          src={photo}
-          alt={fullName}
-        />
+        <Tooltip
+          title={commenterInfo}
+          arrow
+        >
+          <Avatar
+            alt={fullName}
+            src={photo}
+          />
+        </Tooltip>
 
         <Stack>
-          <Typography fontWeight={500}>{fullName}</Typography>
+          <Typography
+            fontWeight={500}
+            component={Link}
+            to={`/${username}`}
+            className="user-link"
+          >
+            {fullName}
+          </Typography>
           <Typography
             component={Link}
             variant="caption"
             to={postSlug + paths.comments + '/' + _id}
-            sx={{
-              textDecoration: 'none',
-              color: 'inherit',
-              '&:hover': {
-                textDecoration: 'underline',
-                color: 'primary.main',
-              },
-            }}
+            className="user-link"
           >
             {formatTimeFromNow(updatedAt)}
           </Typography>

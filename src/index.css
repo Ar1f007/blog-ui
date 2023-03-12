@@ -1,5 +1,6 @@
 :root {
-  --gray: '#858585';
+  --gray: #858585;
+  --primary: #fda214;
 }
 
 html {
@@ -14,12 +15,28 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }
 
 .link-text {
   color: var(--gray);
   font-size: 1.4rem;
-  color: #fda214;
+  color: var(--primary);
   font-weight: 500;
+}
+
+.MuiTooltip-tooltip {
+  background-color: transparent !important;
+}
+
+.user-link {
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s ease-in-out;
+}
+
+.user-link:hover {
+  text-decoration: underline;
+  color: var(--primary);
 }
