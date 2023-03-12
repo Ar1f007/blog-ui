@@ -2,9 +2,10 @@ import { Box, Divider, Stack, Typography } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { useGetCommentsQuery } from '../../../app/slices/comments';
+import { useGetCommentsQuery } from '../../../../app/slices/comments';
 
-import CommentItem from './comments/commentItem';
+import { AddComment } from './add-comment';
+import CommentItem from './comment-item';
 
 type Props = {
   postId: string;
@@ -41,6 +42,8 @@ const Comments = ({ postId }: Props) => {
         >
           Comments ({data?.totalComments})
         </Typography>
+
+        <AddComment />
 
         {data?.comments.map((comment) => (
           <CommentItem

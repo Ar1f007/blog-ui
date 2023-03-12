@@ -1,3 +1,5 @@
+export { Transition } from './ui/transition';
+
 export { FormHeader } from './form/form-header';
 
 export { default as TextInput } from './form/Input';
@@ -9,3 +11,5 @@ export { Select } from './form/select';
 
 export { StatCard } from './ui/stat-card';
 export { SubHeading } from './ui/sub-heading';
+
+export { Dialog } from './ui/dialog';

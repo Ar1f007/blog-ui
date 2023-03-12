@@ -1,3 +1,5 @@
+export const APP_NAME = 'Oh My Blog';
+
 export const PRIMARY_COLOR = '#FDA214';
 
 export const BASE_URL = 'http://localhost:5000/api';

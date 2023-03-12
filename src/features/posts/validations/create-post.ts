@@ -64,7 +64,11 @@ export const createPostSchema = z
       .optional(),
   })
   .superRefine(({ description, tags }, ctx) => {
-    if (description === '<p><br></p>') {
+    const regex = /^(\s*<p>\s*(?:&nbsp;|\s|<br\s*\/?>)*\s*<\/p>\s*)+$/;
+
+    const hasEmptyContent = regex.test(description);
+
+    if (hasEmptyContent) {
       ctx.addIssue({
         code: 'custom',
         message: 'Write your story',
