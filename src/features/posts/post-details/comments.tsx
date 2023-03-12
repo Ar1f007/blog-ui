@@ -1,12 +1,57 @@
+import { Box, Divider, Stack, Typography } from '@mui/material';
+import { useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 import { useGetCommentsQuery } from '../../../app/slices/comments';
 
-const Comments = () => {
-  const { data, isLoading, error } = useGetCommentsQuery(
-    '64062a051494b96c33fc5ed3',
+import CommentItem from './comments/commentItem';
+
+type Props = {
+  postId: string;
+};
+
+const Comments = ({ postId }: Props) => {
+  const { data, isLoading, error } = useGetCommentsQuery(postId, {
+    refetchOnMountOrArgChange: true,
+    refetchOnFocus: true,
+  });
+
+  const location = useLocation();
+
+  if (isLoading) {
+    return <>loading...</>;
+  }
+
+  if (error) {
+    toast.error('Could not load comments, try reloading');
+  }
+
+  return (
+    <Box
+      py={4}
+      px={3}
+    >
+      {data && data?.totalComments > 0 && <Divider sx={{ mb: 4 }} />}
+
+      <Stack rowGap={2}>
+        <Typography
+          variant="h6"
+          component="h4"
+          fontWeight={600}
+        >
+          Comments ({data?.totalComments})
+        </Typography>
+
+        {data?.comments.map((comment) => (
+          <CommentItem
+            {...comment}
+            key={comment._id}
+            postSlug={location.pathname}
+          />
+        ))}
+      </Stack>
+    </Box>
   );
-  console.log(isLoading, error);
-  console.log(data);
-  return null;
 };
 
 export default Comments;

@@ -43,7 +43,7 @@ const styles = {
 const showFromTablet = { xs: 'none', sm: 'block' };
 
 export const Post = (props: PostContent) => {
-  const { tags, description, category, coverImage, published_at, title } =
+  const { tags, description, category, coverImage, published_at, title, id } =
     props.post;
   const { photo, fullName } = props.author;
 
@@ -179,7 +179,7 @@ export const Post = (props: PostContent) => {
         </Stack>
       </Stack>
 
-      <Comments />
+      <Comments postId={id} />
     </Paper>
   );
 };

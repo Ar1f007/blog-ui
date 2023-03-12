@@ -20,6 +20,7 @@ const paths = {
   newPost: '/new-post',
   categories: '/categories',
   tags: '/tags',
+  comments: '/comments',
 };
 
 export default paths;

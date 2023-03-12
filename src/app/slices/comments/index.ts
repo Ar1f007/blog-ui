@@ -9,6 +9,7 @@ export const commentsApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
   }),
+  refetchOnMountOrArgChange: 30,
   endpoints: (builder) => ({
     getComments: builder.query<CommentsData, string>({
       query: (id) => `/comments/${id}`,

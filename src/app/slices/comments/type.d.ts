@@ -1,11 +1,15 @@
 type Commenter = {
   userId: string;
+  username: string;
   fullName: string;
+  email: string;
+  bio: string;
+  photo: string;
 };
 
-type Comment = {
+export type Comment = {
   _id: string;
-  post: string;
+  postId: string;
   user: Commenter;
   commentDesc: string;
   createdAt: string;
