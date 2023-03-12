@@ -4,7 +4,7 @@ import { handleError } from '../helpers';
 
 import postApi from './services';
 
-import type { CreatePost, Post, PostDetails } from './types';
+import type { CreatePost, PostDetails } from './types';
 
 export const createPostAction = createAsyncThunk(
   'posts/create',

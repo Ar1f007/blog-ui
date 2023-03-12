@@ -1,18 +1,6 @@
-import {
-  List,
-  ListItem,
-  ListItemText,
-  MenuItem,
-  MenuList,
-  Paper,
-  Stack,
-  Typography,
-} from '@mui/material';
-import { Link } from 'react-router-dom';
+import { List, ListItem, ListItemText, Paper } from '@mui/material';
 
 import paths from '../../routes/paths';
-
-// import paths from '../../routes/paths';
 
 const dashboardNavigation = [
   {
