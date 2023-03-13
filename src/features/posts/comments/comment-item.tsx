@@ -17,6 +17,8 @@ const CommentItem = (props: Props) => {
   const { _id, commentDesc, user, updatedAt, postSlug } = props;
   const { username, bio, fullName, photo } = user;
 
+  const pathToComment = postSlug + paths.comments + '/' + _id;
+
   const commenterInfo = (
     <Paper sx={{ p: 3 }}>
       <Stack rowGap={1.5}>
@@ -81,14 +83,17 @@ const CommentItem = (props: Props) => {
               <Typography
                 component={Link}
                 variant="caption"
-                to={postSlug + paths.comments + '/' + _id}
+                to={pathToComment}
                 className="user-link"
               >
                 {formatTimeFromNow(updatedAt)}
               </Typography>
             </Stack>
 
-            <CommentDropDownIcon />
+            <CommentDropDownIcon
+              pathToComment={pathToComment}
+              commenterName={fullName}
+            />
           </Stack>
 
           {/* Comment */}
