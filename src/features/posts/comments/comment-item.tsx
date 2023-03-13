@@ -93,6 +93,8 @@ const CommentItem = (props: Props) => {
             <CommentDropDownIcon
               pathToComment={pathToComment}
               commenterName={fullName}
+              comment={commentDesc}
+              commentId={_id}
             />
           </Stack>
 

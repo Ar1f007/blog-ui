@@ -1,9 +1,12 @@
-import { Box, IconButton, Menu, MenuItem } from '@mui/material';
+import { Box, DialogContent, IconButton, Menu, MenuItem } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
+import { Dialog } from '../../../components';
 import { APP_UI_BASE_URL } from '../../../constant';
 import Icons from '../../../utils/icons';
+
+import { EditComment } from './edit-comment';
 
 type Identifier = 'copy-comment-link' | 'edit-comment' | 'delete-comment';
 type Options = {
@@ -15,11 +18,15 @@ type Options = {
 type Props = {
   commenterName: string;
   pathToComment: string;
+  commentId: string;
+  comment: string;
 };
 export const CommentDropDownIcon = (props: Props) => {
-  const { commenterName, pathToComment } = props;
+  const { commenterName, pathToComment, comment, commentId } = props;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  // const [showAlertDialog, setShowAlertDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
 
   const options = useMemo(() => {
     const options: Options[] = [
@@ -45,6 +52,10 @@ export const CommentDropDownIcon = (props: Props) => {
 
   const open = Boolean(anchorEl);
 
+  function handleCloseEditDialog() {
+    setShowEditDialog(false);
+  }
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -61,9 +72,18 @@ export const CommentDropDownIcon = (props: Props) => {
   }
 
   function handleEditComment() {
+    setShowEditDialog(true);
+
+    handleClose();
     return;
   }
+
+  function closeEditCommentDialog() {
+    setShowEditDialog(false);
+  }
+
   function handleDeleteComment() {
+    handleClose();
     return;
   }
 
@@ -124,6 +144,20 @@ export const CommentDropDownIcon = (props: Props) => {
           </MenuItem>
         ))}
       </Menu>
+
+      <Dialog
+        open={showEditDialog}
+        onClose={handleCloseEditDialog}
+        fullWidth
+      >
+        <DialogContent>
+          <EditComment
+            content={comment}
+            commentId={commentId}
+            closeDialog={closeEditCommentDialog}
+          />
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };

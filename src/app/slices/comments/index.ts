@@ -12,6 +12,7 @@ export const commentsApi = createApi({
   }),
   refetchOnMountOrArgChange: 30,
   tagTypes: ['comments'],
+
   endpoints: (builder) => ({
     getComments: builder.query<CommentsData, string>({
       query: (id) => `/comments/${id}`,
@@ -27,7 +28,20 @@ export const commentsApi = createApi({
 
       invalidatesTags: ['comments'],
     }),
+
+    updateComment: builder.mutation({
+      query: ({ commentId, body }) => ({
+        url: `/comments/update/${commentId}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: ['comments'],
+    }),
   }),
 });
 
-export const { useGetCommentsQuery, useAddCommentMutation } = commentsApi;
+export const {
+  useGetCommentsQuery,
+  useAddCommentMutation,
+  useUpdateCommentMutation,
+} = commentsApi;
