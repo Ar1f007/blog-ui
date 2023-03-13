@@ -1,8 +1,18 @@
-import { Box, DialogContent, IconButton, Menu, MenuItem } from '@mui/material';
-import { useMemo, useState } from 'react';
+import {
+  Box,
+  Button,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Menu,
+  MenuItem,
+} from '@mui/material';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
-import { Dialog } from '../../../components';
+import { useDeleteCommentMutation } from '../../../app/slices/comments';
+import { CircularLoader, Dialog } from '../../../components';
 import { APP_UI_BASE_URL } from '../../../constant';
 import Icons from '../../../utils/icons';
 
@@ -25,9 +35,11 @@ export const CommentDropDownIcon = (props: Props) => {
   const { commenterName, pathToComment, comment, commentId } = props;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  // const [showAlertDialog, setShowAlertDialog] = useState(false);
+  const [showAlertDialog, setShowAlertDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
 
+  const [deleteComment, { isLoading, isSuccess, isError }] =
+    useDeleteCommentMutation();
   const options = useMemo(() => {
     const options: Options[] = [
       {
@@ -82,8 +94,18 @@ export const CommentDropDownIcon = (props: Props) => {
     setShowEditDialog(false);
   }
 
+  function closeAlertDialog() {
+    setShowAlertDialog(false);
+  }
+
   function handleDeleteComment() {
+    setShowAlertDialog(true);
     handleClose();
+    return;
+  }
+
+  function handleOnConfirmDelete() {
+    deleteComment(commentId);
     return;
   }
 
@@ -105,6 +127,16 @@ export const CommentDropDownIcon = (props: Props) => {
         return;
     }
   }
+
+  useEffect(() => {
+    if (!showAlertDialog) return;
+
+    if (isSuccess || isError) {
+      closeAlertDialog();
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isError, isSuccess]);
 
   return (
     <Box>
@@ -157,6 +189,25 @@ export const CommentDropDownIcon = (props: Props) => {
             closeDialog={closeEditCommentDialog}
           />
         </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={showAlertDialog}
+        onClose={closeAlertDialog}
+      >
+        <DialogTitle>Are you sure you?</DialogTitle>
+        <DialogContent>Note: This action cannot be reversed.</DialogContent>
+        <DialogActions>
+          <Button onClick={closeAlertDialog}>Cancel</Button>
+          <Button
+            variant="contained"
+            onClick={handleOnConfirmDelete}
+            disabled={isLoading}
+          >
+            <CircularLoader isLoading={isLoading} />
+            Delete
+          </Button>
+        </DialogActions>
       </Dialog>
     </Box>
   );

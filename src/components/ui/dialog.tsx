@@ -17,7 +17,6 @@ export const Dialog = ({ open, children, onClose, ...others }: Props) => (
     TransitionComponent={Transition}
     keepMounted
     onClose={onClose}
-    aria-describedby="Login to continue"
     {...others}
   >
     {children}

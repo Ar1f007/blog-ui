@@ -13,3 +13,4 @@ export { StatCard } from './ui/stat-card';
 export { SubHeading } from './ui/sub-heading';
 
 export { Dialog } from './ui/dialog';
+export { CircularLoader } from './ui/loaders/circular-progress';
