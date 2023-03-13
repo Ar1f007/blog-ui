@@ -9,11 +9,12 @@ import {
   Tooltip,
 } from '@mui/material';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { getUserData, logout } from '../../app/slices/users/slice';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { userNavigation } from '../../routes/navigation';
+import paths from '../../routes/paths';
 import Icons from '../../utils/icons';
 import { createSXCollection } from '../../utils/mui';
 
@@ -32,6 +33,7 @@ const styles = createSXCollection({
 const UserSettings = () => {
   const user = useAppSelector(getUserData);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -46,6 +48,7 @@ const UserSettings = () => {
   const handleLogout = () => {
     handleCloseUserMenu();
     dispatch(logout());
+    navigate(paths.home);
   };
 
   return (

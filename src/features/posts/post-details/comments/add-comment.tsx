@@ -23,6 +23,7 @@ import type { SubmitHandler } from 'react-hook-form';
 import { FormProvider, TextEditor } from '../../../../components';
 import { APP_NAME } from '../../../../constant';
 import { useAppSelector } from '../../../../hooks/store';
+import paths from '../../../../routes/paths';
 import AuthCard from '../../../authentication/components/auth-modal';
 import { commentSchema } from '../../validations/add-comment';
 
@@ -94,7 +95,7 @@ export const AddComment = ({ postId }: Props) => {
   useEffect(() => {
     if (error && 'status' in error) {
       if (error.status === 401 || error.status === 403) {
-        navigate('/login');
+        navigate(paths.login);
       }
     }
   }, [error, navigate]);

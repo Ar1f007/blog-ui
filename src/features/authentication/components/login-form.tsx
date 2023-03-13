@@ -4,7 +4,6 @@ import { Box, IconButton, InputAdornment, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 import type { LoginFields } from '../../../app/slices/users/types';
 import type { LoginInputs } from '../validations/login';
@@ -13,7 +12,6 @@ import { loginUserAction } from '../../../app/slices/users/action';
 
 import type { SubmitHandler } from 'react-hook-form';
 
-import { clearError } from '../../../app/slices/users/slice';
 import Icons from '../../../assets/icons';
 import Input from '../../../components/form/Input';
 import Icon from '../../../components/ui/Icon';
