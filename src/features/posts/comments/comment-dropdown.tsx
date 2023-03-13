@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import { useDeleteCommentMutation } from '../../../app/slices/comments';
 import { CircularLoader, Dialog } from '../../../components';
 import { APP_UI_BASE_URL } from '../../../constant';
+import { useAppSelector } from '../../../hooks/store';
 import Icons from '../../../utils/icons';
 
 import { EditComment } from './edit-comment';
@@ -30,16 +31,21 @@ type Props = {
   pathToComment: string;
   commentId: string;
   comment: string;
+  currentUserId: string;
 };
 export const CommentDropDownIcon = (props: Props) => {
-  const { commenterName, pathToComment, comment, commentId } = props;
+  const { commenterName, pathToComment, comment, commentId, currentUserId } =
+    props;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
 
+  const user = useAppSelector((s) => s.user.data);
+
   const [deleteComment, { isLoading, isSuccess, isError }] =
     useDeleteCommentMutation();
+
   const options = useMemo(() => {
     const options: Options[] = [
       {
@@ -47,20 +53,25 @@ export const CommentDropDownIcon = (props: Props) => {
         label: 'Copy link to comment',
         identifier: 'copy-comment-link',
       },
-      {
-        ariaLabel: `edit comment`,
-        label: 'Edit',
-        identifier: 'edit-comment',
-      },
-      {
-        ariaLabel: `delete comment`,
-        label: 'Delete',
-        identifier: 'delete-comment',
-      },
     ];
 
+    if (user?.id === currentUserId) {
+      options.push(
+        {
+          ariaLabel: `edit comment`,
+          label: 'Edit',
+          identifier: 'edit-comment',
+        },
+        {
+          ariaLabel: `delete comment`,
+          label: 'Delete',
+          identifier: 'delete-comment',
+        },
+      );
+    }
+
     return options;
-  }, [commenterName]);
+  }, [commenterName, user, currentUserId]);
 
   const open = Boolean(anchorEl);
 

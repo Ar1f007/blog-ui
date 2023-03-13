@@ -15,7 +15,7 @@ type Props = {
 
 const CommentItem = (props: Props) => {
   const { _id, commentDesc, user, updatedAt, postSlug } = props;
-  const { username, bio, fullName, photo } = user;
+  const { username, bio, fullName, photo, userId } = user;
 
   const pathToComment = postSlug + paths.comments + '/' + _id;
 
@@ -95,6 +95,7 @@ const CommentItem = (props: Props) => {
               commenterName={fullName}
               comment={commentDesc}
               commentId={_id}
+              currentUserId={userId}
             />
           </Stack>
 
