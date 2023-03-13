@@ -18,6 +18,7 @@ import {
   Comment,
   BookmarkAddOutlined,
   BookmarkOutlined,
+  MoreHoriz,
 } from '@mui/icons-material';
 
 const Icons = {
@@ -40,6 +41,7 @@ const Icons = {
   Comment,
   BookmarkAddOutlined,
   BookmarkOutlined,
+  MoreHoriz,
 };
 
 export default Icons;

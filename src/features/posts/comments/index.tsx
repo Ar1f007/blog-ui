@@ -2,7 +2,7 @@ import { Box, Divider, Stack, Typography } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { useGetCommentsQuery } from '../../../../app/slices/comments';
+import { useGetCommentsQuery } from '../../../app/slices/comments';
 
 import { AddComment } from './add-comment';
 import CommentItem from './comment-item';

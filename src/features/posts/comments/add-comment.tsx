@@ -12,20 +12,19 @@ import { useForm } from 'react-hook-form';
 import { shallowEqual } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { useAddCommentMutation } from '../../../../app/slices/comments';
+import type { CommentPayload } from '../validations/add-comment';
 
-import type { CommentPayload } from '../../validations/add-comment';
-
-import logo from '../../../../assets/images/logo.webp';
+import { useAddCommentMutation } from '../../../app/slices/comments';
+import logo from '../../../assets/images/logo.webp';
 
 import type { SubmitHandler } from 'react-hook-form';
 
-import { FormProvider, TextEditor } from '../../../../components';
-import { APP_NAME } from '../../../../constant';
-import { useAppSelector } from '../../../../hooks/store';
-import paths from '../../../../routes/paths';
-import AuthCard from '../../../authentication/components/auth-modal';
-import { commentSchema } from '../../validations/add-comment';
+import { FormProvider, TextEditor } from '../../../components';
+import { APP_NAME } from '../../../constant';
+import { useAppSelector } from '../../../hooks/store';
+import paths from '../../../routes/paths';
+import AuthCard from '../../authentication/components/auth-modal';
+import { commentSchema } from '../validations/add-comment';
 
 type Props = {
   postId: string;

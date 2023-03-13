@@ -40,3 +40,13 @@ code {
   text-decoration: underline;
   color: var(--primary);
 }
+
+.htmlString p img {
+  border-radius: 4px;
+}
+
+@media screen and (max-width: 768px) {
+  .htmlString p img {
+    width: 100% !important;
+  }
+}

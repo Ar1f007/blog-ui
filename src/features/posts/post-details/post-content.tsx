@@ -17,7 +17,7 @@ import { formatTime } from '../../../utils/dateTime';
 
 import type { PostDetails as PostDetailsType } from '../../../app/slices/posts/types';
 
-import Comments from './comments';
+import Comments from '../comments';
 
 type PostContent = PostDetailsType;
 
