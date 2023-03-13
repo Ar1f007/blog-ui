@@ -4,7 +4,7 @@ export const PRIMARY_COLOR = '#FDA214';
 
 export const BASE_URL = 'http://localhost:5000/api';
 
-export const APP_BASE_URL = 'http://localhost:3000';
+export const APP_UI_BASE_URL = 'http://localhost:3000';
 
 export const REGISTER_ENDPOINT = `${BASE_URL}/users`;
 

@@ -2,7 +2,7 @@ import { Box, IconButton, Menu, MenuItem } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
-import { APP_BASE_URL } from '../../../constant';
+import { APP_UI_BASE_URL } from '../../../constant';
 import Icons from '../../../utils/icons';
 
 type Identifier = 'copy-comment-link' | 'edit-comment' | 'delete-comment';
@@ -54,7 +54,7 @@ export const CommentDropDownIcon = (props: Props) => {
   }
 
   function handleCopyLinkToComment() {
-    navigator.clipboard.writeText(APP_BASE_URL + pathToComment);
+    navigator.clipboard.writeText(APP_UI_BASE_URL + pathToComment);
     toast.success('Copied to clipboard');
     handleClose();
     return;
