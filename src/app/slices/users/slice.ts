@@ -22,6 +22,9 @@ const usersSlice = createSlice({
     logout: (state) => {
       state.data = null;
     },
+    clearUserData: (state) => {
+      state.data = null;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(registerUserAction.pending, (state) => {

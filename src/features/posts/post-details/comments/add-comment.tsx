@@ -10,20 +10,19 @@ import {
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { shallowEqual } from 'react-redux';
-import { toast } from 'react-toastify';
-
-import type { ErrData } from '../../../../types/others';
-import type { CommentPayload } from '../../validations/add-comment';
+import { useNavigate } from 'react-router-dom';
 
 import { useAddCommentMutation } from '../../../../app/slices/comments';
 
-import type { SubmitHandler } from 'react-hook-form';
+import type { CommentPayload } from '../../validations/add-comment';
 
 import logo from '../../../../assets/images/logo.webp';
+
+import type { SubmitHandler } from 'react-hook-form';
+
 import { FormProvider, TextEditor } from '../../../../components';
 import { APP_NAME } from '../../../../constant';
 import { useAppSelector } from '../../../../hooks/store';
-import { isErrorWithMessage, isFetchBaseQueryError } from '../../../../utils';
 import AuthCard from '../../../authentication/components/auth-modal';
 import { commentSchema } from '../../validations/add-comment';
 
@@ -32,9 +31,10 @@ type Props = {
 };
 
 export const AddComment = ({ postId }: Props) => {
-  const [addComment, { isLoading, isSuccess }] = useAddCommentMutation();
-
+  const [addComment, { isLoading, error }] = useAddCommentMutation();
   const user = useAppSelector((s) => s.user, shallowEqual);
+  const navigate = useNavigate();
+
   const [avatar, setAvatar] = useState<{ src: string; alt: string }>();
 
   const [showPopup, setShowPopup] = useState(false);
@@ -43,9 +43,14 @@ export const AddComment = ({ postId }: Props) => {
     defaultValues: {
       commentDesc: '',
     },
-    mode: 'onTouched',
+    mode: 'onSubmit',
     resolver: zodResolver(commentSchema),
   });
+
+  const {
+    formState: { isSubmitSuccessful },
+    reset,
+  } = methods;
 
   const onSubmit: SubmitHandler<CommentPayload> = async (data) => {
     const commentPayload = {
@@ -53,24 +58,7 @@ export const AddComment = ({ postId }: Props) => {
       content: data.commentDesc,
     };
 
-    try {
-      await addComment(commentPayload).unwrap();
-    } catch (err) {
-      if (isFetchBaseQueryError(err)) {
-        const errMsg =
-          'error' in err
-            ? err.error
-            : (err.data as ErrData)?.message || 'Something went wrong';
-
-        toast.error(errMsg, {
-          toastId: 'fetchBaseError',
-        });
-      } else if (isErrorWithMessage(err)) {
-        toast.error(err.message, {
-          toastId: 'errorWithMessage',
-        });
-      }
-    }
+    addComment(commentPayload);
   };
 
   function handleOnTextEditorClick() {
@@ -98,10 +86,18 @@ export const AddComment = ({ postId }: Props) => {
   }, [user.data]);
 
   useEffect(() => {
-    if (isSuccess) {
-      methods.reset();
+    if (isSubmitSuccessful) {
+      reset();
     }
-  }, [isSuccess, methods]);
+  }, [isSubmitSuccessful, reset]);
+
+  useEffect(() => {
+    if (error && 'status' in error) {
+      if (error.status === 401 || error.status === 403) {
+        navigate('/login');
+      }
+    }
+  }, [error, navigate]);
 
   return (
     <>

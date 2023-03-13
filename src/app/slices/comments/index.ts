@@ -24,6 +24,7 @@ export const commentsApi = createApi({
         method: 'POST',
         body: payload,
       }),
+
       invalidatesTags: ['comments'],
     }),
   }),

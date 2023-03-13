@@ -6,7 +6,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-
 import type { LoginFields } from '../../../app/slices/users/types';
 import type { LoginInputs } from '../validations/login';
 
@@ -23,7 +22,6 @@ import { attachValidationErrors } from '../../../utils';
 import loginSchema from '../validations/login';
 
 import LoginFormFooter from './login-form-footer';
-
 
 // --------------------------------------------------------------------
 
@@ -47,12 +45,12 @@ const Form = () => {
   };
 
   useEffect(() => {
-    if (error?.message) {
-      toast.error(error.message);
+    // if (error?.message) {
+    //   toast.error(error.message);
 
-      dispatch(clearError());
-      return;
-    }
+    //   dispatch(clearError());
+    //   return;
+    // }
 
     if (error?.errors) {
       attachValidationErrors<LoginInputs>(
