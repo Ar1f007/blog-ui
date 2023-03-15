@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import { PostStats } from '../features/dashboard';
+import { SingleCommentDesc } from '../features/posts';
 import { AuthLayout, MainLayout, PostLayout } from '../layouts';
 import { Dashboard, Home, SignUp, FourOhFour, PostDetails } from '../pages';
 import AddPost from '../pages/add-post';
@@ -31,6 +32,10 @@ export const routes = createBrowserRouter([
       {
         path: `${paths.posts}/:slug`,
         element: <PostDetails />,
+      },
+      {
+        path: `${paths.posts}/:postSlug/comments/:commentId`,
+        element: <SingleCommentDesc />,
       },
       {
         path: paths.dashboard.index,
