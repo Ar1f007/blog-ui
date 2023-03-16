@@ -10,12 +10,19 @@ export const commentsApi = createApi({
     baseUrl: BASE_URL,
     credentials: 'include',
   }),
-  refetchOnMountOrArgChange: 30,
+  refetchOnMountOrArgChange: 60,
   tagTypes: ['comments'],
 
   endpoints: (builder) => ({
     getComments: builder.query<CommentsData, string>({
-      query: (id) => `/comments/${id}`,
+      query: (id) => `/comments/post/${id}`,
+      providesTags: ['comments'],
+    }),
+
+    getSingleComment: builder.query({
+      query: (id) => ({
+        url: `/comments/${id}`,
+      }),
       providesTags: ['comments'],
     }),
 
@@ -53,4 +60,5 @@ export const {
   useAddCommentMutation,
   useUpdateCommentMutation,
   useDeleteCommentMutation,
+  useGetSingleCommentQuery,
 } = commentsApi;
