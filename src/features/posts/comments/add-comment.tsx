@@ -7,6 +7,7 @@ import {
   Divider,
   Stack,
 } from '@mui/material';
+import { bindActionCreators } from '@reduxjs/toolkit';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { shallowEqual } from 'react-redux';
@@ -15,13 +16,17 @@ import { useNavigate, useParams } from 'react-router-dom';
 import type { CommentPayload } from '../validations/add-comment';
 
 import { useAddCommentMutation } from '../../../app/slices/comments';
-import logo from '../../../assets/images/logo.webp';
 
 import type { SubmitHandler } from 'react-hook-form';
 
+import {
+  decrementCount,
+  incrementCount,
+} from '../../../app/slices/posts/slice';
+import logo from '../../../assets/images/logo.webp';
 import { FormProvider, TextEditor } from '../../../components';
 import { APP_NAME } from '../../../constant';
-import { useAppSelector } from '../../../hooks/store';
+import { useAppDispatch, useAppSelector } from '../../../hooks/store';
 import paths from '../../../routes/paths';
 import AuthCard from '../../authentication/components/auth-modal';
 import { commentSchema } from '../validations/add-comment';
@@ -33,9 +38,12 @@ type Props = {
 export const AddComment = ({ postId }: Props) => {
   const { slug } = useParams();
 
-  const [addComment, { isLoading, error }] = useAddCommentMutation();
+  const [addComment, { isLoading, error, isError }] = useAddCommentMutation();
   const user = useAppSelector((s) => s.user, shallowEqual);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const actions = bindActionCreators({ incrementCount }, dispatch);
 
   const [avatar, setAvatar] = useState<{ src: string; alt: string }>();
 
@@ -90,6 +98,7 @@ export const AddComment = ({ postId }: Props) => {
 
   useEffect(() => {
     if (isSubmitSuccessful) {
+      actions.incrementCount('comment');
       reset();
     }
   }, [isSubmitSuccessful, reset]);
