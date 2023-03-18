@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { BASE_URL } from '../../../constant';
+import { setCommentCount } from '../posts/slice';
 
 import type { CommentsData } from './types';
 
@@ -17,6 +18,13 @@ export const commentsApi = createApi({
     getComments: builder.query<CommentsData, string>({
       query: (id) => `/comments/post/${id}`,
       providesTags: ['comments'],
+
+      onQueryStarted(arg, api) {
+        api.queryFulfilled.then((res) => {
+          const commentsCount = res.data.comments.length;
+          api.dispatch(setCommentCount(commentsCount));
+        });
+      },
     }),
 
     getSingleComment: builder.query({

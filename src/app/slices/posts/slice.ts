@@ -26,14 +26,13 @@ const postSlice = createSlice({
 
     incrementCount: (state, action) => {
       if (!state.currentlyViewedPost) return;
+
       if (action.payload === 'like') {
-        state.currentlyViewedPost.post.likesCount =
-          state.currentlyViewedPost.post.likesCount + 1;
+        state.currentlyViewedPost.post.likesCount += 1;
       }
 
       if (action.payload === 'comment') {
-        state.currentlyViewedPost.post.totalComments =
-          state.currentlyViewedPost.post.totalComments + 1;
+        state.currentlyViewedPost.post.totalComments += 1;
       }
     },
 
@@ -46,6 +45,12 @@ const postSlice = createSlice({
       if (action.payload === 'comment') {
         state.currentlyViewedPost.post.totalComments -= 1;
       }
+    },
+
+    setCommentCount: (state, action) => {
+      if (!state.currentlyViewedPost) return;
+
+      state.currentlyViewedPost.post.totalComments = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -114,6 +119,10 @@ const postSlice = createSlice({
   },
 });
 
-export const { clearCurrentPostData, incrementCount, decrementCount } =
-  postSlice.actions;
+export const {
+  clearCurrentPostData,
+  incrementCount,
+  decrementCount,
+  setCommentCount,
+} = postSlice.actions;
 export default postSlice.reducer;

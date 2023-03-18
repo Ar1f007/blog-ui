@@ -5,7 +5,6 @@ import Icons from '../../../utils/icons';
 
 type Props = {
   likesCount: number | undefined;
-  commentsCount: number | undefined;
   bookmarksCount?: number | undefined;
 };
 
@@ -20,7 +19,7 @@ const styles = {
   },
 };
 export const PostInfo = (props: Props) => {
-  const { likesCount, commentsCount, bookmarksCount } = props;
+  const { likesCount, bookmarksCount } = props;
   const totalComments = useAppSelector(
     (s) => s.post?.currentlyViewedPost?.post.totalComments,
   );

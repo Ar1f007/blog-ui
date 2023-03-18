@@ -31,5 +31,6 @@ root.render(
         </PersistGate>
       </HelmetProvider>
     </Provider>
+    ,
   </React.StrictMode>,
 );

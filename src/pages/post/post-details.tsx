@@ -1,5 +1,5 @@
 import { Box, Container, Grid } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { fetchSinglePostAction } from '../../app/slices/posts/actions';
@@ -10,8 +10,6 @@ import {
 } from '../../features/posts';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { formatTime } from '../../utils/dateTime';
-
-import type { PostDetails as PostDetailsType } from '../../app/slices/posts/types';
 
 export const PostDetails = () => {
   const { loading, currentlyViewedPost: postData } = useAppSelector(
@@ -28,8 +26,6 @@ export const PostDetails = () => {
       }
     })();
   }, [slug, dispatch]);
-
-  console.log(loading);
 
   if (loading) {
     return <>loading</>;
@@ -49,7 +45,6 @@ export const PostDetails = () => {
                 lg={1}
               >
                 <PostInfo
-                  commentsCount={postData?.post.totalComments}
                   likesCount={530}
                   bookmarksCount={37}
                 />
