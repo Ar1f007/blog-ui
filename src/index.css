@@ -26,9 +26,9 @@ code {
   font-weight: 500;
 }
 
-.MuiTooltip-tooltip {
+/* .MuiTooltip-tooltip {
   background-color: transparent !important;
-}
+} */
 
 .user-link {
   text-decoration: none;

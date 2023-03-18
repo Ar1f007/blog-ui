@@ -1,6 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { createPostAction, fetchPostsAction } from './actions';
+import {
+  createPostAction,
+  fetchPostsAction,
+  fetchSinglePostAction,
+} from './actions';
 
 import type { PostsState } from './types';
 
@@ -9,6 +13,7 @@ const initialState = {
   error: null,
   posts: [],
   currentPost: null,
+  currentlyViewedPost: null,
 } as PostsState;
 
 const postSlice = createSlice({
@@ -54,6 +59,27 @@ const postSlice = createSlice({
     builder.addCase(fetchPostsAction.rejected, (state, action) => {
       state.loading = false;
       state.posts = [];
+
+      if (action.payload) {
+        state.error = action.payload;
+      } else {
+        state.error = action.error;
+      }
+    });
+    // ----------------------------------------------------------------------
+    builder.addCase(fetchSinglePostAction.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(fetchSinglePostAction.fulfilled, (state, action) => {
+      state.loading = false;
+      state.currentlyViewedPost = action.payload;
+      state.error = null;
+    });
+
+    builder.addCase(fetchSinglePostAction.rejected, (state, action) => {
+      state.loading = false;
+      state.currentlyViewedPost = null;
 
       if (action.payload) {
         state.error = action.payload;

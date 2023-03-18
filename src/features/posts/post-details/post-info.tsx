@@ -1,11 +1,12 @@
 import { Box, IconButton, Stack, Typography } from '@mui/material';
 
+import { useAppSelector } from '../../../hooks/store';
 import Icons from '../../../utils/icons';
 
 type Props = {
-  likesCount: number;
-  commentsCount: number;
-  bookmarksCount?: number;
+  likesCount: number | undefined;
+  commentsCount: number | undefined;
+  bookmarksCount?: number | undefined;
 };
 
 const styles = {
@@ -20,6 +21,13 @@ const styles = {
 };
 export const PostInfo = (props: Props) => {
   const { likesCount, commentsCount, bookmarksCount } = props;
+  const totalComments = useAppSelector(
+    (s) => s.post?.currentlyViewedPost?.post.totalComments,
+  );
+
+  function handleOnClickHeart() {
+    return;
+  }
 
   return (
     <Box>
@@ -28,7 +36,10 @@ export const PostInfo = (props: Props) => {
         rowGap={3}
       >
         <Stack sx={styles.common}>
-          <IconButton aria-label="Like">
+          <IconButton
+            aria-label="Like"
+            onClick={() => handleOnClickHeart()}
+          >
             <Icons.FavoriteBorder />
           </IconButton>
 
@@ -40,7 +51,7 @@ export const PostInfo = (props: Props) => {
             <Icons.Comment />
           </IconButton>
 
-          <Typography sx={styles.count}>{commentsCount}</Typography>
+          <Typography sx={styles.count}>{totalComments}</Typography>
         </Stack>
 
         <Stack sx={styles.common}>

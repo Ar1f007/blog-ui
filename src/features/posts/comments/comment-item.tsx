@@ -50,6 +50,7 @@ const CommentItem = (props: Props) => {
         <Tooltip
           title={commenterInfo}
           arrow
+          className="comment-tooltip"
         >
           <Avatar
             alt={fullName}

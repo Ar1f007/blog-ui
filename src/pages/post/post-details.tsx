@@ -8,13 +8,15 @@ import {
   Post as PostContent,
   PostInfo,
 } from '../../features/posts';
-import { useAppDispatch } from '../../hooks/store';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { formatTime } from '../../utils/dateTime';
 
 import type { PostDetails as PostDetailsType } from '../../app/slices/posts/types';
 
 export const PostDetails = () => {
-  const [post, setPost] = useState<PostDetailsType>();
+  const { loading, currentlyViewedPost: postData } = useAppSelector(
+    (s) => s.post,
+  );
 
   const { slug } = useParams();
   const dispatch = useAppDispatch();
@@ -22,52 +24,64 @@ export const PostDetails = () => {
   useEffect(() => {
     (async function () {
       if (slug) {
-        const { payload } = await dispatch(fetchSinglePostAction(slug));
-        setPost(payload as PostDetailsType);
+        await dispatch(fetchSinglePostAction(slug));
       }
     })();
   }, [slug, dispatch]);
 
-  return (
-    <Container maxWidth="xl">
-      <Box mt={6}>
-        <Grid
-          container
-          spacing={3}
-        >
-          <Grid
-            item
-            lg={1}
-          >
-            <PostInfo
-              commentsCount={20}
-              likesCount={530}
-              bookmarksCount={37}
-            />
-          </Grid>
+  console.log(loading);
 
-          <Grid
-            item
-            xs={12}
-            lg={9}
-          >
-            {post ? <PostContent {...post} /> : <></>}
-          </Grid>
-          <Grid
-            item
-            lg={2}
-          >
-            <AuthorInfo
-              name={post?.author.fullName}
-              avatar={post?.author.photo}
-              bio={post?.author.bio}
-              address={post?.author.address}
-              followers={post?.author.followers}
-              joined={post?.author.joined && formatTime(post?.author.joined)}
-            />
-          </Grid>
-        </Grid>
-      </Box>
-    </Container>
+  if (loading) {
+    return <>loading</>;
+  }
+
+  return (
+    <>
+      {!!postData && (
+        <Container maxWidth="xl">
+          <Box mt={6}>
+            <Grid
+              container
+              spacing={3}
+            >
+              <Grid
+                item
+                lg={1}
+              >
+                <PostInfo
+                  commentsCount={postData?.post.totalComments}
+                  likesCount={530}
+                  bookmarksCount={37}
+                />
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                lg={9}
+              >
+                {postData ? <PostContent {...postData} /> : <></>}
+              </Grid>
+              <Grid
+                item
+                lg={2}
+              >
+                <AuthorInfo
+                  name={postData?.author.fullName}
+                  avatar={postData?.author.photo}
+                  bio={postData?.author.bio}
+                  address={postData?.author.address}
+                  followers={postData?.author.followers}
+                  joined={
+                    postData?.author.joined &&
+                    formatTime(postData?.author.joined)
+                  }
+                />
+              </Grid>
+            </Grid>
+          </Box>
+        </Container>
+      )}
+    </>
   );
 };

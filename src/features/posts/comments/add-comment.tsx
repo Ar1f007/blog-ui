@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { shallowEqual } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import type { CommentPayload } from '../validations/add-comment';
 
@@ -31,6 +31,8 @@ type Props = {
 };
 
 export const AddComment = ({ postId }: Props) => {
+  const { slug } = useParams();
+
   const [addComment, { isLoading, error }] = useAddCommentMutation();
   const user = useAppSelector((s) => s.user, shallowEqual);
   const navigate = useNavigate();
@@ -54,6 +56,7 @@ export const AddComment = ({ postId }: Props) => {
 
   const onSubmit: SubmitHandler<CommentPayload> = async (data) => {
     const commentPayload = {
+      postSlug: slug,
       postId,
       content: data.commentDesc,
     };

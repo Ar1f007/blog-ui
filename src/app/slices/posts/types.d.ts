@@ -68,6 +68,7 @@ type PostContent = {
   published_at: string;
   category: Topic;
   tags: Topic[];
+  totalComments: number;
 };
 
 export type PostDetails = {
@@ -90,4 +91,5 @@ export type PostsState = {
   currentPost: Post | null;
   posts: Post[] | [];
   error: ApiError | null;
+  currentlyViewedPost: PostDetails | null;
 };
