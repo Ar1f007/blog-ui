@@ -17,6 +17,7 @@ import reducer from './rootReducer';
 import type { Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
 
 import { commentsApi } from './slices/comments';
+import { postInfoApi } from './slices/posts/postInfoApi';
 import { logout } from './slices/users/slice';
 
 const persistConfig = {
@@ -63,7 +64,11 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(commentsApi.middleware, rtkQueryErrorLogger),
+    }).concat(
+      commentsApi.middleware,
+      postInfoApi.middleware,
+      rtkQueryErrorLogger,
+    ),
 });
 
 export const persistor = persistStore(store);

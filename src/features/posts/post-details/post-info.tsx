@@ -1,10 +1,11 @@
 import { Box, IconButton, Stack, Typography } from '@mui/material';
+import { shallowEqual } from 'react-redux';
 
+import { useGetTotalReactionsQuery } from '../../../app/slices/posts/postInfoApi';
 import { useAppSelector } from '../../../hooks/store';
 import Icons from '../../../utils/icons';
 
 type Props = {
-  likesCount: number | undefined;
   bookmarksCount?: number | undefined;
 };
 
@@ -19,14 +20,21 @@ const styles = {
   },
 };
 export const PostInfo = (props: Props) => {
-  const { likesCount, bookmarksCount } = props;
-  const totalComments = useAppSelector(
-    (s) => s.post?.currentlyViewedPost?.post.totalComments,
+  const { bookmarksCount } = props;
+  const post = useAppSelector(
+    (s) => s.post?.currentlyViewedPost?.post,
+    shallowEqual,
   );
+
+  const { isLoading, data } = useGetTotalReactionsQuery(post?.id ?? '', {
+    skip: !post?.id,
+  });
 
   function handleOnClickHeart() {
     return;
   }
+
+  if (isLoading) return null;
 
   return (
     <Box>
@@ -42,7 +50,7 @@ export const PostInfo = (props: Props) => {
             <Icons.FavoriteBorder />
           </IconButton>
 
-          <Typography sx={styles.count}>{likesCount}</Typography>
+          <Typography sx={styles.count}>{data?.totalReactions}</Typography>
         </Stack>
 
         <Stack sx={styles.common}>
@@ -50,7 +58,7 @@ export const PostInfo = (props: Props) => {
             <Icons.Comment />
           </IconButton>
 
-          <Typography sx={styles.count}>{totalComments}</Typography>
+          <Typography sx={styles.count}>{post?.totalComments}</Typography>
         </Stack>
 
         <Stack sx={styles.common}>

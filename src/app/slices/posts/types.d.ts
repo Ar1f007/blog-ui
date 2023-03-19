@@ -93,3 +93,8 @@ export type PostsState = {
   error: ApiError | null;
   currentlyViewedPost: PostDetails | null;
 };
+
+export type TotalReaction = {
+  success: boolean;
+  totalReactions: number;
+};
