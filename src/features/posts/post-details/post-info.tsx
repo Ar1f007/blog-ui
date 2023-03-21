@@ -1,9 +1,11 @@
 import { Box, IconButton, Stack, Typography } from '@mui/material';
+import { useState } from 'react';
 import { shallowEqual } from 'react-redux';
 
-import { useGetTotalReactionsQuery } from '../../../app/slices/posts/postInfoApi';
+import { useAddReactionToPostMutation } from '../../../app/slices/posts/postInfoApi';
 import { useAppSelector } from '../../../hooks/store';
 import Icons from '../../../utils/icons';
+import AuthCard from '../../authentication/components/auth-modal';
 
 type Props = {
   bookmarksCount?: number | undefined;
@@ -20,21 +22,38 @@ const styles = {
   },
 };
 export const PostInfo = (props: Props) => {
+  const [showPopup, setShowPopup] = useState(false);
+
   const { bookmarksCount } = props;
+
   const post = useAppSelector(
     (s) => s.post?.currentlyViewedPost?.post,
     shallowEqual,
   );
 
-  const { isLoading, data } = useGetTotalReactionsQuery(post?.id ?? '', {
-    skip: !post?.id,
-  });
+  const user = useAppSelector((s) => s.user.data);
+
+  const [addReactionToPost, { isLoading: addingReaction, data: reactionRes }] =
+    useAddReactionToPostMutation();
 
   function handleOnClickHeart() {
-    return;
+    if (!user) {
+      setShowPopup(true);
+      return;
+    }
+
+    if (!post) return;
+
+    const data = {
+      userId: user.id,
+      postId: post.id,
+    };
+    addReactionToPost(data);
   }
 
-  if (isLoading) return null;
+  function handlePopupClose() {
+    setShowPopup(false);
+  }
 
   return (
     <Box>
@@ -50,7 +69,7 @@ export const PostInfo = (props: Props) => {
             <Icons.FavoriteBorder />
           </IconButton>
 
-          <Typography sx={styles.count}>{data?.totalReactions}</Typography>
+          <Typography sx={styles.count}>{post?.likesCount}</Typography>
         </Stack>
 
         <Stack sx={styles.common}>
@@ -69,6 +88,10 @@ export const PostInfo = (props: Props) => {
           <Typography sx={styles.count}>{bookmarksCount}</Typography>
         </Stack>
       </Stack>
+      <AuthCard
+        open={showPopup}
+        onClose={handlePopupClose}
+      />
     </Box>
   );
 };

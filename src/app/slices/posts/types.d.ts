@@ -94,7 +94,7 @@ export type PostsState = {
   currentlyViewedPost: PostDetails | null;
 };
 
-export type TotalReaction = {
-  success: boolean;
-  totalReactions: number;
+export type ReactionPayload = {
+  userId: string;
+  postId: string;
 };
