@@ -1,9 +1,10 @@
 import { Box, IconButton, Stack, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { shallowEqual } from 'react-redux';
 
+import { isPostLikedAction } from '../../../app/slices/posts/actions';
 import { useAddReactionToPostMutation } from '../../../app/slices/posts/postInfoApi';
-import { useAppSelector } from '../../../hooks/store';
+import { useAppDispatch, useAppSelector } from '../../../hooks/store';
 import Icons from '../../../utils/icons';
 import AuthCard from '../../authentication/components/auth-modal';
 
@@ -22,9 +23,9 @@ const styles = {
   },
 };
 export const PostInfo = (props: Props) => {
-  const [showPopup, setShowPopup] = useState(false);
-
   const { bookmarksCount } = props;
+  const dispatch = useAppDispatch();
+  const [showPopup, setShowPopup] = useState(false);
 
   const post = useAppSelector(
     (s) => s.post?.currentlyViewedPost?.post,
@@ -54,6 +55,15 @@ export const PostInfo = (props: Props) => {
   function handlePopupClose() {
     setShowPopup(false);
   }
+
+  useEffect(() => {
+    dispatch(
+      isPostLikedAction({
+        userId: user?.id,
+        postId: post?.id,
+      }),
+    );
+  }, []);
 
   return (
     <Box>

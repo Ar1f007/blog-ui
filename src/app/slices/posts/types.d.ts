@@ -98,3 +98,15 @@ export type ReactionPayload = {
   userId: string;
   postId: string;
 };
+
+type StringOrUndefined = string | undefined;
+
+export type IsLikedQuery = {
+  userId: StringOrUndefined;
+  postId: StringOrUndefined;
+};
+
+export type IsLikedQueryRes = {
+  success: boolean;
+  isLiked: boolean;
+};

@@ -4,7 +4,12 @@ import { handleError } from '../helpers';
 
 import postApi from './services';
 
-import type { CreatePost, PostDetails } from './types';
+import type {
+  CreatePost,
+  IsLikedQuery,
+  IsLikedQueryRes,
+  PostDetails,
+} from './types';
 
 export const createPostAction = createAsyncThunk(
   'posts/create',
@@ -44,3 +49,16 @@ export const fetchSinglePostAction = createAsyncThunk<PostDetails, string>(
     }
   },
 );
+
+export const isPostLikedAction = createAsyncThunk<
+  IsLikedQueryRes,
+  IsLikedQuery
+>('posts/isLiked', async (queryParams, { rejectWithValue }) => {
+  try {
+    const { data } = await postApi.isPostLiked(queryParams);
+    console.log(data);
+    return data;
+  } catch (error) {
+    return rejectWithValue(handleError(error));
+  }
+});

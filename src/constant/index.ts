@@ -15,3 +15,5 @@ export const GET_ALL_CATEGORIES = `${BASE_URL}/categories`;
 export const GET_ALL_TAGS = `${BASE_URL}/tags`;
 
 export const POST_END_POINT = BASE_URL + '/posts';
+
+export const IS_LIKED_POST = BASE_URL + '/reactions';

@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 
 import { BASE_URL } from '../../../constant';
 
-import type { ReactionPayload } from './types';
+import type { IsLikedQuery, ReactionPayload } from './types';
 
 export const postInfoApi = createApi({
   reducerPath: 'postInfoApi',
@@ -11,11 +11,6 @@ export const postInfoApi = createApi({
     credentials: 'include',
   }),
   endpoints: (builder) => ({
-    // getTotalReactions: builder.query<TotalReaction, string>({
-    //   query: (postId: string) => ({
-    //     url: `/reactions/${postId}`,
-    //   }),
-    // }),
     addReactionToPost: builder.mutation({
       query: (data: ReactionPayload) => ({
         url: `/posts/reactions`,
