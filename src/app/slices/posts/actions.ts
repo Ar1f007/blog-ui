@@ -56,7 +56,7 @@ export const isPostLikedAction = createAsyncThunk<
 >('posts/isLiked', async (queryParams, { rejectWithValue }) => {
   try {
     const { data } = await postApi.isPostLiked(queryParams);
-    console.log(data);
+
     return data;
   } catch (error) {
     return rejectWithValue(handleError(error));

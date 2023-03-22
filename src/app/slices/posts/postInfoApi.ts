@@ -2,7 +2,9 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 
 import { BASE_URL } from '../../../constant';
 
-import type { IsLikedQuery, ReactionPayload } from './types';
+import { setCurrViewPostLikesCount } from './slice';
+
+import type { ReactionCountRes, ReactionPayload } from './types';
 
 export const postInfoApi = createApi({
   reducerPath: 'postInfoApi',
@@ -11,8 +13,8 @@ export const postInfoApi = createApi({
     credentials: 'include',
   }),
   endpoints: (builder) => ({
-    addReactionToPost: builder.mutation({
-      query: (data: ReactionPayload) => ({
+    addReactionToPost: builder.mutation<ReactionCountRes, ReactionPayload>({
+      query: (data) => ({
         url: `/posts/reactions`,
         method: 'POST',
         body: data,
@@ -20,7 +22,7 @@ export const postInfoApi = createApi({
 
       onQueryStarted(arg, api) {
         api.queryFulfilled.then((res) => {
-          console.log(res);
+          api.dispatch(setCurrViewPostLikesCount(res.data.reactionCount));
         });
       },
     }),

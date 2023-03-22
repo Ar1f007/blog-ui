@@ -99,6 +99,11 @@ export type ReactionPayload = {
   postId: string;
 };
 
+export type ReactionCountRes = {
+  success: boolean;
+  reactionCount: number;
+};
+
 type StringOrUndefined = string | undefined;
 
 export type IsLikedQuery = {

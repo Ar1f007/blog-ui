@@ -47,6 +47,12 @@ const postSlice = createSlice({
       }
     },
 
+    setCurrViewPostLikesCount: (state, action) => {
+      if (!state.currentlyViewedPost) return;
+
+      state.currentlyViewedPost.post.likesCount = action.payload;
+    },
+
     setCommentCount: (state, action) => {
       if (!state.currentlyViewedPost) return;
 
@@ -124,5 +130,6 @@ export const {
   incrementCount,
   decrementCount,
   setCommentCount,
+  setCurrViewPostLikesCount,
 } = postSlice.actions;
 export default postSlice.reducer;
