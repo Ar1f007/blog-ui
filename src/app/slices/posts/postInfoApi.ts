@@ -4,7 +4,12 @@ import { BASE_URL } from '../../../constant';
 
 import { setCurrViewPostLikesCount } from './slice';
 
-import type { ReactionCountRes, ReactionPayload } from './types';
+import type {
+  BookmarkParams,
+  IsBookmarkedRes,
+  ReactionCountRes,
+  ReactionPayload,
+} from './types';
 
 export const postInfoApi = createApi({
   reducerPath: 'postInfoApi',
@@ -26,7 +31,16 @@ export const postInfoApi = createApi({
         });
       },
     }),
+
+    createBookmark: builder.mutation<IsBookmarkedRes, BookmarkParams>({
+      query: (params) => ({
+        url: `/bookmarks/${params.userId}/${params.postId}`,
+        method: 'POST',
+        body: {},
+      }),
+    }),
   }),
 });
 
-export const { useAddReactionToPostMutation } = postInfoApi;
+export const { useAddReactionToPostMutation, useCreateBookmarkMutation } =
+  postInfoApi;
