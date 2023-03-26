@@ -122,6 +122,6 @@ export type IsLikedQueryRes = PostInfoQueryRes;
 export type IsBookmarkedRes = PostInfoQueryRes & { isBookmarked: boolean };
 
 export type BookmarkParams = {
-  userId: string;
-  postId: string;
+  userId: StringOrUndefined;
+  postId: StringOrUndefined;
 };

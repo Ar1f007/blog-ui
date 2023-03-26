@@ -45,10 +45,24 @@ export const postInfoApi = createApi({
         });
       },
     }),
+
+    isBookmarked: builder.query<IsBookmarkedRes, BookmarkParams>({
+      query: (params) => ({
+        url: `/bookmarks/${params.postId}/${params.userId}`,
+        method: 'GET',
+      }),
+
+      onQueryStarted(arg, api) {
+        api.queryFulfilled.then((res) => {
+          api.dispatch(setBookmark(res.data.isBookmarked));
+        });
+      },
+    }),
   }),
 });
 
 export const {
   useAddReactionToPostMutation,
   useCreateOrRemoveBookmarkMutation,
+  useIsBookmarkedQuery,
 } = postInfoApi;

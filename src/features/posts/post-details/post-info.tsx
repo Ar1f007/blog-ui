@@ -1,7 +1,10 @@
 import { Box, IconButton, Stack, Typography } from '@mui/material';
 import { shallowEqual } from 'react-redux';
 
-import { useCreateOrRemoveBookmarkMutation } from '../../../app/slices/posts/postInfoApi';
+import {
+  useCreateOrRemoveBookmarkMutation,
+  useIsBookmarkedQuery,
+} from '../../../app/slices/posts/postInfoApi';
 import { useAppSelector } from '../../../hooks/store';
 import Icons from '../../../utils/icons';
 
@@ -26,6 +29,14 @@ export const PostInfo = () => {
   const user = useAppSelector((s) => s.user.data);
 
   const [createOrRemove] = useCreateOrRemoveBookmarkMutation();
+
+  useIsBookmarkedQuery(
+    { postId: post?.id, userId: user?.id },
+    {
+      refetchOnMountOrArgChange: true,
+      skip: !post?.id || !user?.id,
+    },
+  );
 
   async function handleOnBookmarkClick() {
     if (!post || !user) return;
