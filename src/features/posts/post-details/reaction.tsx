@@ -20,17 +20,17 @@ const styles = {
 
 export const Reaction = () => {
   const user = useAppSelector((s) => s.user.data);
+
   const currentlyViewedPost = useAppSelector((s) => s.post.currentlyViewedPost);
+  const dispatch = useAppDispatch();
 
   const [addReactionToPost, { isError }] = useAddReactionToPostMutation();
 
-  const dispatch = useAppDispatch();
   const [showPopup, setShowPopup] = useState(false);
-
   const [isLiked, setIsLiked] = useState<boolean>();
 
   async function isLikedPostQuery() {
-    if (!user?.id && !currentlyViewedPost?.post.id) {
+    if (!user?.id) {
       setIsLiked(false);
       return;
     }

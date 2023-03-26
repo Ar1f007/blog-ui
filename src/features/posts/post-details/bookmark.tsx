@@ -1,4 +1,5 @@
 import { IconButton, Stack } from '@mui/material';
+import { useState } from 'react';
 import { shallowEqual } from 'react-redux';
 
 import {
@@ -7,6 +8,7 @@ import {
 } from '../../../app/slices/posts/postInfoApi';
 import { useAppSelector } from '../../../hooks/store';
 import Icons from '../../../utils/icons';
+import AuthCard from '../../authentication/components/auth-modal';
 
 const styles = {
   common: {
@@ -33,11 +35,22 @@ export const Bookmark = () => {
 
   const [createOrRemove] = useCreateOrRemoveBookmarkMutation();
 
+  const [showPopup, setShowPopup] = useState(false);
+
   async function handleOnBookmarkClick() {
-    if (!post || !user) return;
+    if (!user) {
+      setShowPopup(true);
+      return;
+    }
+
+    if (!post) return;
 
     // toggle bookmark > mark/un-mark
     await createOrRemove({ postId: post.id, userId: user.id });
+  }
+
+  function handlePopupClose() {
+    setShowPopup(false);
   }
 
   return (
@@ -52,6 +65,10 @@ export const Bookmark = () => {
           <Icons.BookmarkAddOutlined />
         )}
       </IconButton>
+      <AuthCard
+        open={showPopup}
+        onClose={handlePopupClose}
+      />
     </Stack>
   );
 };
