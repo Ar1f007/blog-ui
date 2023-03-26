@@ -69,6 +69,7 @@ type PostContent = {
   category: Topic;
   tags: Topic[];
   totalComments: number;
+  isBookmarked: boolean;
 };
 
 export type PostDetails = {
@@ -118,7 +119,7 @@ type PostInfoQueryRes = {
 
 export type IsLikedQueryRes = PostInfoQueryRes;
 
-export type IsBookmarkedRes = PostInfoQueryRes;
+export type IsBookmarkedRes = PostInfoQueryRes & { isBookmarked: boolean };
 
 export type BookmarkParams = {
   userId: string;

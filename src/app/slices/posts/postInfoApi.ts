@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 
 import { BASE_URL } from '../../../constant';
 
-import { setCurrViewPostLikesCount } from './slice';
+import { setBookmark, setCurrViewPostLikesCount } from './slice';
 
 import type {
   BookmarkParams,
@@ -32,15 +32,23 @@ export const postInfoApi = createApi({
       },
     }),
 
-    createBookmark: builder.mutation<IsBookmarkedRes, BookmarkParams>({
+    createOrRemoveBookmark: builder.mutation<IsBookmarkedRes, BookmarkParams>({
       query: (params) => ({
-        url: `/bookmarks/${params.userId}/${params.postId}`,
+        url: `/bookmarks/${params.postId}/${params.userId}`,
         method: 'POST',
         body: {},
       }),
+
+      onQueryStarted(arg, api) {
+        api.queryFulfilled.then((res) => {
+          api.dispatch(setBookmark(res.data.isBookmarked));
+        });
+      },
     }),
   }),
 });
 
-export const { useAddReactionToPostMutation, useCreateBookmarkMutation } =
-  postInfoApi;
+export const {
+  useAddReactionToPostMutation,
+  useCreateOrRemoveBookmarkMutation,
+} = postInfoApi;

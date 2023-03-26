@@ -58,6 +58,12 @@ const postSlice = createSlice({
 
       state.currentlyViewedPost.post.totalComments = action.payload;
     },
+
+    setBookmark: (state, action) => {
+      if (!state.currentlyViewedPost) return;
+
+      state.currentlyViewedPost.post.isBookmarked = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(createPostAction.pending, (state) => {
@@ -131,5 +137,6 @@ export const {
   decrementCount,
   setCommentCount,
   setCurrViewPostLikesCount,
+  setBookmark,
 } = postSlice.actions;
 export default postSlice.reducer;

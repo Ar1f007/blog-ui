@@ -44,7 +44,7 @@ export const PostDetails = () => {
                 item
                 lg={1}
               >
-                <PostInfo bookmarksCount={37} />
+                <PostInfo />
               </Grid>
 
               <Grid
