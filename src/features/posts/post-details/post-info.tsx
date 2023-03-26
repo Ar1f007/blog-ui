@@ -1,13 +1,10 @@
 import { Box, IconButton, Stack, Typography } from '@mui/material';
 import { shallowEqual } from 'react-redux';
 
-import {
-  useCreateOrRemoveBookmarkMutation,
-  useIsBookmarkedQuery,
-} from '../../../app/slices/posts/postInfoApi';
 import { useAppSelector } from '../../../hooks/store';
 import Icons from '../../../utils/icons';
 
+import { Bookmark } from './bookmark';
 import { Reaction } from './reaction';
 
 const styles = {
@@ -26,25 +23,6 @@ export const PostInfo = () => {
     shallowEqual,
   );
 
-  const user = useAppSelector((s) => s.user.data);
-
-  const [createOrRemove] = useCreateOrRemoveBookmarkMutation();
-
-  useIsBookmarkedQuery(
-    { postId: post?.id, userId: user?.id },
-    {
-      refetchOnMountOrArgChange: true,
-      skip: !post?.id || !user?.id,
-    },
-  );
-
-  async function handleOnBookmarkClick() {
-    if (!post || !user) return;
-
-    // toggle bookmark > mark/un-mark
-    await createOrRemove({ postId: post.id, userId: user.id });
-  }
-
   return (
     <Box>
       <Stack
@@ -52,6 +30,7 @@ export const PostInfo = () => {
         rowGap={3}
       >
         <Reaction />
+
         <Stack sx={styles.common}>
           <IconButton aria-label="Comment">
             <Icons.Comment />
@@ -60,18 +39,7 @@ export const PostInfo = () => {
           <Typography sx={styles.count}>{post?.totalComments}</Typography>
         </Stack>
 
-        <Stack sx={styles.common}>
-          <IconButton
-            aria-label="Bookmark"
-            onClick={() => handleOnBookmarkClick()}
-          >
-            {post?.isBookmarked ? (
-              <Icons.BookmarkOutlined />
-            ) : (
-              <Icons.BookmarkAddOutlined />
-            )}
-          </IconButton>
-        </Stack>
+        <Bookmark />
       </Stack>
     </Box>
   );
