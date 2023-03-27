@@ -38,3 +38,16 @@ export type UserState = {
   data: User | null;
   error: ApiError | null;
 };
+
+export type DashboardInfo = {
+  totalFollowers: number;
+  totalFollowing: number;
+  totalPosts: number;
+  totalFollowingCategories: number;
+  totalFollowingTags: number;
+};
+
+export type DashboardInfoRes = {
+  success: boolean;
+  dashboardInfo: DashboardInfo;
+};

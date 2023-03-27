@@ -19,6 +19,7 @@ import type { Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
 import { commentsApi } from './slices/comments';
 import { postInfoApi } from './slices/posts/postInfoApi';
 import { logout } from './slices/users/slice';
+import { dashboardInfoApi } from './slices/users/user-dashboard-info-api';
 
 const persistConfig = {
   key: 'root',
@@ -67,6 +68,7 @@ export const store = configureStore({
     }).concat(
       commentsApi.middleware,
       postInfoApi.middleware,
+      dashboardInfoApi.middleware,
       rtkQueryErrorLogger,
     ),
 });

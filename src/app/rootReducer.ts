@@ -7,6 +7,7 @@ import postReducer from './slices/posts/slice';
 import tagReducer from './slices/tags/slice';
 import themeReducer from './slices/themeSlice';
 import userReducer from './slices/users/slice';
+import { dashboardInfoApi } from './slices/users/user-dashboard-info-api';
 
 const reducer = combineReducers({
   theme: themeReducer,
@@ -16,6 +17,7 @@ const reducer = combineReducers({
   tag: tagReducer,
   [commentsApi.reducerPath]: commentsApi.reducer,
   [postInfoApi.reducerPath]: postInfoApi.reducer,
+  [dashboardInfoApi.reducerPath]: dashboardInfoApi.reducer,
 });
 
 export default reducer;
