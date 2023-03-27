@@ -5,6 +5,7 @@ import { BASE_URL } from '../../../constant';
 import { setBookmark, setCurrViewPostLikesCount } from './slice';
 
 import type {
+  AuthorPostsRes,
   BookmarkParams,
   IsBookmarkedRes,
   ReactionCountRes,
@@ -58,6 +59,10 @@ export const postInfoApi = createApi({
         });
       },
     }),
+
+    getAuthorsPost: builder.query<AuthorPostsRes, string>({
+      query: (userId) => `/posts/author-posts/${userId}`,
+    }),
   }),
 });
 
@@ -65,4 +70,5 @@ export const {
   useAddReactionToPostMutation,
   useCreateOrRemoveBookmarkMutation,
   useIsBookmarkedQuery,
+  useGetAuthorsPostQuery,
 } = postInfoApi;

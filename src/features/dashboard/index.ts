@@ -1,1 +1,1 @@
-export { PostStats } from './posts';
+export { Posts } from './posts';

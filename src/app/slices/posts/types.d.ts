@@ -125,3 +125,8 @@ export type BookmarkParams = {
   userId: StringOrUndefined;
   postId: StringOrUndefined;
 };
+
+export type AuthorPostsRes = {
+  success: boolean;
+  posts: Post[];
+};

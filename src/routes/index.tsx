@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import { PostStats } from '../features/dashboard';
+import { Posts } from '../features/dashboard';
 import { SingleCommentDesc } from '../features/posts';
 import { AuthLayout, MainLayout, PostLayout } from '../layouts';
 import { Dashboard, Home, SignUp, FourOhFour, PostDetails } from '../pages';
@@ -43,7 +43,7 @@ export const routes = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <PostStats />,
+            element: <Posts />,
           },
         ],
       },
