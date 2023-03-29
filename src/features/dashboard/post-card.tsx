@@ -14,16 +14,24 @@ import {
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useDeletePostMutation } from '../../app/slices/posts/postInfoApi';
 import { CircularLoader } from '../../components';
 import paths from '../../routes/paths';
 import Icons from '../../utils/icons';
 
-import type { Post } from '../../app/slices/posts/types';
+import type { MenuOptions, Post } from '../../app/slices/posts/types';
 import type { MouseEvent } from 'react';
 
 export const PostCard = (props: Post) => {
   const { slug, coverImage, title } = props;
+  const [deletePost, { isLoading }] = useDeletePostMutation();
   const navigate = useNavigate();
+
+  const menuOptions: MenuOptions[] = [
+    { label: 'View', identifier: 'view-post' },
+    { label: 'Edit', identifier: 'edit-post' },
+    { label: 'Delete', identifier: 'delete-post' },
+  ];
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
@@ -38,11 +46,30 @@ export const PostCard = (props: Post) => {
     setAnchorEl(null);
   }
 
-  function navigateToPost(slug: string) {
+  function handleDropdownClick(identifier: MenuOptions['identifier']) {
+    switch (identifier) {
+      case 'view-post':
+        navigateToPost();
+        break;
+
+      case 'edit-post':
+        navigateToPost();
+        break;
+
+      case 'delete-post':
+        handleDeletePost();
+        break;
+
+      default:
+        return;
+    }
+  }
+
+  function navigateToPost() {
     navigate(paths.posts + '/' + slug);
   }
 
-  function handleDeleteComment() {
+  function handleDeletePost() {
     setShowAlertDialog(true);
     handleClose();
     return;
@@ -53,8 +80,7 @@ export const PostCard = (props: Post) => {
   }
 
   function handleOnConfirmDelete() {
-    //  deleteComment(commentId);
-    alert(slug);
+    deletePost(slug);
     return;
   }
 
@@ -66,7 +92,7 @@ export const PostCard = (props: Post) => {
           alt="cover image"
           height="140"
           image={coverImage}
-          onClick={() => navigateToPost(slug)}
+          onClick={() => navigateToPost()}
         />
 
         <CardHeader
@@ -98,26 +124,16 @@ export const PostCard = (props: Post) => {
                   horizontal: 'right',
                 }}
               >
-                <MenuItem
-                  aria-label="view post"
-                  onClick={() => navigateToPost(slug)}
-                >
-                  View
-                </MenuItem>
-
-                <MenuItem
-                  aria-label="Edit post"
-                  onClick={() => navigateToPost(slug)}
-                >
-                  Edit
-                </MenuItem>
-
-                <MenuItem
-                  aria-label="delete post"
-                  onClick={() => handleDeleteComment()}
-                >
-                  Delete
-                </MenuItem>
+                {menuOptions.map((option, idx) => (
+                  <MenuItem
+                    key={idx}
+                    aria-label={option.label}
+                    onClick={() => handleDropdownClick(option.identifier)}
+                    sx={{ px: 4 }}
+                  >
+                    {option.label}
+                  </MenuItem>
+                ))}
               </Menu>
             </>
           }
@@ -135,9 +151,9 @@ export const PostCard = (props: Post) => {
           <Button
             variant="contained"
             onClick={handleOnConfirmDelete}
-            // disabled={isLoading}
+            disabled={isLoading}
           >
-            {/* <CircularLoader isLoading={isLoading} /> */}
+            <CircularLoader isLoading={isLoading} />
             Delete
           </Button>
         </DialogActions>

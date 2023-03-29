@@ -130,3 +130,8 @@ export type AuthorPostsRes = {
   success: boolean;
   posts: Post[];
 };
+
+export type MenuOptions = {
+  label: string;
+  identifier: 'view-post' | 'edit-post' | 'delete-post';
+};

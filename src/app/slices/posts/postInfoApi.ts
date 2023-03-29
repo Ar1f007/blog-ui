@@ -18,6 +18,7 @@ export const postInfoApi = createApi({
     baseUrl: BASE_URL,
     credentials: 'include',
   }),
+  tagTypes: ['authorsPost'],
   endpoints: (builder) => ({
     addReactionToPost: builder.mutation<ReactionCountRes, ReactionPayload>({
       query: (data) => ({
@@ -62,6 +63,16 @@ export const postInfoApi = createApi({
 
     getAuthorsPost: builder.query<AuthorPostsRes, string>({
       query: (userId) => `/posts/author-posts/${userId}`,
+      providesTags: ['authorsPost'],
+    }),
+
+    deletePost: builder.mutation({
+      query: (slug) => ({
+        url: `/posts/${slug}`,
+        method: 'DELETE',
+      }),
+
+      invalidatesTags: ['authorsPost'],
     }),
   }),
 });
@@ -71,4 +82,5 @@ export const {
   useCreateOrRemoveBookmarkMutation,
   useIsBookmarkedQuery,
   useGetAuthorsPostQuery,
+  useDeletePostMutation,
 } = postInfoApi;
