@@ -22,6 +22,21 @@ export type User = {
   isAdmin?: boolean;
 };
 
+export type UserDetails = {
+  user: User & {
+    active: boolean;
+    followers: [string];
+    following: [string];
+    createdAt: string;
+    postCount: number;
+    bio: string;
+    website: string;
+    address: string;
+    education: string;
+    work: string;
+  };
+};
+
 export type RegisterFields = Exclude<keyof SignUpInputs, 'confirmPassword'>;
 export type LoginFields = keyof LoginInputs;
 

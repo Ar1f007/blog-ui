@@ -20,6 +20,7 @@ import { commentsApi } from './slices/comments';
 import { postInfoApi } from './slices/posts/postInfoApi';
 import { logout } from './slices/users/slice';
 import { dashboardInfoApi } from './slices/users/user-dashboard-info-api';
+import { usersApi } from './slices/users/users-api';
 
 const persistConfig = {
   key: 'root',
@@ -69,6 +70,7 @@ export const store = configureStore({
       commentsApi.middleware,
       postInfoApi.middleware,
       dashboardInfoApi.middleware,
+      usersApi.middleware,
       rtkQueryErrorLogger,
     ),
 });
