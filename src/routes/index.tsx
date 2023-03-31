@@ -3,7 +3,14 @@ import { createBrowserRouter } from 'react-router-dom';
 import { Posts } from '../features/dashboard';
 import { SingleCommentDesc } from '../features/posts';
 import { AuthLayout, MainLayout, PostLayout } from '../layouts';
-import { Dashboard, Home, SignUp, FourOhFour, PostDetails } from '../pages';
+import {
+  Dashboard,
+  Home,
+  SignUp,
+  FourOhFour,
+  PostDetails,
+  Profile,
+} from '../pages';
 import AddPost from '../pages/add-post';
 import Login from '../pages/login';
 
@@ -46,6 +53,10 @@ export const routes = createBrowserRouter([
             element: <Posts />,
           },
         ],
+      },
+      {
+        path: '/:username',
+        element: <Profile />,
       },
     ],
   },
