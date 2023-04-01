@@ -1,3 +1,5 @@
+export { AlertDialog } from './ui/alert-dialog';
+
 export { Transition } from './ui/transition';
 
 export { FormHeader } from './form/form-header';

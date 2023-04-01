@@ -7,8 +7,10 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { useState } from 'react';
 
 import { useGetMyDetailsQuery } from '../app/slices/users/users-api';
+import { AlertDialog } from '../components';
 import { useAppSelector } from '../hooks/store';
 import { createSXCollection } from '../utils';
 import { formatTime } from '../utils/dateTime';
@@ -68,142 +70,166 @@ export const Profile = () => {
   const user = useAppSelector((s) => s.user.data);
   const { isLoading, data } = useGetMyDetailsQuery(user?.id || '');
 
+  const [showAlertDialog, setShowAlertDialog] = useState(false);
+
+  function closeAlertDialog() {
+    setShowAlertDialog(false);
+  }
+
+  function handleOnConfirmDelete() {
+    //
+  }
+
+  if (isLoading) {
+    return null;
+  }
+
   return (
-    <Box>
-      <Box sx={styles.topBG} />
+    <>
+      <Box>
+        <Box sx={styles.topBG} />
 
-      <Box sx={styles.wrapper}>
-        <Box sx={styles.mainContainer}>
-          <Container
-            maxWidth="md"
-            sx={styles.container}
-          >
-            <Box sx={styles.profileContainer}>
-              <Avatar
-                src={data?.user.photo}
-                alt={data?.user.firstName}
-                sx={styles.photo}
-              />
-            </Box>
-            <Stack
-              rowGap={2}
-              alignItems="center"
-              mt={2}
+        <Box sx={styles.wrapper}>
+          <Box sx={styles.mainContainer}>
+            <Container
+              maxWidth="md"
+              sx={styles.container}
             >
-              <Typography
-                variant="h6"
-                component="h2"
-                textTransform="capitalize"
-                fontWeight={600}
+              <Box sx={styles.profileContainer}>
+                <Avatar
+                  src={data?.user.photo}
+                  alt={data?.user.firstName}
+                  sx={styles.photo}
+                />
+              </Box>
+              <Stack
+                rowGap={2}
+                alignItems="center"
+                mt={2}
               >
-                {data?.user.firstName} {data?.user.lastName}
-              </Typography>
-
-              <Typography>{data?.user.bio}</Typography>
-
-              {data?.user && (
-                <Typography>
-                  Joined {formatTime(data?.user.createdAt)}
-                </Typography>
-              )}
-            </Stack>
-          </Container>
-
-          <Container
-            maxWidth="sm"
-            sx={styles.info}
-          >
-            <Stack rowGap={2}>
-              {/* Basic */}
-              <Box>
                 <Typography
                   variant="h6"
-                  fontWeight={700}
-                  mb={1}
-                  textTransform="uppercase"
+                  component="h2"
+                  textTransform="capitalize"
+                  fontWeight={600}
                 >
-                  Basic
+                  {data?.user.firstName} {data?.user.lastName}
                 </Typography>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Typography sx={styles.infoText}>
-                    <b>Email:</b> {data?.user.email}
+
+                <Typography>{data?.user.bio}</Typography>
+
+                {data?.user && (
+                  <Typography>
+                    Joined {formatTime(data?.user.createdAt)}
                   </Typography>
-                  <Button
-                    variant="outlined"
-                    color="info"
-                    size="small"
+                )}
+              </Stack>
+            </Container>
+
+            <Container
+              maxWidth="sm"
+              sx={styles.info}
+            >
+              <Stack rowGap={2}>
+                {/* Basic */}
+                <Box>
+                  <Typography
+                    variant="h6"
+                    fontWeight={700}
+                    mb={1}
+                    textTransform="uppercase"
                   >
-                    Edit Profile
-                  </Button>
-                </Stack>
+                    Basic
+                  </Typography>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Typography sx={styles.infoText}>
+                      <b>Email:</b> {data?.user.email}
+                    </Typography>
+                    <Button
+                      variant="outlined"
+                      color="info"
+                      size="small"
+                    >
+                      Edit Profile
+                    </Button>
+                  </Stack>
 
-                <Stack
-                  rowGap={1}
-                  mt={1}
-                >
-                  <Typography sx={styles.infoText}>
-                    <b>Website URL: </b>
-                    {data?.user.website || 'N/A'}
+                  <Stack
+                    rowGap={1}
+                    mt={1}
+                  >
+                    <Typography sx={styles.infoText}>
+                      <b>Website URL: </b>
+                      {data?.user.website || 'N/A'}
+                    </Typography>
+
+                    <Typography sx={styles.infoText}>
+                      <b>Location:</b> {data?.user.address || 'N/A'}
+                    </Typography>
+                  </Stack>
+                </Box>
+
+                <Divider />
+
+                {/* Work */}
+                <Box>
+                  <Typography
+                    variant="h6"
+                    fontWeight={700}
+                    mb={1}
+                    textTransform="uppercase"
+                  >
+                    Work
                   </Typography>
 
                   <Typography sx={styles.infoText}>
-                    <b>Location:</b> {data?.user.address || 'N/A'}
+                    <b>Education:</b> {data?.user.education || 'N/A'}
                   </Typography>
-                </Stack>
-              </Box>
 
-              <Divider />
+                  <Typography sx={styles.infoText}>
+                    <b>Work:</b> {data?.user.work || 'N/A'}
+                  </Typography>
+                </Box>
+              </Stack>
+              <Divider sx={{ mt: 2 }} />
 
-              {/* Work */}
-              <Box>
-                <Typography
-                  variant="h6"
-                  fontWeight={700}
-                  mb={1}
-                  textTransform="uppercase"
+              <Stack
+                direction="row"
+                spacing={1}
+                justifyContent="flex-end"
+                mt={3}
+              >
+                <Button
+                  variant="contained"
+                  color="error"
+                  size="small"
                 >
-                  Work
-                </Typography>
-
-                <Typography sx={styles.infoText}>
-                  <b>Education:</b> {data?.user.education || 'N/A'}
-                </Typography>
-
-                <Typography sx={styles.infoText}>
-                  <b>Work:</b> {data?.user.work || 'N/A'}
-                </Typography>
-              </Box>
-            </Stack>
-            <Divider sx={{ mt: 2 }} />
-
-            <Stack
-              direction="row"
-              spacing={1}
-              justifyContent="flex-end"
-              mt={3}
-            >
-              <Button
-                variant="contained"
-                color="error"
-                size="small"
-              >
-                Deactivate Account
-              </Button>
-              <Button
-                variant="outlined"
-                color="error"
-                size="small"
-              >
-                Delete Account
-              </Button>
-            </Stack>
-          </Container>
+                  Deactivate Account
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  size="small"
+                  onClick={() => setShowAlertDialog(true)}
+                >
+                  Delete Account
+                </Button>
+              </Stack>
+            </Container>
+          </Box>
         </Box>
       </Box>
-    </Box>
+
+      <AlertDialog
+        open={showAlertDialog}
+        loader={isLoading}
+        onClose={closeAlertDialog}
+        onConfirm={handleOnConfirmDelete}
+      />
+    </>
   );
 };

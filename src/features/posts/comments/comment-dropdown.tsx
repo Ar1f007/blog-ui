@@ -1,18 +1,9 @@
-import {
-  Box,
-  Button,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  Menu,
-  MenuItem,
-} from '@mui/material';
+import { Box, DialogContent, IconButton, Menu, MenuItem } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { useDeleteCommentMutation } from '../../../app/slices/comments';
-import { CircularLoader, Dialog } from '../../../components';
+import { AlertDialog, Dialog } from '../../../components';
 import { APP_UI_BASE_URL } from '../../../constant';
 import { useAppSelector } from '../../../hooks/store';
 import Icons from '../../../utils/icons';
@@ -202,24 +193,13 @@ export const CommentDropDownIcon = (props: Props) => {
         </DialogContent>
       </Dialog>
 
-      <Dialog
+      <AlertDialog
         open={showAlertDialog}
         onClose={closeAlertDialog}
-      >
-        <DialogTitle>Are you sure you?</DialogTitle>
-        <DialogContent>Note: This action cannot be reversed.</DialogContent>
-        <DialogActions>
-          <Button onClick={closeAlertDialog}>Cancel</Button>
-          <Button
-            variant="contained"
-            onClick={handleOnConfirmDelete}
-            disabled={isLoading}
-          >
-            <CircularLoader isLoading={isLoading} />
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onConfirm={handleOnConfirmDelete}
+        loader={isLoading}
+        title="Delete Comment?"
+      />
     </Box>
   );
 };
