@@ -7,11 +7,17 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { useGetMyDetailsQuery } from '../app/slices/users/users-api';
+import { logout } from '../app/slices/users/slice';
+import {
+  useDeactivateAccountMutation,
+  useGetMyDetailsQuery,
+} from '../app/slices/users/users-api';
 import { AlertDialog } from '../components';
-import { useAppSelector } from '../hooks/store';
+import { useAppDispatch, useAppSelector } from '../hooks/store';
+import paths from '../routes/paths';
 import { createSXCollection } from '../utils';
 import { formatTime } from '../utils/dateTime';
 
@@ -69,16 +75,42 @@ const styles = createSXCollection({
 export const Profile = () => {
   const user = useAppSelector((s) => s.user.data);
   const { isLoading, data } = useGetMyDetailsQuery(user?.id || '');
+  const [
+    deactivateAccount,
+    { isLoading: deactivationOnProgress, isSuccess: isDeactivationSuccessful },
+  ] = useDeactivateAccountMutation();
+
+  const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
 
   const [showAlertDialog, setShowAlertDialog] = useState(false);
+  const [deactivationAlert, setDeactivationAlert] = useState(false);
 
   function closeAlertDialog() {
     setShowAlertDialog(false);
   }
 
+  function closeDeactivationAlert() {
+    setDeactivationAlert(false);
+  }
+
   function handleOnConfirmDelete() {
     //
   }
+
+  async function handleAccountDeactivation() {
+    if (!user) return;
+
+    await deactivateAccount(user.id);
+  }
+
+  useEffect(() => {
+    if (isDeactivationSuccessful) {
+      dispatch(logout());
+      navigate(paths.home);
+    }
+  }, [isDeactivationSuccessful, dispatch, navigate]);
 
   if (isLoading) {
     return null;
@@ -207,6 +239,7 @@ export const Profile = () => {
                   variant="contained"
                   color="error"
                   size="small"
+                  onClick={() => setDeactivationAlert(true)}
                 >
                   Deactivate Account
                 </Button>
@@ -229,6 +262,17 @@ export const Profile = () => {
         loader={isLoading}
         onClose={closeAlertDialog}
         onConfirm={handleOnConfirmDelete}
+        subTitle="Note: Deleting your account will permanently remove all of your data"
+      />
+
+      <AlertDialog
+        open={deactivationAlert}
+        loader={deactivationOnProgress}
+        onClose={closeDeactivationAlert}
+        onConfirm={handleAccountDeactivation}
+        title="Deactivate Account?"
+        subTitle="Note: You can activate your account again by signing in anytime."
+        confirmBtnText="Deactivate"
       />
     </>
   );

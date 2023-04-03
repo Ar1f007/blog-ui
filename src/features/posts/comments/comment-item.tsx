@@ -14,10 +14,24 @@ type Props = {
 } & Comment;
 
 const CommentItem = (props: Props) => {
-  const { _id, commentDesc, user, updatedAt, postSlug } = props;
-  const { username, bio, fullName, photo, userId } = user;
+  const { _id, commentDesc, updatedAt, postSlug, commenter } = props;
+  const {
+    bio,
+    firstName,
+    lastName,
+    active,
+    photo,
+    id: userId,
+    username,
+  } = commenter;
+
+  if (!active) {
+    return null;
+  }
 
   const pathToComment = postSlug + paths.comments + '/' + _id;
+
+  const fullName = firstName + ' ' + lastName;
 
   const commenterInfo = (
     <Paper sx={{ p: 3 }}>
@@ -28,11 +42,13 @@ const CommentItem = (props: Props) => {
           alignItems="center"
         >
           <Avatar
-            alt={fullName}
+            alt={firstName}
             src={photo}
           />
 
-          <Typography fontWeight={500}>{fullName}</Typography>
+          <Typography fontWeight={500}>
+            {firstName}&nbsp;{lastName}
+          </Typography>
         </Stack>
 
         <Typography variant="body2">{bio}</Typography>
@@ -53,7 +69,7 @@ const CommentItem = (props: Props) => {
           className="comment-tooltip"
         >
           <Avatar
-            alt={fullName}
+            alt={firstName}
             src={photo}
             sx={{ mt: 1 }}
           />
@@ -79,7 +95,7 @@ const CommentItem = (props: Props) => {
                 to={`/${username}`}
                 className="user-link"
               >
-                {fullName}
+                {firstName}&nbsp;{lastName}
               </Typography>
               <Typography
                 component={Link}

@@ -18,6 +18,7 @@ export const Dialog = ({ open, children, onClose, ...others }: Props) => (
     keepMounted
     onClose={onClose}
     {...others}
+    maxWidth="sm"
   >
     {children}
   </MuiDialog>

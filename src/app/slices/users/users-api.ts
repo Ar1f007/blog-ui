@@ -17,7 +17,13 @@ export const usersApi = createApi({
       query: (userId) => `/users/profile/${userId}`,
       providesTags: ['user-details'],
     }),
+    deactivateAccount: builder.mutation({
+      query: (userId) => ({
+        url: `/users/deactivate-account/${userId}`,
+        method: 'PATCH',
+      }),
+    }),
   }),
 });
 
-export const { useGetMyDetailsQuery } = usersApi;
+export const { useGetMyDetailsQuery, useDeactivateAccountMutation } = usersApi;
