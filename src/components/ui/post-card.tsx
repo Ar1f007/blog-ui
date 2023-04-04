@@ -13,7 +13,8 @@ import {
 import { Link } from 'react-router-dom';
 
 import paths from '../../routes/paths';
-import { createSXCollection } from '../../utils';
+import { calculateReadingTime, createSXCollection } from '../../utils';
+import { formatTimeFromNow } from '../../utils/dateTime';
 
 import type { Post as PostAttrs } from '../../app/slices/posts/types';
 import type { FC } from 'react';
@@ -26,7 +27,7 @@ type CardExcerptProps = {
 
 type LinkWrapperProps = {
   children: JSX.Element;
-  slug: string;
+  path: string;
 };
 
 const styles = createSXCollection({
@@ -78,69 +79,74 @@ const CardExcerpt: FC<CardExcerptProps> = ({ excerpt }) => (
   />
 );
 
-const Info: FC<Pick<PostProps, 'category' | 'likesCount' | 'slug'>> = ({
-  category,
-  likesCount,
-  slug,
-}) => (
-  <Stack
-    direction="row"
-    columnGap={1}
-    rowGap={1}
-    justifyContent="space-between"
+const Info: FC<
+  Pick<
+    PostProps,
+    'category' | 'likesCount' | 'slug' | 'createdAt' | 'description'
   >
-    <LinkWrapper slug={slug}>
-      <Box sx={styles.infoText}>3 days ago</Box>
-    </LinkWrapper>
+> = ({ category, likesCount, slug, createdAt, description }) => (
+  <>
+    <Stack
+      direction="row"
+      columnGap={1}
+      rowGap={1}
+      justifyContent="space-between"
+    >
+      <LinkWrapper path={paths.posts + '/' + slug}>
+        <Box sx={styles.infoText}>{formatTimeFromNow(createdAt)}</Box>
+      </LinkWrapper>
 
-    <Divider
-      orientation="vertical"
-      flexItem
-    />
-    <LinkWrapper slug={slug}>
-      <Box sx={styles.infoText}>8 min read</Box>
-    </LinkWrapper>
+      <Divider
+        orientation="vertical"
+        flexItem
+      />
+      <LinkWrapper path={paths.posts + '/' + slug}>
+        <Box sx={styles.infoText}>{calculateReadingTime(description)}</Box>
+      </LinkWrapper>
 
-    <Divider
-      orientation="vertical"
-      flexItem
-      sx={{
-        display: {
-          sm: 'none',
-        },
-      }}
-    />
+      <Divider
+        orientation="vertical"
+        flexItem
+        sx={{
+          display: {
+            sm: 'none',
+          },
+        }}
+      />
 
-    <Box
-      flexGrow={1}
-      sx={{
-        display: {
-          xs: 'none',
-          sm: 'block',
-        },
-      }}
-    />
+      <Box
+        flexGrow={1}
+        sx={{
+          display: {
+            xs: 'none',
+            sm: 'block',
+          },
+        }}
+      />
 
-    <Box sx={styles.infoText}>{category?.name}</Box>
+      <LinkWrapper path={paths.categories + '/' + category?.slug}>
+        <Box sx={styles.infoText}>{category?.name}</Box>
+      </LinkWrapper>
 
-    <Divider
-      orientation="vertical"
-      flexItem
-    />
+      <Divider
+        orientation="vertical"
+        flexItem
+      />
 
-    <LinkWrapper slug={slug}>
-      <Box sx={styles.infoText}>
-        {likesCount}&nbsp;
-        {likesCount > 0 ? 'reactions' : 'reaction'}
-      </Box>
-    </LinkWrapper>
-  </Stack>
+      <LinkWrapper path={paths.posts + '/' + slug}>
+        <Box sx={styles.infoText}>
+          {likesCount}&nbsp;
+          {likesCount > 0 ? 'reactions' : 'reaction'}
+        </Box>
+      </LinkWrapper>
+    </Stack>
+  </>
 );
 
-const LinkWrapper: FC<LinkWrapperProps> = ({ children, slug }) => (
+const LinkWrapper: FC<LinkWrapperProps> = ({ children, path }) => (
   <Box
     component={Link}
-    to={paths.posts + '/' + slug}
+    to={path}
     sx={styles.container}
   >
     {children}
@@ -156,6 +162,7 @@ export const Post: FC<PostProps> = ({
   likesCount,
   author,
   slug,
+  createdAt,
 }) => {
   const authorName = `${author?.firstName || ''} ${author?.lastName || ''}`;
 
@@ -195,11 +202,11 @@ export const Post: FC<PostProps> = ({
               item
               xs={8}
             >
-              <LinkWrapper slug={slug}>
+              <LinkWrapper path={paths.posts + '/' + slug}>
                 <CardTitle title={title} />
               </LinkWrapper>
 
-              <LinkWrapper slug={slug}>
+              <LinkWrapper path={paths.posts + '/' + slug}>
                 <CardExcerpt excerpt={description.slice(0, 300)} />
               </LinkWrapper>
             </Grid>
@@ -208,7 +215,7 @@ export const Post: FC<PostProps> = ({
               item
               xs={4}
             >
-              <LinkWrapper slug={slug}>
+              <LinkWrapper path={paths.posts + '/' + slug}>
                 <CardMedia
                   component="img"
                   sx={{ width: '100%' }}
@@ -224,6 +231,8 @@ export const Post: FC<PostProps> = ({
               category={category}
               likesCount={likesCount}
               slug={slug}
+              createdAt={createdAt}
+              description={description}
             />
           </Grid>
           <Divider />

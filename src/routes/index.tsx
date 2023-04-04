@@ -10,6 +10,7 @@ import {
   FourOhFour,
   PostDetails,
   Profile,
+  AuthorsPostList,
 } from '../pages';
 import AddPost from '../pages/add-post';
 import Login from '../pages/login';
@@ -57,6 +58,10 @@ export const routes = createBrowserRouter([
       {
         path: '/:username',
         element: <Profile />,
+      },
+      {
+        path: paths.myPost,
+        element: <AuthorsPostList />,
       },
     ],
   },
