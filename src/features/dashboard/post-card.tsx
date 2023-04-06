@@ -53,7 +53,7 @@ export const PostCard = (props: Post) => {
         break;
 
       case 'edit-post':
-        navigateToPost();
+        handleEditPost();
         break;
 
       case 'delete-post':
@@ -67,6 +67,10 @@ export const PostCard = (props: Post) => {
 
   function navigateToPost() {
     navigate(paths.posts + '/' + slug);
+  }
+
+  function handleEditPost() {
+    navigate(paths.editPost, { state: { post: props } });
   }
 
   function handleDeletePost() {

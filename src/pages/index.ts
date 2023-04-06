@@ -6,3 +6,4 @@ export { PostDetails } from './post/post-details';
 export { Profile } from './profile';
 
 export { AuthorsPostList } from './post/author-posts-list';
+export { EditPost } from './post/edit-post';

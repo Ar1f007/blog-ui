@@ -5,6 +5,7 @@ const paths = {
   login: '/login',
   forgotPassword: '/forgot-password',
   createPost: '/create',
+  editPost: '/edit-post',
 
   lists: '/me/lists',
   dashboard: {

@@ -11,6 +11,7 @@ import {
   PostDetails,
   Profile,
   AuthorsPostList,
+  EditPost,
 } from '../pages';
 import AddPost from '../pages/add-post';
 import Login from '../pages/login';
@@ -34,6 +35,10 @@ export const routes = createBrowserRouter([
           {
             path: paths.newPost,
             element: <AddPost />,
+          },
+          {
+            path: paths.editPost,
+            element: <EditPost />,
           },
         ],
       },
