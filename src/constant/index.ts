@@ -17,3 +17,14 @@ export const GET_ALL_TAGS = `${BASE_URL}/tags`;
 export const POST_END_POINT = BASE_URL + '/posts';
 
 export const IS_LIKED_POST = BASE_URL + '/reactions';
+
+// Post Info
+export const MB_BYTES = 1000000;
+
+export const ACCEPTED_MIME_TYPES = [
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp',
+  'image/avif',
+];

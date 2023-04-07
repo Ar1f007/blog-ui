@@ -1,20 +1,12 @@
 import dayjs from 'dayjs';
 import { z } from 'zod';
 
+import { ACCEPTED_MIME_TYPES, MB_BYTES } from '../../../constant';
 import { bytesToMB } from '../../../utils/others';
 
 import type { Dayjs } from 'dayjs';
 
-const MB_BYTES = 1000000;
-const ACCEPTED_MIME_TYPES = [
-  'image/jpeg',
-  'image/jpg',
-  'image/png',
-  'image/webp',
-  'image/avif',
-];
-
-const selectSchema = z.object({
+export const selectSchema = z.object({
   value: z.string(),
   label: z.string(),
   __isNew__: z.boolean().optional(),

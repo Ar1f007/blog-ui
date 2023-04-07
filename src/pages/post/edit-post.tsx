@@ -1,19 +1,23 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoadingButton } from '@mui/lab';
-import { Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 import type { Post } from '../../app/slices/posts/types';
+
+import { toast } from 'react-toastify';
+
 import type { CreatePostPayload } from '../../features/posts/validations/create-post';
+import type { SubmitHandler } from 'react-hook-form';
 
 import { getCategoriesAction } from '../../app/slices/categories';
 import { clearCurrentPostData, createPostAction } from '../../app/slices/posts';
 import { getAllTagActions } from '../../app/slices/tags/action';
 import {
+  DateTimePicker,
   FileInput,
   FormHeader,
   FormProvider,
@@ -21,8 +25,10 @@ import {
   TextEditor,
   TextInput,
 } from '../../components';
+import { getFormattedPayload } from '../../features/posts/helpers';
 import { createPostSchema } from '../../features/posts/validations/create-post';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import dayjs from '../../lib/dayjs';
 
 export const EditPost = () => {
   const { state } = useLocation();
@@ -52,18 +58,34 @@ export const EditPost = () => {
       title: post.title,
       description: post.description,
       category: {
-        value: post.category.slug,
+        value: post.category._id,
         label: post.category.name,
         __isNew__: false,
       },
       tags: post.tags.map((tag) => ({
-        value: tag.slug,
+        value: tag._id,
         label: tag.name,
         __isNew__: false,
       })),
+      coverImage: undefined,
+      published_at: dayjs(new Date(post.published_at)),
     },
     resolver: zodResolver(createPostSchema),
   });
+
+  const onSubmit: SubmitHandler<CreatePostPayload> = (data) => {
+    // const payload = getFormattedPayload(data);
+    // if (data.coverImage) {
+    // }
+  };
+
+  if (errorFetchingCategory || errorFetchingTag) {
+    toast.error('Could not load category/tag list. Please try re-loading', {
+      toastId: 'toast1',
+    });
+  }
+
+  const newImage = methods.getValues('coverImage');
 
   useEffect(() => {
     if (!category.length) {
@@ -76,16 +98,6 @@ export const EditPost = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  function onSubmit() {
-    //
-  }
-
-  if (errorFetchingCategory || errorFetchingTag) {
-    toast.error('Could not load category/tag list. Please try re-loading', {
-      toastId: 'toast1',
-    });
-  }
 
   if (!state.post) return null;
 
@@ -101,7 +113,19 @@ export const EditPost = () => {
         onSubmit={methods.handleSubmit(onSubmit)}
       >
         <Stack rowGap={3}>
+          {!newImage && (
+            <Box
+              component="img"
+              src={post.coverImage}
+              alt={post.title}
+            />
+          )}
+
           <FileInput name="coverImage" />
+
+          <Box sx={{ display: 'none' }}>
+            <DateTimePicker name="published_at" />
+          </Box>
 
           <TextInput
             name="title"

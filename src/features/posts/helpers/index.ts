@@ -17,7 +17,9 @@ export type CategoryOptions = {
 
 const getUTCDate = (date: Dayjs) => dayjs.utc(date).format();
 
-const getFormattedCategoryValue = (category: CreatePostPayload['category']) => ({
+const getFormattedCategoryValue = (
+  category: CreatePostPayload['category'],
+) => ({
   [category.__isNew__ ? 'newCategoryName' : 'categoryId']: category.value,
 });
 
@@ -60,7 +62,10 @@ const getTransformedFormData = (data: CreatePostPayload) => {
   fd.append('title', data.title);
   fd.append('description', data.description);
   fd.append('published_at', getUTCDate(data.published_at));
-  fd.append('category', JSON.stringify(getFormattedCategoryValue(data.category)));
+  fd.append(
+    'category',
+    JSON.stringify(getFormattedCategoryValue(data.category)),
+  );
   fd.append('tags', JSON.stringify(getFormattedTagsValue(data.tags)));
   fd.append('coverImage', data.coverImage[0]);
 

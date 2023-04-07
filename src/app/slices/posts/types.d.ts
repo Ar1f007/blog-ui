@@ -36,7 +36,7 @@ export type Post = {
   description: string;
   coverImage: string;
   published_at: string;
-  id: string;
+  _id: string;
   createdAt: string;
   updatedAt: string;
 };

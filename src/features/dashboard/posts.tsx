@@ -67,12 +67,9 @@ export const Posts = () => {
                   xs={12}
                   md={6}
                   lg={4}
-                  key={post.id}
+                  key={post._id}
                 >
-                  <PostCard
-                    key={post.id}
-                    {...post}
-                  />
+                  <PostCard {...post} />
                 </Grid>
               ))}
             </Grid>
