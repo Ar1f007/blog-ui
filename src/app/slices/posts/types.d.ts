@@ -8,6 +8,10 @@ export type CreatePost = {
   coverImgIncluded: boolean;
 };
 
+export type UpdatePost = CreatePost & {
+  postId: string;
+};
+
 type Topic = {
   _id: string;
   name: string;
