@@ -9,6 +9,7 @@ import type {
   IsLikedQuery,
   IsLikedQueryRes,
   PostDetails,
+  UpdatePost,
 } from './types';
 
 export const createPostAction = createAsyncThunk(
@@ -16,6 +17,19 @@ export const createPostAction = createAsyncThunk(
   async (payload: CreatePost, { rejectWithValue }) => {
     try {
       const { data } = await postApi.createPost(payload);
+
+      return data.post;
+    } catch (error) {
+      return rejectWithValue(handleError(error));
+    }
+  },
+);
+
+export const updatePostAction = createAsyncThunk(
+  'posts/update',
+  async (payload: UpdatePost, { rejectWithValue }) => {
+    try {
+      const { data } = await postApi.updatePost(payload);
 
       return data.post;
     } catch (error) {

@@ -18,7 +18,7 @@ const createPost = ({ payload, coverImgIncluded }: CreatePost) => {
 const updatePost = ({ payload, coverImgIncluded, postId }: UpdatePost) => {
   const url =
     POST_END_POINT +
-    `${coverImgIncluded ? '/update' : `/update/no-image/${postId}`}`;
+    `${coverImgIncluded ? `/update/${postId}` : `/update/no-image/${postId}`}`;
 
   return apiClient.patch(url, payload, {
     headers: {

@@ -4,6 +4,7 @@ import {
   createPostAction,
   fetchPostsAction,
   fetchSinglePostAction,
+  updatePostAction,
 } from './actions';
 
 import type { PostsState } from './types';
@@ -79,6 +80,25 @@ const postSlice = createSlice({
     builder.addCase(createPostAction.rejected, (state, action) => {
       state.loading = false;
       state.currentPost = null;
+
+      if (action.payload) {
+        state.error = action.payload;
+      } else {
+        state.error = action.error;
+      }
+    });
+    // ----------------------------------------------------------------------
+
+    builder.addCase(updatePostAction.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updatePostAction.fulfilled, (state, action) => {
+      state.loading = false;
+      state.currentPost = action.payload;
+      state.error = null;
+    });
+    builder.addCase(updatePostAction.rejected, (state, action) => {
+      state.loading = false;
 
       if (action.payload) {
         state.error = action.payload;

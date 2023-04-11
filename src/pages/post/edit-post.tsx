@@ -4,7 +4,7 @@ import { Box, Stack } from '@mui/material';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import type { Post } from '../../app/slices/posts/types';
 
@@ -14,7 +14,7 @@ import type { CreatePostPayload } from '../../features/posts/validations/create-
 import type { SubmitHandler } from 'react-hook-form';
 
 import { getCategoriesAction } from '../../app/slices/categories';
-import { clearCurrentPostData, createPostAction } from '../../app/slices/posts';
+import { clearCurrentPostData, updatePostAction } from '../../app/slices/posts';
 import { getAllTagActions } from '../../app/slices/tags/action';
 import {
   DateTimePicker,
@@ -29,6 +29,8 @@ import { getFormattedPayload } from '../../features/posts/helpers';
 import { createPostSchema } from '../../features/posts/validations/create-post';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import dayjs from '../../lib/dayjs';
+import paths from '../../routes/paths';
+import { attachValidationErrors } from '../../utils';
 
 export const EditPost = () => {
   const { state } = useLocation();
@@ -40,14 +42,22 @@ export const EditPost = () => {
 
   const { data: tag, error: errorFetchingTag } = useAppSelector((s) => s.tag);
 
+  const {
+    currentPost: postUpdated,
+    loading: updatingPost,
+    error: errorUpdating,
+  } = useAppSelector((s) => s.post);
+
   const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
 
   const actions = bindActionCreators(
     {
       getCategoriesAction,
       getAllTagActions,
-      createPostAction,
       clearCurrentPostData,
+      updatePostAction,
     },
     dispatch,
   );
@@ -74,9 +84,15 @@ export const EditPost = () => {
   });
 
   const onSubmit: SubmitHandler<CreatePostPayload> = (data) => {
-    // const payload = getFormattedPayload(data);
-    // if (data.coverImage) {
-    // }
+    const payload = getFormattedPayload(data);
+
+    dispatch(
+      updatePostAction({
+        payload,
+        coverImgIncluded: !!data.coverImage,
+        postId: post._id,
+      }),
+    );
   };
 
   if (errorFetchingCategory || errorFetchingTag) {
@@ -98,6 +114,28 @@ export const EditPost = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (errorUpdating?.message) {
+      toast.error(errorUpdating.message, {
+        toastId: 'error',
+      });
+    }
+
+    if (errorUpdating?.errors) {
+      attachValidationErrors<CreatePostPayload>(errorUpdating.errors, methods);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorUpdating]);
+
+  useEffect(() => {
+    if (postUpdated) {
+      methods.reset();
+      actions.clearCurrentPostData();
+      navigate(paths.dashboard.index);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postUpdated]);
 
   if (!state.post) return null;
 
@@ -151,7 +189,7 @@ export const EditPost = () => {
           <LoadingButton
             variant="contained"
             type="submit"
-            // loading={creatingPost}
+            loading={updatingPost}
           >
             Update
           </LoadingButton>
