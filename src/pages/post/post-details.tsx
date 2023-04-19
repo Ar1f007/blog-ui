@@ -68,6 +68,7 @@ export const PostDetails = () => {
                     postData?.author.joined &&
                     formatTime(postData?.author.joined)
                   }
+                  authorId={postData?.author.id}
                 />
               </Grid>
             </Grid>
