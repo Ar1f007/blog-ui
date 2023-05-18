@@ -16,7 +16,9 @@ export const FollowBtn = () => {
     setPopup(false);
   }
 
-  console.log(data);
+  if (isLoading) {
+    return null;
+  }
 
   if (!userId) {
     return (
