@@ -60,7 +60,7 @@ export const FollowBtn = () => {
     }
   }, [data, authorId, userDetailsLoading]);
 
-  if (userDetailsLoading) {
+  if (userDetailsLoading || userId === authorId) {
     return null;
   }
 
