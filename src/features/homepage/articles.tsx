@@ -1,7 +1,9 @@
+import { Stack } from '@mui/material';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 import { fetchPostsAction } from '../../app/slices/posts';
+import { PostSkeleton } from '../../components';
 import { Post } from '../../components/ui/post-card';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 
@@ -22,7 +24,13 @@ export const Articles = () => {
   }
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <Stack spacing={4}>
+        {Array.from(new Array(10)).map((_, idx) => (
+          <PostSkeleton key={idx} />
+        ))}
+      </Stack>
+    );
   }
 
   return (

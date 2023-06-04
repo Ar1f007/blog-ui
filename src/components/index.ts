@@ -16,3 +16,4 @@ export { SubHeading } from './ui/sub-heading';
 
 export { Dialog } from './ui/dialog';
 export { CircularLoader } from './ui/loaders/circular-progress';
+export { PostSkeleton } from './skeletons/post-skeleton';
