@@ -25,7 +25,7 @@ import { usersApi } from './slices/users/users-api';
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['theme', 'category', 'tag', 'post'],
+  blacklist: ['theme', 'category', 'tag', 'post', 'postInfoApi'],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducer);

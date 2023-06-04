@@ -1,29 +1,23 @@
-import { Stack } from '@mui/material';
-import { useEffect } from 'react';
-import { toast } from 'react-toastify';
+import { Button, Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 
-import { fetchPostsAction } from '../../app/slices/posts';
+import { useGetPostsQuery } from '../../app/slices/posts/postInfoApi';
 import { PostSkeleton } from '../../components';
 import { Post } from '../../components/ui/post-card';
-import { useAppDispatch, useAppSelector } from '../../hooks/store';
 
 export const Articles = () => {
-  const dispatch = useAppDispatch();
-  const { posts, loading, error } = useAppSelector((s) => s.post);
+  const [page, setPage] = useState(1);
+  const { data, isLoading, isFetching, refetch } = useGetPostsQuery(page);
 
-  useEffect(() => {
-    if (!posts.length && !error) {
-      dispatch(fetchPostsAction());
-    }
-  }, [dispatch, error, posts.length]);
-
-  if (error) {
-    toast.error(error.message, {
-      toastId: 'fetch-posts',
-    });
+  function handleLoadMorePosts(type: 'inc' | 'dec') {
+    setPage((prev) => (type === 'inc' ? prev + 1 : prev - 1));
   }
 
-  if (loading) {
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
+  if (isLoading) {
     return (
       <Stack spacing={4}>
         {Array.from(new Array(10)).map((_, idx) => (
@@ -35,13 +29,37 @@ export const Articles = () => {
 
   return (
     <>
-      {posts?.map((post, idx) => (
+      {data?.posts?.map((post, idx) => (
         <Post
           key={idx}
           showHeader
           {...post}
         />
       ))}
+
+      {data?.pagination.prev && (
+        <Button
+          sx={{ mt: 4 }}
+          variant="contained"
+          disabled={isFetching}
+          onClick={() => handleLoadMorePosts('dec')}
+        >
+          Back
+        </Button>
+      )}
+
+      {data?.pagination.next && (
+        <Button
+          sx={{ mt: 4, ml: data?.pagination.prev ? 1 : 0 }}
+          variant="contained"
+          disabled={isFetching}
+          onClick={() => handleLoadMorePosts('inc')}
+        >
+          Load More
+        </Button>
+      )}
+
+      {!data?.posts && <Typography variant="h4">No Posts Found</Typography>}
     </>
   );
 };

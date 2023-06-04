@@ -7,6 +7,7 @@ import { setBookmark, setCurrViewPostLikesCount } from './slice';
 import type {
   AuthorPostsRes,
   BookmarkParams,
+  FetchPostsResponse,
   IsBookmarkedRes,
   ReactionCountRes,
   ReactionPayload,
@@ -18,8 +19,12 @@ export const postInfoApi = createApi({
     baseUrl: BASE_URL,
     credentials: 'include',
   }),
-  tagTypes: ['authorsPost'],
+  tagTypes: ['authorsPost', 'posts'],
   endpoints: (builder) => ({
+    getPosts: builder.query<FetchPostsResponse, number | void>({
+      query: (page = 1) => `/posts?page=${page}`,
+      providesTags: ['posts'],
+    }),
     addReactionToPost: builder.mutation<ReactionCountRes, ReactionPayload>({
       query: (data) => ({
         url: `/posts/reactions`,
@@ -83,4 +88,5 @@ export const {
   useIsBookmarkedQuery,
   useGetAuthorsPostQuery,
   useDeletePostMutation,
+  useGetPostsQuery,
 } = postInfoApi;

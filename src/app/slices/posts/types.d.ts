@@ -45,6 +45,21 @@ export type Post = {
   updatedAt: string;
 };
 
+type PaginationParams = {
+  page: number;
+  limit: number;
+};
+
+export type FetchPostsResponse = {
+  success: boolean;
+  posts: Post[];
+  totalPosts: number;
+  pagination: {
+    next?: PaginationParams;
+    prev?: PaginationParams;
+  };
+};
+
 export type Author = {
   id: string;
   username: string;
