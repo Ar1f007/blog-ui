@@ -23,7 +23,27 @@ export const usersApi = createApi({
         method: 'PATCH',
       }),
     }),
+
+    followUser: builder.mutation({
+      query: (userId) => ({
+        url: `/users/follow`,
+        method: 'PATCH',
+        body: { userId },
+      }),
+    }),
+    unfollowUser: builder.mutation({
+      query: (userId) => ({
+        url: `/users/unfollow`,
+        method: 'PATCH',
+        body: { userId },
+      }),
+    }),
   }),
 });
 
-export const { useGetMyDetailsQuery, useDeactivateAccountMutation } = usersApi;
+export const {
+  useGetMyDetailsQuery,
+  useDeactivateAccountMutation,
+  useFollowUserMutation,
+  useUnfollowUserMutation,
+} = usersApi;

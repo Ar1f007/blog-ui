@@ -1,6 +1,4 @@
-import { Avatar, Box, Button, Stack, Typography } from '@mui/material';
-
-import { useAppSelector } from '../../../hooks/store';
+import { Avatar, Box, Stack, Typography } from '@mui/material';
 
 import { FollowBtn } from './follow';
 
@@ -15,7 +13,7 @@ type Props = {
 };
 
 export const AuthorInfo = (props: Partial<Props>) => {
-  const { avatar, followers, name, address, bio, joined, authorId } = props;
+  const { avatar, followers, name, address, bio, joined } = props;
 
   return (
     <Box>
